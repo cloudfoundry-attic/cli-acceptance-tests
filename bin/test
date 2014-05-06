@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -e -x
+
+. $(dirname $0)/goenv
+
+go install -v github.com/onsi/ginkgo/ginkgo
+GOPATH=$(godep path) ginkgo -r -slowSpecThreshold=120 $@
