@@ -14,3 +14,4 @@ mkdir -p $local_gopath/bin
 
 export GOPATH=$local_gopath:$GOPATH
 export PATH=$local_gopath/bin:$PATH
+export CONFIG=$(dirname $0)/../config.json
