@@ -10,5 +10,5 @@ rm -f bin/gcf
 curl -L https://s3.amazonaws.com/go-cli/builds/cf-linux-amd64 > bin/gcf
 chmod +x bin/gcf
 
-local_bin = $(cd $(dirname $0) && pwd)
+export local_bin=$(cd $(dirname $0) && pwd)
 PATH=$PATH:$local_bin GOPATH=$(godep path) ginkgo -r -slowSpecThreshold=120 $@
