@@ -16,6 +16,8 @@ var _ = Describe("CF Quota commands", func() {
 				"-m", "512M",
 			), 5.0).Should(Exit(0))
 
+			Eventually(Cf("quota", "quota-name-goes-here"), 5.0).Should(Say("512M"))
+
 			quotaOutput := Cf("quotas")
 			Eventually(quotaOutput, 5).Should(Say("quota-name-goes-here"))
 
