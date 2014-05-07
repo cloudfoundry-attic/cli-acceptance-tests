@@ -13,5 +13,5 @@ local_gopath=$parent_dir/Godeps/_workspace
 mkdir -p $local_gopath/bin
 
 export GOPATH=$local_gopath:$GOPATH
-export PATH=$local_gopath/bin:$PATH
+export PATH=$local_gopath/bin:$PATH:$HOME/go/bin
 export CONFIG=$(dirname $0)/../config.json
