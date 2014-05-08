@@ -1,39 +1,46 @@
 package quotas_test
 
 import(
+	"github.com/nu7hatch/gouuid"
+	
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	. "github.com/onsi/gomega/gbytes"
-	. "github.com/onsi/gomega/gexec"
 	. "github.com/pivotal-cf-experimental/cf-test-helpers/cf"
 )
+
+var assertionTimeout = 10.0
 
 var _ = Describe("CF Quota commands", func() {
 	It("can Create, Read, Update, and Delete quotas", func() {
 		AsUser(context.AdminUserContext(), func() {
+			quotaBytes, err := uuid.NewV4()
+			Expect(err).ToNot(HaveOccurred())
+			quotaName := quotaBytes.String()
+			
 			Eventually(Cf("create-quota",
-				"quota-name-goes-here",
+				quotaName,
 				"-m", "512M",
-			), 5.0).Should(Exit(0))
+			), assertionTimeout).Should(Say("OK"))
 
-			Eventually(Cf("quota", "quota-name-goes-here"), 5.0).Should(Say("512M"))
+			Eventually(Cf("quota", quotaName), assertionTimeout).Should(Say("512M"))
 
 			quotaOutput := Cf("quotas")
-			Eventually(quotaOutput, 5).Should(Say("quota-name-goes-here"))
+			Eventually(quotaOutput, assertionTimeout).Should(Say(quotaName))
 
 			Eventually(Cf("update-quota",
-				"quota-name-goes-here",
+				quotaName,
 				"-m", "513M",
-			), 5).Should(Exit(0))
+			), assertionTimeout).Should(Say("OK"))
 
-			Eventually(Cf("quotas")).Should(Say("513M"))
+			Eventually(Cf("quotas"), assertionTimeout).Should(Say("513M"))
 
 			Eventually(Cf("delete-quota",
-				"quota-name-goes-here",
-				"-f,",
-			)).Should(Exit(0))
+				quotaName,
+				"-f",
+			), assertionTimeout).Should(Say("OK"))
 
-			Eventually(Cf("quotas")).ShouldNot(Say("quota-name-goes-here"))
+			Eventually(Cf("quotas"), assertionTimeout).ShouldNot(Say(quotaName))
 		})
 	})
 })
