@@ -3,9 +3,10 @@ package translations_test
 import (
 	"github.com/XenoPhex/jibber_jabber"
 
-	//	. "github.com/cloudfoundry-incubator/cf-test-helpers/cf"
+	. "github.com/cloudfoundry-incubator/cf-test-helpers/cf"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	. "github.com/onsi/gomega/gbytes"
 )
 
 var _ = Describe("i18n support and language detection", func() {
@@ -15,7 +16,7 @@ var _ = Describe("i18n support and language detection", func() {
 		Expect(userLocale).To(Equal("fr-FR"), "This test can only be run when the system's language is set to french")
 	})
 
-	It("does nothing yet", func() {
-
+	It("returns the french translation for cf quota", func() {
+		Eventually(Cf("help", "quota")).Should(Say("Montrez l'information de quota"))
 	})
 })
