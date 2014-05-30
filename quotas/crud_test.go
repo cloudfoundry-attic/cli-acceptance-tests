@@ -1,12 +1,12 @@
 package quotas_test
 
-import(
+import (
 	"github.com/nu7hatch/gouuid"
-	
+
+	. "github.com/cloudfoundry-incubator/cf-test-helpers/cf"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	. "github.com/onsi/gomega/gbytes"
-	. "github.com/pivotal-cf-experimental/cf-test-helpers/cf"
 )
 
 var assertionTimeout = 10.0
@@ -17,7 +17,7 @@ var _ = Describe("CF Quota commands", func() {
 			quotaBytes, err := uuid.NewV4()
 			Expect(err).ToNot(HaveOccurred())
 			quotaName := quotaBytes.String()
-			
+
 			Eventually(Cf("create-quota",
 				quotaName,
 				"-m", "512M",

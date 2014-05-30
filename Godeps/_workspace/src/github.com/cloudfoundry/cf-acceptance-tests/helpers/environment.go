@@ -4,7 +4,7 @@ import (
 	. "github.com/onsi/gomega"
 	. "github.com/onsi/gomega/gexec"
 
-	"github.com/pivotal-cf-experimental/cf-test-helpers/cf"
+	"github.com/cloudfoundry-incubator/cf-test-helpers/cf"
 )
 
 type SuiteContext interface {
@@ -44,8 +44,8 @@ func (e *Environment) Teardown() {
 
 func setUpSpaceWithUserAccess(uc cf.UserContext) {
 	spaceSetupTimeout := 10.0
-	Eventually(cf.Cf("create-space", "-o", uc.Org, uc.Space), spaceSetupTimeout).Should(Exit(0))
-	Eventually(cf.Cf("set-space-role", uc.Username, uc.Org, uc.Space, "SpaceManager"), spaceSetupTimeout).Should(Exit(0))
-	Eventually(cf.Cf("set-space-role", uc.Username, uc.Org, uc.Space, "SpaceDeveloper"), spaceSetupTimeout).Should(Exit(0))
-	Eventually(cf.Cf("set-space-role", uc.Username, uc.Org, uc.Space, "SpaceAuditor"), spaceSetupTimeout).Should(Exit(0))
+	Expect(cf.Cf("create-space", "-o", uc.Org, uc.Space).Wait(spaceSetupTimeout)).To(Exit(0))
+	Expect(cf.Cf("set-space-role", uc.Username, uc.Org, uc.Space, "SpaceManager").Wait(spaceSetupTimeout)).To(Exit(0))
+	Expect(cf.Cf("set-space-role", uc.Username, uc.Org, uc.Space, "SpaceDeveloper").Wait(spaceSetupTimeout)).To(Exit(0))
+	Expect(cf.Cf("set-space-role", uc.Username, uc.Org, uc.Space, "SpaceAuditor").Wait(spaceSetupTimeout)).To(Exit(0))
 }
