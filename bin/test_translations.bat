@@ -4,7 +4,7 @@ bitsadmin.exe /transfer "DownloadStableCLI" https://s3.amazonaws.com/go-cli/buil
 go get -u github.com/pivotal-cf-experimental/GATS/...
 
 SET GATSPATH=%GOPATH%\src\github.com\pivotal-cf-experimental\GATS
-SET PATH=%PATH%;%GATSPATH%;C:\Program Files\cURL\bin
+SET PATH=%GATSPATH%;C:\Program Files\cURL\bin;%PATH%
 SET CONFIG=%CD%\config.json
 SET LOCAL_GOPATH=%GATSPATH%\Godeps\_workspace
 MKDIR %LOCAL_GOPATH%\bin
