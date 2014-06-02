@@ -1,6 +1,8 @@
 DEL c:\Users\Administrator\go\src\github.com\pivotal-cf-experimental\GATS\gcf.exe
 bitsadmin.exe /transfer "DownloadStableCLI" https://s3.amazonaws.com/go-cli/builds/cf-windows-amd64.exe c:\Users\Administrator\go\src\github.com\pivotal-cf-experimental\GATS\gcf.exe
 
+go get -u github.com/piovotal-cf-experimental/GATS
+
 SET GATSPATH=%GOPATH%\src\github.com\pivotal-cf-experimental\GATS
 SET PATH=%PATH%;%GATSPATH%;C:\Program Files\cURL\bin
 SET CONFIG=%GATSPATH%\config.json
