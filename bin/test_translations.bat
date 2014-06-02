@@ -5,7 +5,7 @@ go get -u github.com/piovotal-cf-experimental/GATS/...
 
 SET GATSPATH=%GOPATH%\src\github.com\pivotal-cf-experimental\GATS
 SET PATH=%PATH%;%GATSPATH%;C:\Program Files\cURL\bin
-SET CONFIG=%GATSPATH%\config.json
+SET CONFIG=%CD%\config.json
 SET LOCAL_GOPATH=%GATSPATH%\Godeps\_workspace
 MKDIR %LOCAL_GOPATH%\bin
 SET GOPATH=%LOCAL_GOPATH%;%GOPATH%
