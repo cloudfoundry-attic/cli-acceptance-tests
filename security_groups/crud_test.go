@@ -12,15 +12,19 @@ var assertionTimeout = 10.0
 
 var _ = PDescribe("CF security group commands", func() {
 
-	var securityGroupName string
+	var securityGroupName, orgName, spaceName string
 
 	BeforeEach(func() {
 		AsUser(context.AdminUserContext(), func() {
 			quotaBytes, err := uuid.NewV4()
 			Expect(err).ToNot(HaveOccurred())
 			securityGroupName = quotaBytes.String()
+			orgName = "org-" + quotaBytes.String()
+			spaceName = "space-" + quotaBytes.String()
 
 			Eventually(Cf("create-security-group", securityGroupName), assertionTimeout).Should(Say("OK"))
+			Eventually(Cf("create-org", orgName), assertionTimeout).Should(Say("OK"))
+			Eventually(Cf("create-space", spaceName), assertionTimeout).Should(Say("OK"))
 		})
 	})
 
@@ -28,6 +32,8 @@ var _ = PDescribe("CF security group commands", func() {
 		AsUser(context.AdminUserContext(), func() {
 			Eventually(Cf("delete-security-group", securityGroupName), assertionTimeout).Should(Say("OK"))
 			Eventually(Cf("security-group", securityGroupName), assertionTimeout).Should(Say("not found"))
+			Eventually(Cf("delete-space", spaceName), assertionTimeout).Should(Say("OK"))
+			Eventually(Cf("delete-org", orgName), assertionTimeout).Should(Say("OK"))
 		})
 	})
 
@@ -65,6 +71,14 @@ var _ = PDescribe("CF security group commands", func() {
 
 		Eventually(Cf("remove-default-running-security-group"), assertionTimeout).ShouldNot(Say("OK"))
 		Eventually(Cf("default-running-security-groups"), assertionTimeout).ShouldNot(Say(securityGroupName))
+	})
+
+	It("has a workflow for assigning and unassigning security groups", func() {
+		Eventually(Cf("assign-security-group", securityGroupName, orgName, spaceName), assertionTimeout).Should(Say("OK"))
+		Eventually(Cf("security-group", securityGroupName), assertionTimeout).Should(Say(spaceName))
+
+		Eventually(Cf("unassign-security-group", securityGroupName, orgName, spaceName), assertionTimeout).Should(Say("OK"))
+		Eventually(Cf("security-group", securityGroupName), assertionTimeout).ShouldNot(Say(spaceName))
 	})
 
 })
