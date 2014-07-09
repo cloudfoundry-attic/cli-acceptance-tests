@@ -39,12 +39,15 @@ var _ = PDescribe("CF security group commands", func() {
 
 			Eventually(Cf("create-security-group", securityGroupName, tempfile.Name()), assertionTimeout).Should(Say("OK"))
 			Eventually(Cf("create-org", orgName), assertionTimeout).Should(Say("OK"))
-			Eventually(Cf("create-space", spaceName), assertionTimeout).Should(Say("OK"))
+			Eventually(Cf("create-space", spaceName, "-o", orgName), assertionTimeout).Should(Say("OK"))
 		})
 	})
 
 	AfterEach(func() {
 		AsUser(context.AdminUserContext(), func() {
+			// Must target org in order to delete security-group.
+			Eventually(Cf("target", "-o", orgName, "-s", spaceName), assertionTimeout).ShouldNot(Say("FAILED"))
+
 			Eventually(Cf("delete-security-group", securityGroupName, "-f"), assertionTimeout).Should(Say("OK"))
 			Eventually(Cf("security-group", securityGroupName), assertionTimeout).Should(Say("not found"))
 			Eventually(Cf("delete-space", spaceName, "-f"), assertionTimeout).Should(Say("OK"))
@@ -78,31 +81,37 @@ var _ = PDescribe("CF security group commands", func() {
 	})
 
 	It("has a workflow for default staging security groups", func() {
-		Eventually(Cf("staging-security-groups"), assertionTimeout).ShouldNot(Say(securityGroupName))
+		AsUser(context.AdminUserContext(), func() {
+			Eventually(Cf("staging-security-groups"), assertionTimeout).ShouldNot(Say(securityGroupName))
 
-		Eventually(Cf("add-staging-security-group", securityGroupName), assertionTimeout).Should(Say("OK"))
-		Eventually(Cf("staging-security-groups"), assertionTimeout).Should(Say(securityGroupName))
+			Eventually(Cf("bind-staging-security-group", securityGroupName), assertionTimeout).Should(Say("OK"))
+			Eventually(Cf("staging-security-groups"), assertionTimeout).Should(Say(securityGroupName))
 
-		Eventually(Cf("remove-staging-security-group"), assertionTimeout).ShouldNot(Say("OK"))
-		Eventually(Cf("staging-security-groups"), assertionTimeout).ShouldNot(Say(securityGroupName))
+			Eventually(Cf("unbind-staging-security-group"), assertionTimeout).ShouldNot(Say("OK"))
+			Eventually(Cf("staging-security-groups"), assertionTimeout).ShouldNot(Say(securityGroupName))
+		})
 	})
 
 	It("has a workflow for default running security groups", func() {
-		Eventually(Cf("running-security-groups"), assertionTimeout).ShouldNot(Say(securityGroupName))
+		AsUser(context.AdminUserContext(), func() {
+			Eventually(Cf("running-security-groups"), assertionTimeout).ShouldNot(Say(securityGroupName))
 
-		Eventually(Cf("add-running-security-group", securityGroupName), assertionTimeout).Should(Say("OK"))
-		Eventually(Cf("running-security-groups"), assertionTimeout).Should(Say(securityGroupName))
+			Eventually(Cf("bind-running-security-group", securityGroupName), assertionTimeout).Should(Say("OK"))
+			Eventually(Cf("running-security-groups"), assertionTimeout).Should(Say(securityGroupName))
 
-		Eventually(Cf("remove-running-security-group"), assertionTimeout).ShouldNot(Say("OK"))
-		Eventually(Cf("running-security-groups"), assertionTimeout).ShouldNot(Say(securityGroupName))
+			Eventually(Cf("unbind-running-security-group"), assertionTimeout).ShouldNot(Say("OK"))
+			Eventually(Cf("running-security-groups"), assertionTimeout).ShouldNot(Say(securityGroupName))
+		})
 	})
 
-	It("has a workflow for assigning and unassigning security groups", func() {
-		Eventually(Cf("assign-security-group", securityGroupName, orgName, spaceName), assertionTimeout).Should(Say("OK"))
-		Eventually(Cf("security-group", securityGroupName), assertionTimeout).Should(Say(spaceName))
+	It("has a workflow for binding and unbinding security groups", func() {
+		AsUser(context.AdminUserContext(), func() {
+			Eventually(Cf("bind-security-group", securityGroupName, orgName, spaceName), assertionTimeout).Should(Say("OK"))
+			Eventually(Cf("security-group", securityGroupName), assertionTimeout).Should(Say(spaceName))
 
-		Eventually(Cf("unassign-security-group", securityGroupName, orgName, spaceName), assertionTimeout).Should(Say("OK"))
-		Eventually(Cf("security-group", securityGroupName), assertionTimeout).ShouldNot(Say(spaceName))
+			Eventually(Cf("unbind-security-group", securityGroupName, orgName, spaceName), assertionTimeout).Should(Say("OK"))
+			Eventually(Cf("security-group", securityGroupName), assertionTimeout).ShouldNot(Say(spaceName))
+		})
 	})
 
 })

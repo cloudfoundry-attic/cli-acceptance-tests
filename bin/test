@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-
-set -e -x
+set -e
 
 function printStatus {
     if [ $? -eq 0 ]; then
@@ -17,8 +16,15 @@ trap printStatus EXIT
 go install -v github.com/onsi/ginkgo/ginkgo
 
 rm -f bin/gcf
-curl -L https://s3.amazonaws.com/go-cli/builds/cf-linux-amd64 > bin/gcf
-chmod +x bin/gcf
+
+if [[ $1 == '-s' ]]
+then
+  echo "Using $(which cf) as gcf"
+  ln -s $(which cf) bin/gcf
+else
+  curl -L https://s3.amazonaws.com/go-cli/builds/cf-linux-amd64 > bin/gcf
+  chmod +x bin/gcf
+fi
 
 export local_bin=$(cd $(dirname $0) && pwd)
-PATH=$PATH:$local_bin GOPATH=$(godep path) ginkgo -r -slowSpecThreshold=120 ./quotas
+PATH=$PATH:$local_bin GOPATH=$(godep path) ginkgo -r -slowSpecThreshold=120 ./gats
