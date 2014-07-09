@@ -16,11 +16,11 @@ var _ = PDescribe("CF security group commands", func() {
 
 	BeforeEach(func() {
 		AsUser(context.AdminUserContext(), func() {
-			quotaBytes, err := uuid.NewV4()
+			bytes, err := uuid.NewV4()
 			Expect(err).ToNot(HaveOccurred())
-			securityGroupName = quotaBytes.String()
-			orgName = "org-" + quotaBytes.String()
-			spaceName = "space-" + quotaBytes.String()
+			securityGroupName = bytes.String()
+			orgName = "org-" + bytes.String()
+			spaceName = "space-" + bytes.String()
 
 			Eventually(Cf("create-security-group", securityGroupName), assertionTimeout).Should(Say("OK"))
 			Eventually(Cf("create-org", orgName), assertionTimeout).Should(Say("OK"))
