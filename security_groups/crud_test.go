@@ -30,10 +30,10 @@ var _ = PDescribe("CF security group commands", func() {
 
 	AfterEach(func() {
 		AsUser(context.AdminUserContext(), func() {
-			Eventually(Cf("delete-security-group", securityGroupName), assertionTimeout).Should(Say("OK"))
+			Eventually(Cf("delete-security-group", securityGroupName, "-f"), assertionTimeout).Should(Say("OK"))
 			Eventually(Cf("security-group", securityGroupName), assertionTimeout).Should(Say("not found"))
-			Eventually(Cf("delete-space", spaceName), assertionTimeout).Should(Say("OK"))
-			Eventually(Cf("delete-org", orgName), assertionTimeout).Should(Say("OK"))
+			Eventually(Cf("delete-space", spaceName, "-f"), assertionTimeout).Should(Say("OK"))
+			Eventually(Cf("delete-org", orgName, "-f"), assertionTimeout).Should(Say("OK"))
 		})
 	})
 
