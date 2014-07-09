@@ -54,23 +54,23 @@ var _ = PDescribe("CF security group commands", func() {
 	})
 
 	It("has a workflow for default staging security groups", func() {
-		Eventually(Cf("default-staging-security-groups"), assertionTimeout).ShouldNot(Say(securityGroupName))
+		Eventually(Cf("staging-security-groups"), assertionTimeout).ShouldNot(Say(securityGroupName))
 
-		Eventually(Cf("add-default-staging-security-group", securityGroupName), assertionTimeout).Should(Say("OK"))
-		Eventually(Cf("default-staging-security-groups"), assertionTimeout).Should(Say(securityGroupName))
+		Eventually(Cf("add-staging-security-group", securityGroupName), assertionTimeout).Should(Say("OK"))
+		Eventually(Cf("staging-security-groups"), assertionTimeout).Should(Say(securityGroupName))
 
-		Eventually(Cf("remove-default-staging-security-group"), assertionTimeout).ShouldNot(Say("OK"))
-		Eventually(Cf("default-staging-security-groups"), assertionTimeout).ShouldNot(Say(securityGroupName))
+		Eventually(Cf("remove-staging-security-group"), assertionTimeout).ShouldNot(Say("OK"))
+		Eventually(Cf("staging-security-groups"), assertionTimeout).ShouldNot(Say(securityGroupName))
 	})
 
 	It("has a workflow for default running security groups", func() {
-		Eventually(Cf("default-running-security-groups"), assertionTimeout).ShouldNot(Say(securityGroupName))
+		Eventually(Cf("running-security-groups"), assertionTimeout).ShouldNot(Say(securityGroupName))
 
-		Eventually(Cf("add-default-running-security-group", securityGroupName), assertionTimeout).Should(Say("OK"))
-		Eventually(Cf("default-running-security-groups"), assertionTimeout).Should(Say(securityGroupName))
+		Eventually(Cf("add-running-security-group", securityGroupName), assertionTimeout).Should(Say("OK"))
+		Eventually(Cf("running-security-groups"), assertionTimeout).Should(Say(securityGroupName))
 
-		Eventually(Cf("remove-default-running-security-group"), assertionTimeout).ShouldNot(Say("OK"))
-		Eventually(Cf("default-running-security-groups"), assertionTimeout).ShouldNot(Say(securityGroupName))
+		Eventually(Cf("remove-running-security-group"), assertionTimeout).ShouldNot(Say("OK"))
+		Eventually(Cf("running-security-groups"), assertionTimeout).ShouldNot(Say(securityGroupName))
 	})
 
 	It("has a workflow for assigning and unassigning security groups", func() {
