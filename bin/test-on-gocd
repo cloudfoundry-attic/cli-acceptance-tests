@@ -12,7 +12,8 @@ echo `ls $GOPATH`
 echo $PWD
 echo `ls $PWD`
 
-$(dirname $0)/create-cats-config
+cd $(dirname $0)
+./create-gats-config
 export CONFIG=$PWD/config.json
 cat $CONFIG
 
