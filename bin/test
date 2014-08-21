@@ -13,6 +13,9 @@ trap printStatus EXIT
 
 . $(dirname $0)/goenv
 
+git pull
+git checkout master
+
 go install -v github.com/onsi/ginkgo/ginkgo
 
 rm -f bin/gcf
