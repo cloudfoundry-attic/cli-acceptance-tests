@@ -19,11 +19,11 @@ rm -f bin/gcf
 
 if [[ $1 == '-s' ]]
 then
-  echo "Using $(which cf) as gcf"
-  ln -s $(which cf) bin/gcf
+  echo "Using $(which cf) as cf"
+  ln -s $(which cf) bin/cf
 else
-  curl -L https://s3.amazonaws.com/go-cli/builds/cf-linux-amd64 > bin/gcf
-  chmod +x bin/gcf
+  curl -L https://s3.amazonaws.com/go-cli/builds/cf-linux-amd64 > bin/cf
+  chmod +x bin/cf
 fi
 
 export local_bin=$(cd $(dirname $0) && pwd)
