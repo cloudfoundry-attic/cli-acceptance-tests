@@ -5,9 +5,12 @@ type Assets struct {
 	HelloWorld               string
 	Node                     string
 	Java                     string
-	Go                       string
+	Golang                   string
+	Python                   string
 	LoggregatorLoadGenerator string
 	ServiceBroker            string
+	Php                      string
+	SecurityGroupBuildpack   string
 }
 
 func NewAssets() Assets {
@@ -16,8 +19,11 @@ func NewAssets() Assets {
 		HelloWorld: "../assets/hello-world",
 		Node:       "../assets/node",
 		Java:       "../assets/java",
-		Go:         "../assets/go",
+		Golang:     "../assets/golang",
+		Python:     "../assets/python",
 		LoggregatorLoadGenerator: "../assets/loggregator-load-generator",
 		ServiceBroker:            "../assets/service_broker",
+		Php:                      "../assets/php",
+		SecurityGroupBuildpack: "../assets/security_group_buildpack",
 	}
 }

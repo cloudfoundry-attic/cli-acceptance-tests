@@ -3,7 +3,7 @@
 package jibber_jabber_test
 
 import (
-	. "github.com/XenoPhex/jibber_jabber"
+	. "github.com/pivotal-cf-experimental/jibber_jabber"
 	"os"
 
 	. "github.com/onsi/ginkgo"
@@ -11,9 +11,6 @@ import (
 )
 
 var _ = Describe("Unix", func() {
-
-	//os.Setenv("LC_ALL", "fr_FR.UTF-8")
-	//os.Setenv("LANG", "fr_FR.UTF-8")
 	AfterEach(func() {
 		os.Setenv("LC_ALL", "")
 		os.Setenv("LANG", "en_US.UTF-8")
@@ -39,6 +36,18 @@ var _ = Describe("Unix", func() {
 
 				_, err := DetectIETF()
 				Ω(err.Error()).Should(Equal(COULD_NOT_DETECT_PACKAGE_ERROR_MESSAGE))
+			})
+		})
+
+		Context("when the locale is simply 'fr'", func() {
+			BeforeEach(func() {
+				os.Setenv("LANG", "fr")
+			})
+
+			It("should return the locale without a territory", func() {
+				language, err := DetectIETF()
+				Ω(err).ShouldNot(HaveOccurred())
+				Ω(language).Should(Equal("fr"))
 			})
 		})
 	})
