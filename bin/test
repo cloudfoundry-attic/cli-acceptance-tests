@@ -27,4 +27,4 @@ else
 fi
 
 export local_bin=$(cd $(dirname $0) && pwd)
-PATH=$PATH:$local_bin GOPATH=$(godep path) ginkgo -r -slowSpecThreshold=120 ./gats
+PATH=$PATH:$local_bin GOPATH=$(godep path):$GOPATH ginkgo -r -slowSpecThreshold=120 ./gats

@@ -14,7 +14,7 @@ import (
 
 var assertionTimeout = 10.0
 
-var _ = PDescribe("CF security group commands", func() {
+var _ = Describe("CF security group commands", func() {
 
 	var securityGroupName, orgName, spaceName string
 
