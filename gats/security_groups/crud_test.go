@@ -1,9 +1,6 @@
 package security_groups_test
 
 import (
-	"io/ioutil"
-	"os"
-
 	"github.com/nu7hatch/gouuid"
 	"github.com/pivotal-cf-experimental/GATS/helpers"
 
