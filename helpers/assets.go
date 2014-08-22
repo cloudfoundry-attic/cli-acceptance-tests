@@ -1,9 +1,9 @@
 package helpers
 
 import (
-	"filepath"
 	"os"
 	"path"
+	"path/filepath"
 )
 
 type Assets struct {
