@@ -66,7 +66,7 @@ var _ = Describe("CF security group commands", func() {
 			Eventually(Cf("bind-staging-security-group", securityGroupName), assertionTimeout).Should(Say("OK"))
 			Eventually(Cf("staging-security-groups"), assertionTimeout).Should(Say(securityGroupName))
 
-			Eventually(Cf("unbind-staging-security-group"), assertionTimeout).ShouldNot(Say("OK"))
+			Eventually(Cf("unbind-staging-security-group", securityGroupName), assertionTimeout).Should(Say("OK"))
 			Eventually(Cf("staging-security-groups"), assertionTimeout).ShouldNot(Say(securityGroupName))
 		})
 	})
@@ -78,7 +78,7 @@ var _ = Describe("CF security group commands", func() {
 			Eventually(Cf("bind-running-security-group", securityGroupName), assertionTimeout).Should(Say("OK"))
 			Eventually(Cf("running-security-groups"), assertionTimeout).Should(Say(securityGroupName))
 
-			Eventually(Cf("unbind-running-security-group"), assertionTimeout).ShouldNot(Say("OK"))
+			Eventually(Cf("unbind-running-security-group", securityGroupName), assertionTimeout).Should(Say("OK"))
 			Eventually(Cf("running-security-groups"), assertionTimeout).ShouldNot(Say(securityGroupName))
 		})
 	})
