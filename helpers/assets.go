@@ -18,8 +18,8 @@ func NewAssets() Assets {
 		panic(err.Error())
 	}
 	return Assets{
-		ServiceBroker:      filepath.ToSlash(path.Join(pwd, "../../assets/service_broker")),
-		SecurityRules:      filepath.ToSlash(path.Join(pwd, "../../assets/security_groups/security-rules.json")),
-		EmptySecurityRules: filepath.ToSlash(path.Join(pwd, "../../assets/security_groups/empty-security-rules.json")),
+		ServiceBroker:      filepath.FromSlash(path.Join(pwd, "../../assets/service_broker")),
+		SecurityRules:      filepath.FromSlash(path.Join(pwd, "../../assets/security_groups/security-rules.json")),
+		EmptySecurityRules: filepath.FromSlash(path.Join(pwd, "../../assets/security_groups/empty-security-rules.json")),
 	}
 }
