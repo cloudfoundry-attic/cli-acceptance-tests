@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"filepath"
 	"os"
 	"path"
 )
@@ -17,8 +18,8 @@ func NewAssets() Assets {
 		panic(err.Error())
 	}
 	return Assets{
-		ServiceBroker:      path.Join(pwd, "../../assets/service_broker"),
-		SecurityRules:      path.Join(pwd, "../../assets/security_groups/security-rules.json"),
-		EmptySecurityRules: path.Join(pwd, "../../assets/security_groups/empty-security-rules.json"),
+		ServiceBroker:      filepath.ToSlash(path.Join(pwd, "../../assets/service_broker")),
+		SecurityRules:      filepath.ToSlash(path.Join(pwd, "../../assets/security_groups/security-rules.json")),
+		EmptySecurityRules: filepath.ToSlash(path.Join(pwd, "../../assets/security_groups/empty-security-rules.json")),
 	}
 }
