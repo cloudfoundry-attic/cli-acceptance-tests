@@ -12,6 +12,10 @@ function printStatus {
 trap printStatus EXIT
 
 . $(dirname $0)/goenv
+ROOT_DIR=$(cd $(dirname $(dirname $0)) && pwd)
+GATS_GOPATH=$ROOT_DIR/tmp/gats_gopath
+mkdir -p $GATS_GOPATH/src/github.com/pivotal-cf-experimental
+ln -s $ROOT_DIR $GATS_GOPATH/src/github.com/pivotal-cf-experimental
 
 go install -v github.com/onsi/ginkgo/ginkgo
 
@@ -27,4 +31,5 @@ else
 fi
 
 export local_bin=$(cd $(dirname $0) && pwd)
-PATH=$PATH:$local_bin GOPATH=$(godep path):$GOPATH ginkgo -r -slowSpecThreshold=120 ./gats
+PATH=$PATH:$local_bin GOPATH=$(godep path):$GATS_GOPATH:$GOPATH ginkgo -r -slowSpecThreshold=120 ./gats
+rm -rf $GATS_GOPATH
