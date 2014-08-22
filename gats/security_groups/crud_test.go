@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/nu7hatch/gouuid"
+	"github.com/pivotal-cf-experimental/GATS/helpers"
 
 	. "github.com/cloudfoundry-incubator/cf-test-helpers/cf"
 	. "github.com/onsi/ginkgo"
@@ -26,18 +27,9 @@ var _ = Describe("CF security group commands", func() {
 			securityGroupName = bytes.String()
 			orgName = "org-" + bytes.String()
 			spaceName = "space-" + bytes.String()
+			emptySecRulesPath := helpers.NewAssets().EmptySecurityRules
 
-			tempfile, err := ioutil.TempFile("", "json-rules")
-			Expect(err).ShouldNot(HaveOccurred())
-
-			defer func() {
-				Expect(os.Remove(tempfile.Name())).ShouldNot(HaveOccurred())
-			}()
-
-			_, err = tempfile.Write([]byte("[]"))
-			Expect(err).ShouldNot(HaveOccurred())
-
-			Eventually(Cf("create-security-group", securityGroupName, tempfile.Name()), assertionTimeout).Should(Say("OK"))
+			Eventually(Cf("create-security-group", securityGroupName, emptySecRulesPath), assertionTimeout).Should(Say("OK"))
 			Eventually(Cf("create-org", orgName), assertionTimeout).Should(Say("OK"))
 			Eventually(Cf("create-space", spaceName, "-o", orgName), assertionTimeout).Should(Say("OK"))
 		})
@@ -72,7 +64,7 @@ var _ = Describe("CF security group commands", func() {
 			Eventually(Cf(
 				"update-security-group",
 				securityGroupName,
-				tempfile.Name(),
+				helpers.NewAssets().SecurityRules,
 			), assertionTimeout).Should(Say("OK"))
 			Eventually(Cf("security-group", securityGroupName), assertionTimeout).Should(Say("8.8.8.8"))
 
@@ -113,5 +105,4 @@ var _ = Describe("CF security group commands", func() {
 			Eventually(Cf("security-group", securityGroupName), assertionTimeout).ShouldNot(Say(spaceName))
 		})
 	})
-
 })

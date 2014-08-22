@@ -6,7 +6,9 @@ import (
 )
 
 type Assets struct {
-	ServiceBroker string
+	ServiceBroker      string
+	SecurityRules      string
+	EmptySecurityRules string
 }
 
 func NewAssets() Assets {
@@ -15,6 +17,8 @@ func NewAssets() Assets {
 		panic(err.Error())
 	}
 	return Assets{
-		ServiceBroker: path.Join(pwd, "../../assets/service_broker"),
+		ServiceBroker:      path.Join(pwd, "../../assets/service_broker"),
+		SecurityRules:      path.Join(pwd, "../../assets/security_groups/security-rules.json"),
+		EmptySecurityRules: path.Join(pwd, "../../assets/security_groups/empty-security-rules.json"),
 	}
 }
