@@ -1,11 +1,5 @@
 package helpers
 
-import (
-	"os"
-	"path"
-	"path/filepath"
-)
-
 type Assets struct {
 	ServiceBroker      string
 	SecurityRules      string
