@@ -51,16 +51,6 @@ var _ = Describe("CF security group commands", func() {
 		AsUser(context.AdminUserContext(), func() {
 			Eventually(Cf("security-group", securityGroupName), assertionTimeout).Should(Say("Rules"))
 
-			newRules := `[{"protocol": "tcp", "ports": "8080-8081", "destination": "8.8.8.8"}]`
-			tempfile, err := ioutil.TempFile("", "json-rules")
-			Expect(err).ShouldNot(HaveOccurred())
-
-			defer func() {
-				Expect(os.Remove(tempfile.Name())).ShouldNot(HaveOccurred())
-			}()
-			_, err = tempfile.Write([]byte(newRules))
-			Expect(err).ShouldNot(HaveOccurred())
-
 			Eventually(Cf(
 				"update-security-group",
 				securityGroupName,
