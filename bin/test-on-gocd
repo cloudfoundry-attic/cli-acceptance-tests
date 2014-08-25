@@ -25,7 +25,8 @@ then
   echo "Using $(which cf) as cf"
   ln -s $(which cf) bin/cf
 else
-  chmod +x bin/cf
+  chmod +x bin/cf-linux-amd64
+  ln -s bin/cf-linux-amd64 bin/cf
 fi
 
 echo `which cf`
