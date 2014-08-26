@@ -35,7 +35,10 @@ export local_bin=$(cd $(dirname $0) && pwd)
 export PATH=$local_bin:$PATH
 
 echo `ls -l $GATS_GOPATH/src/github.com/pivotal-cf-experimental/GATS/bin`
+echo $local_bin
+echo `ls -l $local_bin`
 
+echo $PATH
 echo `which cf`
 echo `which godep`
 
