@@ -18,7 +18,7 @@ mkdir -p $GATS_GOPATH/src/github.com/pivotal-cf-experimental
 ln -s $ROOT_DIR $GATS_GOPATH/src/github.com/pivotal-cf-experimental/GATS
 
 go install -v github.com/onsi/ginkgo/ginkgo
-go get github.com/tools/godep
+go get -uv github.com/tools/godep
 
 if [[ $1 == '-s' ]]
 then
@@ -32,5 +32,5 @@ fi
 echo `which cf`
 
 export local_bin=$(cd $(dirname $0) && pwd)
-GOPATH=$(godep path):$GATS_GOPATH:$GOPATH ginkgo -r -slowSpecThreshold=120 ./gats
+PATH=local_bin:$PATH GOPATH=$(godep path):$GATS_GOPATH:$GOPATH ginkgo -r -slowSpecThreshold=120 ./gats
 rm -rf $GATS_GOPATH
