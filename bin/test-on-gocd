@@ -18,7 +18,7 @@ mkdir -p $GATS_GOPATH/src/github.com/pivotal-cf-experimental
 ln -s $ROOT_DIR $GATS_GOPATH/src/github.com/pivotal-cf-experimental/GATS
 
 go install -v github.com/onsi/ginkgo/ginkgo
-go get -uv github.com/tools/godep
+go get -u github.com/tools/godep
 
 if [[ $1 == '-s' ]]
 then
