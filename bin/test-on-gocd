@@ -20,18 +20,24 @@ ln -s $ROOT_DIR $GATS_GOPATH/src/github.com/pivotal-cf-experimental/GATS
 go install -v github.com/onsi/ginkgo/ginkgo
 go get -u github.com/tools/godep
 
+rm -f bin/cf
+
 if [[ $1 == '-s' ]]
 then
   echo "Using $(which cf) as cf"
   ln -s $(which cf) bin/cf
 else
-  chmod +x bin/cf-linux-amd64
-  ln -s bin/cf-linux-amd64 bin/cf
+  chmod +x cf-linux-amd64
+  ln -s cf-linux-amd64 bin/cf
 fi
+
+export local_bin=$(cd $(dirname $0) && pwd)
+export PATH=$local_bin:$PATH
+
+echo `ls -l $GATS_GOPATH/src/github.com/pivotal-cf-experimental/GATS/bin`
 
 echo `which cf`
 echo `which godep`
 
-export local_bin=$(cd $(dirname $0) && pwd)
-PATH=$local_bin:$PATH GOPATH=$ROOT_DIR/Godeps/_workspace:$GATS_GOPATH:$GOPATH ginkgo -r -slowSpecThreshold=120 ./gats
+GOPATH=$ROOT_DIR/Godeps/_workspace:$GATS_GOPATH:$GOPATH ginkgo -r -slowSpecThreshold=120 ./gats
 rm -rf $GATS_GOPATH
