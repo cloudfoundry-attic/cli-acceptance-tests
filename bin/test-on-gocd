@@ -27,8 +27,8 @@ then
   echo "Using $(which cf) as cf"
   ln -s $(which cf) bin/cf
 else
-  chmod +x cf-linux-amd64
-  ln -s cf-linux-amd64 bin/cf
+  mv cf-linux-amd64 bin/cf
+  chmod u+x bin/cf
 fi
 
 export local_bin=$(cd $(dirname $0) && pwd)
