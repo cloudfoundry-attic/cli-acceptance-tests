@@ -30,7 +30,8 @@ else
 fi
 
 echo `which cf`
+echo `which godep`
 
 export local_bin=$(cd $(dirname $0) && pwd)
-PATH=local_bin:$PATH GOPATH=$(godep path):$GATS_GOPATH:$GOPATH ginkgo -r -slowSpecThreshold=120 ./gats
+PATH=$local_bin:$PATH GOPATH=$ROOT_DIR/Godeps/_workspace:$GATS_GOPATH:$GOPATH ginkgo -r -slowSpecThreshold=120 ./gats
 rm -rf $GATS_GOPATH
