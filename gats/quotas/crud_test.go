@@ -20,10 +20,11 @@ var _ = Describe("CF Quota commands", func() {
 
 			Eventually(Cf("create-quota",
 				quotaName,
-				"-m", "512M",
+				"-m", "512M", "-i", "1G",
 			), assertionTimeout).Should(Say("OK"))
 
 			Eventually(Cf("quota", quotaName), assertionTimeout).Should(Say("512M"))
+			Eventually(Cf("quota", quotaName), assertionTimeout).Should(Say("1G"))
 
 			quotaOutput := Cf("quotas")
 			Eventually(quotaOutput, assertionTimeout).Should(Say(quotaName))
