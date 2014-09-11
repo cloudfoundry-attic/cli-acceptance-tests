@@ -61,7 +61,7 @@ var _ = Describe("CF space quota commands", func() {
 				spaceQuota = Cf("space-quota", "foo").Wait(assertionTimeout)
 				Expect(spaceQuota).To(Exit(0))
 				output = spaceQuota.Out.Contents()
-				Expect(output).To(ContainSubstring("instance memory limit   -1"))
+				Expect(output).To(ContainSubstring("instance memory limit   unlimited"))
 
 				spaceName := context.RegularUserContext().Space
 				spaceQuota = Cf("set-space-quota", spaceName, "foo").Wait(assertionTimeout)
