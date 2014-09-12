@@ -1,4 +1,4 @@
-DEL c:\Users\Administrator\go\src\github.com\pivotal-cf-experimental\GATS\gcf.exe
+DEL c:\Users\Administrator\go\src\github.com\pivotal-cf-experimental\GATS\cf.exe
 bitsadmin.exe /transfer "DownloadStableCLI" https://s3.amazonaws.com/go-cli/builds/cf-windows-amd64.exe c:\Users\Administrator\go\src\github.com\pivotal-cf-experimental\GATS\cf.exe
 
 go get -u github.com/pivotal-cf-experimental/GATS/...
