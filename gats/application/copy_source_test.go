@@ -1,4 +1,4 @@
-package copy_source_test
+package application_test
 
 import (
 	"time"
@@ -44,7 +44,7 @@ var _ = Describe("CopySource", func() {
 			org := context.RegularUserContext().Org
 			username := context.RegularUserContext().Username
 
-			target := Cf("target", "-o", context.RegularUserContext().Org, "-s", space).Wait(assertionTimeout)
+			target := Cf("target", "-o", org, "-s", space).Wait(assertionTimeout)
 			Expect(target.ExitCode()).To(Equal(0))
 
 			appName1 := generator.RandomName()

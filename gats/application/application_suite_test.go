@@ -1,4 +1,4 @@
-package copy_source_test
+package application_test
 
 import (
 	. "github.com/onsi/ginkgo"
@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestCopySource(t *testing.T) {
+func TestApplication(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "CopySource Suite")
+	RunSpecs(t, "Application Suite")
 }
