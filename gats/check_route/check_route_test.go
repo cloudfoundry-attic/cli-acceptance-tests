@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	. "github.com/cloudfoundry-incubator/cf-test-helpers/cf"
+	"github.com/cloudfoundry-incubator/cf-test-helpers/generator"
 	"github.com/cloudfoundry-incubator/cf-test-helpers/helpers"
-	"github.com/nu7hatch/gouuid"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -26,9 +26,7 @@ var _ = Describe("CheckRoute", func() {
 	config := helpers.LoadConfig()
 
 	BeforeEach(func() {
-		uuidBytes, err := uuid.NewV4()
-		Expect(err).ToNot(HaveOccurred())
-		hostName = uuidBytes.String()
+		hostName = generator.RandomName()
 
 		context = helpers.NewContext(config)
 		env = helpers.NewEnvironment(context)
