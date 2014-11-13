@@ -1,7 +1,7 @@
 package feature_flags_test
 
 import (
-	CATS_helper "github.com/cloudfoundry/cf-acceptance-tests/helpers"
+	CATS_helper "github.com/cloudfoundry/cf-acceptance-tests/helpers/assets"
 
 	. "github.com/cloudfoundry-incubator/cf-test-helpers/cf"
 	. "github.com/onsi/ginkgo"
