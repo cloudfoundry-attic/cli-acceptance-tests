@@ -18,6 +18,10 @@
 			"Rev": "866a2a0085b0a91579a455ec0e142dcf53187f45"
 		},
 		{
+			"ImportPath": "github.com/cloudfoundry-incubator/cf-test-helpers/helpers",
+			"Rev": "866a2a0085b0a91579a455ec0e142dcf53187f45"
+		},
+		{
 			"ImportPath": "github.com/cloudfoundry-incubator/cf-test-helpers/runner",
 			"Rev": "866a2a0085b0a91579a455ec0e142dcf53187f45"
 		},
