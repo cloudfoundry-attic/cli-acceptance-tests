@@ -2,7 +2,7 @@ GATS
 ====
 
 We got some CATS strapped with GATS.
-![cache-cats](http://24.media.tumblr.com/f8391c9e7788b2b373b0f4bce3cd69a1/tumblr_n3vpe5zZjX1qgn992o1_1280.jpg)
+![cache-cats](http://41.media.tumblr.com/8b3d8038a788d661b59ed7b35a7f73a2/tumblr_njuqwy3abv1r9khx4o4_1280.jpg)
 
 What???
 =======
