@@ -34,11 +34,23 @@ var _ = BeforeSuite(func() {
 	var install *Session
 	switch runtime.GOOS {
 	case "windows":
-		install = Cf("install-plugin", "fixtures/plugin_api.windows").Wait(5 * time.Second)
+		if runtime.GOARCH == "amd64" {
+			install = Cf("install-plugin", "fixtures/plugin_windows_amd64.exe").Wait(5 * time.Second)
+		} else {
+			install = Cf("install-plugin", "fixtures/plugin_windows_386.exe").Wait(5 * time.Second)
+		}
 	case "linux":
-		install = Cf("install-plugin", "fixtures/plugin_api.linux").Wait(5 * time.Second)
+		if runtime.GOARCH == "amd64" {
+			install = Cf("install-plugin", "fixtures/plugin_linux_amd64").Wait(5 * time.Second)
+		} else {
+			install = Cf("install-plugin", "fixtures/plugin_linux_386").Wait(5 * time.Second)
+		}
 	case "darwin":
-		install = Cf("install-plugin", "fixtures/plugin_api.osx").Wait(5 * time.Second)
+		if runtime.GOARCH == "amd64" {
+			install = Cf("install-plugin", "fixtures/plugin_darwin_amd64").Wait(5 * time.Second)
+		} else {
+			install = Cf("install-plugin", "fixtures/plugin_darwin_386").Wait(5 * time.Second)
+		}
 	}
 	Expect(install).To(Exit(0))
 })
