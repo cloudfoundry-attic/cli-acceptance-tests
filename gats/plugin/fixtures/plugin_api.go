@@ -13,6 +13,12 @@ type Test1 struct {
 
 func (c *Test1) Run(cliConnection plugin.CliConnection, args []string) {
 	switch args[0] {
+	case "CliCommandWithoutTerminalOutput":
+		result, _ := cliConnection.CliCommandWithoutTerminalOutput("target")
+		fmt.Println("Done CliCommandWithoutTerminalOutput:", result)
+	case "CliCommand":
+		result, _ := cliConnection.CliCommand("target")
+		fmt.Println("Done CliCommand:", result)
 	case "GetCurrentOrg":
 		result, _ := cliConnection.GetCurrentOrg()
 		fmt.Println("Done GetCurrentOrg:", result)
@@ -62,12 +68,36 @@ func (c *Test1) Run(cliConnection plugin.CliConnection, args []string) {
 	case "AccessToken":
 		result, _ := cliConnection.AccessToken()
 		fmt.Println("Done AccessToken:", result)
+	case "GetApp":
+		result, _ := cliConnection.GetApp(args[1])
+		fmt.Println("Done GetApp:", result)
+	case "GetApps":
+		result, _ := cliConnection.GetApps()
+		fmt.Println("Done GetApps:", result)
 	case "GetOrg":
 		result, _ := cliConnection.GetOrg(args[1])
 		fmt.Println("Done GetOrg:", result)
 	case "GetOrgs":
 		result, _ := cliConnection.GetOrgs()
 		fmt.Println("Done GetOrgs:", result)
+	case "GetSpace":
+		result, _ := cliConnection.GetSpace(args[1])
+		fmt.Println("Done GetSpace:", result)
+	case "GetSpaces":
+		result, _ := cliConnection.GetSpaces()
+		fmt.Println("Done GetSpaces:", result)
+	case "GetOrgUsers":
+		result, _ := cliConnection.GetOrgUsers(args[1], args[2:]...)
+		fmt.Println("Done GetOrgUsers:", result)
+	case "GetSpaceUsers":
+		result, _ := cliConnection.GetSpaceUsers(args[1], args[2])
+		fmt.Println("Done GetSpaceUsers:", result)
+	case "GetServices":
+		result, _ := cliConnection.GetServices()
+		fmt.Println("Done GetServices:", result)
+	case "GetService":
+		result, _ := cliConnection.GetService(args[1])
+		fmt.Println("Done GetService:", result)
 	}
 
 	// } else if args[0] == "CLI-MESSAGE-UNINSTALL" {
@@ -89,6 +119,8 @@ func (c *Test1) GetMetadata() plugin.PluginMetadata {
 			Build: 0,
 		},
 		Commands: []plugin.Command{
+			{Name: "CliCommandWithoutTerminalOutput"},
+			{Name: "CliCommand"},
 			{Name: "GetCurrentSpace"},
 			{Name: "GetCurrentOrg"},
 			{Name: "Username"},
@@ -104,8 +136,16 @@ func (c *Test1) GetMetadata() plugin.PluginMetadata {
 			{Name: "LoggregatorEndpoint"},
 			{Name: "DopplerEndpoint"},
 			{Name: "AccessToken"},
+			{Name: "GetApp"},
+			{Name: "GetApps"},
 			{Name: "GetOrg"},
 			{Name: "GetOrgs"},
+			{Name: "GetSpace"},
+			{Name: "GetSpaces"},
+			{Name: "GetOrgUsers"},
+			{Name: "GetSpaceUsers"},
+			{Name: "GetServices"},
+			{Name: "GetService"},
 		},
 	}
 }

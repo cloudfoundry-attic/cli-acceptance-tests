@@ -7,10 +7,12 @@ import (
 	. "github.com/cloudfoundry-incubator/cf-test-helpers/cf"
 
 	acceptanceTestHelpers "github.com/cloudfoundry-incubator/cf-test-helpers/helpers"
+	gatsHelpers "github.com/pivotal-cf-experimental/GATS/helpers"
 
 	"github.com/cloudfoundry-incubator/cf-test-helpers/generator"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	"github.com/onsi/gomega/gbytes"
 	. "github.com/onsi/gomega/gexec"
 )
 
@@ -27,8 +29,14 @@ var _ = BeforeSuite(func() {
 
 	env.Setup()
 
+	Expect(runtime.GOARCH).To(Equal("amd64"), "Plugin suite only runs under 64bit OS, please skip the plugin suite in 32bit OS (use flag -skipPackage='gats/plugin')")
+
 	var install *Session
 	switch runtime.GOOS {
+	case "windows":
+		install = Cf("install-plugin", "fixtures/plugin_api.windows").Wait(5 * time.Second)
+	case "linux":
+		install = Cf("install-plugin", "fixtures/plugin_api.linux").Wait(5 * time.Second)
 	case "darwin":
 		install = Cf("install-plugin", "fixtures/plugin_api.osx").Wait(5 * time.Second)
 	}
@@ -45,8 +53,28 @@ var _ = AfterSuite(func() {
 var _ = Describe("Plugin API", func() {
 	const (
 		apiTimeout       = 10 * time.Second
+		appTimeout       = 1 * time.Minute
+		assertionTimeout = 10 * time.Second
 		operationTimeout = 20 * time.Second
 	)
+
+	Describe("CliCommand()", func() {
+		It("calls the core cli command and output to terminal", func() {
+			apiResult := Cf("CliCommand", "target").Wait(apiTimeout)
+			Expect(apiResult).To(Exit(0))
+			Expect(apiResult).Should(gbytes.Say("API endpoint"))
+			Expect(apiResult).Should(gbytes.Say("API endpoint"))
+		})
+	})
+
+	Describe("CliCommandWithoutTerminalOutput()", func() {
+		It("calls the core cli command and without outputing to terminal", func() {
+			apiResult := Cf("CliCommandWithoutTerminalOutput", "target").Wait(apiTimeout)
+			Expect(apiResult).To(Exit(0))
+			Expect(apiResult).Should(gbytes.Say("API endpoint"))
+			Expect(apiResult).ShouldNot(gbytes.Say("API endpoint"))
+		})
+	})
 
 	Describe("GetCurrentOrg()", func() {
 		It("gets the current targeted org", func() {
@@ -193,6 +221,41 @@ var _ = Describe("Plugin API", func() {
 		})
 	})
 
+	Describe("GetApp() and GetApps()", func() {
+		It("gets app details and app list", func() {
+			AsUser(context.RegularUserContext(), 180*time.Second, func() {
+				space := context.RegularUserContext().Space
+				org := context.RegularUserContext().Org
+
+				target := Cf("target", "-o", org, "-s", space).Wait(assertionTimeout)
+				Expect(target.ExitCode()).To(Equal(0))
+
+				appName1 := generator.RandomName()
+				app1 := Cf("push", appName1, "-p", gatsHelpers.NewAssets().ServiceBroker).Wait(appTimeout)
+				Expect(app1).To(Exit(0))
+
+				appName2 := generator.RandomName()
+				app2 := Cf("push", appName2, "-p", gatsHelpers.NewAssets().ServiceBroker).Wait(appTimeout)
+				Expect(app2).To(Exit(0))
+
+				apiResult := Cf("GetApp", appName1).Wait(apiTimeout)
+				Expect(apiResult).To(Exit(0))
+				Expect(apiResult.Out.Contents()).To(ContainSubstring(appName1))
+
+				apiResult = Cf("GetApps", appName1).Wait(apiTimeout)
+				Expect(apiResult).To(Exit(0))
+				Expect(apiResult.Out.Contents()).To(ContainSubstring(appName1))
+				Expect(apiResult.Out.Contents()).To(ContainSubstring(appName2))
+
+				app1 = Cf("delete", appName1, "-f").Wait(appTimeout)
+				Expect(app1).To(Exit(0))
+
+				app2 = Cf("delete", appName2, "-f").Wait(appTimeout)
+				Expect(app2).To(Exit(0))
+			})
+		})
+	})
+
 	Describe("GetOrg()", func() {
 		It("gets the detail of a org", func() {
 			org := generator.RandomName()
@@ -218,4 +281,172 @@ var _ = Describe("Plugin API", func() {
 			Expect(apiResult.Out.Contents()).To(ContainSubstring("CATS-ORG-"))
 		})
 	})
+
+	Describe("GetSpace()", func() {
+		It("gets the detail of a space", func() {
+			var cmd *Session
+
+			org := generator.RandomName()
+			space := generator.RandomName()
+
+			AsUser(context.AdminUserContext(), 10*time.Second, func() {
+				cmd = Cf("create-org", org).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+
+				cmd = Cf("target", "-o", org).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+
+				cmd = Cf("create-space", space).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+
+				apiResult := Cf("GetSpace", space).Wait(apiTimeout)
+				Expect(apiResult).To(Exit(0))
+				Expect(apiResult.Out.Contents()).To(ContainSubstring(space))
+
+				cmd = Cf("delete-space", space, "-f").Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+
+				cmd = Cf("delete-org", org, "-f").Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+			})
+		})
+	})
+
+	Describe("GetOrgUsers()", func() {
+		It("gets a list of users in the org", func() {
+			var cmd *Session
+
+			org := generator.RandomName()
+			user := generator.RandomName()
+
+			AsUser(context.AdminUserContext(), 10*time.Second, func() {
+				cmd = Cf("create-org", org).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+
+				cmd = Cf("target", "-o", org).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+
+				cmd = Cf("create-user", user, "password").Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+
+				cmd = Cf("set-org-role", user, org, "OrgManager").Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+
+				apiResult := Cf("GetOrgUsers", org, "-a").Wait(apiTimeout)
+				Expect(apiResult).To(Exit(0))
+				Expect(apiResult.Out.Contents()).To(ContainSubstring(user))
+
+				cmd = Cf("delete-org", org, "-f").Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+			})
+		})
+	})
+
+	Describe("GetSpaceUsers()", func() {
+		It("gets a list of users in the space", func() {
+			var cmd *Session
+
+			org := generator.RandomName()
+			space := generator.RandomName()
+			user := generator.RandomName()
+
+			AsUser(context.AdminUserContext(), 10*time.Second, func() {
+				cmd = Cf("create-org", org).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+
+				cmd = Cf("create-space", space, "-o", org).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+
+				cmd = Cf("target", "-o", org, "-s", space).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+
+				cmd = Cf("create-user", user, "password").Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+
+				cmd = Cf("set-org-role", user, org, "OrgManager").Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+
+				cmd = Cf("set-space-role", user, org, space, "SpaceManager").Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+
+				apiResult := Cf("GetSpaceUsers", org, space).Wait(apiTimeout)
+				Expect(apiResult).To(Exit(0))
+				Expect(apiResult.Out.Contents()).To(ContainSubstring(user))
+
+				cmd = Cf("delete-org", org, "-f").Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+			})
+		})
+	})
+
+	Describe("GetSpaces()", func() {
+		It("gets a list of spaces", func() {
+			apiResult := Cf("GetSpaces").Wait(apiTimeout)
+			Expect(apiResult).To(Exit(0))
+			Expect(apiResult.Out.Contents()).To(ContainSubstring("CATS-SPACE-"))
+		})
+	})
+
+	Describe("GetServices()", func() {
+		It("gets a list of available services", func() {
+			var cmd *Session
+
+			service := generator.RandomName()
+			org := generator.RandomName()
+			space := generator.RandomName()
+
+			AsUser(context.AdminUserContext(), 10*time.Second, func() {
+				cmd = Cf("create-org", org).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+
+				cmd = Cf("create-space", space, "-o", org).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+
+				cmd = Cf("target", "-o", org, "-s", space).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+
+				cmd = Cf("cups", service).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+
+				apiResult := Cf("GetServices").Wait(apiTimeout)
+				Expect(apiResult).To(Exit(0))
+				Expect(apiResult.Out.Contents()).To(ContainSubstring(service))
+
+				do := Cf("delete-service", service, "-f").Wait(operationTimeout)
+				Expect(do).To(Exit(0))
+			})
+		})
+	})
+
+	Describe("GetService()", func() {
+		It("gets the details of a service", func() {
+			var cmd *Session
+
+			service := generator.RandomName()
+			org := generator.RandomName()
+			space := generator.RandomName()
+
+			AsUser(context.AdminUserContext(), 10*time.Second, func() {
+				cmd = Cf("create-org", org).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+
+				cmd = Cf("create-space", space, "-o", org).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+
+				cmd = Cf("target", "-o", org, "-s", space).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+
+				cmd = Cf("cups", service).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+
+				apiResult := Cf("GetService", service).Wait(apiTimeout)
+				Expect(apiResult).To(Exit(0))
+				Expect(apiResult.Out.Contents()).To(ContainSubstring(service))
+
+				do := Cf("delete-service", service, "-f").Wait(operationTimeout)
+				Expect(do).To(Exit(0))
+			})
+		})
+	})
+
 })
