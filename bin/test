@@ -26,7 +26,9 @@ then
   echo "Using $(which cf) as cf"
   ln -s $(which cf) bin/cf
 else
-  curl -L https://s3.amazonaws.com/go-cli/builds/cf-linux-amd64 > bin/cf
+  curl -L http://go-cli.s3.amazonaws.com/master/cf-linux-amd64.tgz > bin/cf.tgz
+  tar -xvzf bin/cf.tgz
+  rm bin/cf.tgz
   chmod +x bin/cf
 fi
 
