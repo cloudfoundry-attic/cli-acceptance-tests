@@ -5,7 +5,7 @@ import (
 
 	. "github.com/cloudfoundry-incubator/cf-test-helpers/cf"
 	"github.com/cloudfoundry-incubator/cf-test-helpers/generator"
-	acceptanceTestHelpers "github.com/cloudfoundry/cf-acceptance-tests/helpers"
+	acceptanceTestHelpers "github.com/cloudfoundry-incubator/cf-test-helpers/helpers"
 	gatsHelpers "github.com/pivotal-cf-experimental/GATS/helpers"
 
 	. "github.com/onsi/ginkgo"
@@ -39,7 +39,7 @@ var _ = Describe("CopySource", func() {
 	})
 
 	It("can copy app bits between multiple apps", func() {
-		AsUser(context.RegularUserContext(), func() {
+		AsUser(context.RegularUserContext(), 180*time.Second, func() {
 			space := context.RegularUserContext().Space
 			org := context.RegularUserContext().Org
 			username := context.RegularUserContext().Username

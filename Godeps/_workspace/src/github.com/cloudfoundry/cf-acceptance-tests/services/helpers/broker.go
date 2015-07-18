@@ -107,20 +107,20 @@ func (b ServiceBroker) Restart() {
 }
 
 func (b ServiceBroker) Create() {
-	cf.AsUser(b.context.AdminUserContext(), func() {
+	AsUser(b.context.AdminUserContext(), 30*time.Second, func() {
 		Expect(cf.Cf("create-service-broker", b.Name, "username", "password", helpers.AppUri(b.Name, "")).Wait(DEFAULT_TIMEOUT)).To(Exit(0))
 		Expect(cf.Cf("service-brokers").Wait(DEFAULT_TIMEOUT)).To(Say(b.Name))
 	})
 }
 
 func (b ServiceBroker) Update() {
-	cf.AsUser(b.context.AdminUserContext(), func() {
+	AsUser(b.context.AdminUserContext(), 30*time.Second, func() {
 		Expect(cf.Cf("update-service-broker", b.Name, "username", "password", helpers.AppUri(b.Name, "")).Wait(DEFAULT_TIMEOUT)).To(Exit(0))
 	})
 }
 
 func (b ServiceBroker) Delete() {
-	cf.AsUser(b.context.AdminUserContext(), func() {
+	AsUser(b.context.AdminUserContext(), 30*time.Second, func() {
 		Expect(cf.Cf("delete-service-broker", b.Name, "-f").Wait(DEFAULT_TIMEOUT)).To(Exit(0))
 
 		brokers := cf.Cf("service-brokers").Wait(DEFAULT_TIMEOUT)
@@ -130,7 +130,7 @@ func (b ServiceBroker) Delete() {
 }
 
 func (b ServiceBroker) Destroy() {
-	cf.AsUser(b.context.AdminUserContext(), func() {
+	AsUser(b.context.AdminUserContext(), 30*time.Second, func() {
 		Expect(cf.Cf("purge-service-offering", b.Service.Name, "-f").Wait(DEFAULT_TIMEOUT)).To(Exit(0))
 	})
 	b.Delete()
@@ -149,7 +149,7 @@ func (b ServiceBroker) ToJSON() string {
 func (b ServiceBroker) PublicizePlans() {
 	url := fmt.Sprintf("/v2/services?inline-relations-depth=1&q=label:%s", b.Service.Name)
 	var session *Session
-	cf.AsUser(b.context.AdminUserContext(), func() {
+	AsUser(b.context.AdminUserContext(), 30*time.Second, func() {
 		session = cf.Cf("curl", url).Wait(DEFAULT_TIMEOUT)
 		Expect(session).To(Exit(0))
 	})
@@ -172,7 +172,7 @@ func (b ServiceBroker) PublicizePlan(url string) {
 	jsonMap := make(map[string]bool)
 	jsonMap["public"] = true
 	planJson, _ := json.Marshal(jsonMap)
-	cf.AsUser(b.context.AdminUserContext(), func() {
+	AsUser(b.context.AdminUserContext(), 30*time.Second, func() {
 		Expect(cf.Cf("curl", url, "-X", "PUT", "-d", string(planJson)).Wait(DEFAULT_TIMEOUT)).To(Exit(0))
 	})
 }

@@ -3,7 +3,7 @@ package security_groups_test
 import (
 	"testing"
 
-	"github.com/cloudfoundry/cf-acceptance-tests/helpers"
+	"github.com/cloudfoundry-incubator/cf-test-helpers/helpers"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

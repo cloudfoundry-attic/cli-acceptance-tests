@@ -1,8 +1,9 @@
 package translations_test
 
-import(
-	"github.com/cloudfoundry/cf-acceptance-tests/helpers"
+import (
 	"testing"
+
+	"github.com/cloudfoundry-incubator/cf-test-helpers/helpers"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

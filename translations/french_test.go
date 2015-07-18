@@ -1,7 +1,7 @@
 package translations_test
 
 import (
-	"github.com/XenoPhex/jibber_jabber"
+	"github.com/cloudfoundry/jibber_jabber"
 
 	. "github.com/cloudfoundry-incubator/cf-test-helpers/cf"
 	. "github.com/onsi/ginkgo"

@@ -5,7 +5,7 @@ import (
 
 	. "github.com/cloudfoundry-incubator/cf-test-helpers/cf"
 	"github.com/cloudfoundry-incubator/cf-test-helpers/generator"
-	acceptanceTestHelpers "github.com/cloudfoundry/cf-acceptance-tests/helpers"
+	acceptanceTestHelpers "github.com/cloudfoundry-incubator/cf-test-helpers/helpers"
 	gatsHelpers "github.com/pivotal-cf-experimental/GATS/helpers"
 
 	. "github.com/onsi/ginkgo"
@@ -32,7 +32,7 @@ var _ = Describe("Env", func() {
 		env = acceptanceTestHelpers.NewEnvironment(context)
 
 		env.Setup()
-		AsUser(context.AdminUserContext(), func() {
+		AsUser(context.AdminUserContext(), 30*time.Second, func() {
 			envVarGroups := Cf("ssevg", `{}`).Wait(assertionTimeout)
 			Expect(envVarGroups).To(Exit(0))
 
@@ -42,7 +42,7 @@ var _ = Describe("Env", func() {
 	})
 
 	AfterEach(func() {
-		AsUser(context.AdminUserContext(), func() {
+		AsUser(context.AdminUserContext(), 30*time.Second, func() {
 			envVarGroups := Cf("ssevg", `{}`).Wait(assertionTimeout)
 			Expect(envVarGroups).To(Exit(0))
 
@@ -53,7 +53,7 @@ var _ = Describe("Env", func() {
 	})
 
 	It("returns ann applications running, staging, system provided and user defined environment variables", func() {
-		AsUser(context.AdminUserContext(), func() {
+		AsUser(context.AdminUserContext(), 60*time.Second, func() {
 			ssevgResult := Cf("ssevg", `{"name":"staging-val"}`).Wait(assertionTimeout)
 			Expect(ssevgResult).To(Exit(0))
 			srevgResult := Cf("srevg", `{"name":"running-val"}`).Wait(assertionTimeout)

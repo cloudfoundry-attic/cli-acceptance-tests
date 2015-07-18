@@ -98,7 +98,7 @@ var _ = Describe("Plugin API", func() {
 
 	Describe("GetCurrentSpace()", func() {
 		It("gets the current targeted space", func() {
-			AsUser(context.AdminUserContext(), func() {
+			AsUser(context.AdminUserContext(), 150*time.Second, func() {
 				var cmd *Session
 
 				org := generator.RandomName()
@@ -235,7 +235,7 @@ var _ = Describe("Plugin API", func() {
 
 	Describe("GetApp() and GetApps()", func() {
 		It("gets app details and app list", func() {
-			AsUser(context.RegularUserContext(), func() {
+			AsUser(context.RegularUserContext(), 250*time.Second, func() {
 				space := context.RegularUserContext().Space
 				org := context.RegularUserContext().Org
 
@@ -272,7 +272,7 @@ var _ = Describe("Plugin API", func() {
 		It("gets the detail of a org", func() {
 			org := generator.RandomName()
 
-			AsUser(context.AdminUserContext(), func() {
+			AsUser(context.AdminUserContext(), 50*time.Second, func() {
 				co := Cf("create-org", org).Wait(operationTimeout)
 				Expect(co).To(Exit(0))
 
@@ -301,7 +301,7 @@ var _ = Describe("Plugin API", func() {
 			org := generator.RandomName()
 			space := generator.RandomName()
 
-			AsUser(context.AdminUserContext(), func() {
+			AsUser(context.AdminUserContext(), 120*time.Second, func() {
 				cmd = Cf("create-org", org).Wait(operationTimeout)
 				Expect(cmd).To(Exit(0))
 
@@ -331,7 +331,7 @@ var _ = Describe("Plugin API", func() {
 			org := generator.RandomName()
 			user := generator.RandomName()
 
-			AsUser(context.AdminUserContext(), func() {
+			AsUser(context.AdminUserContext(), 120*time.Second, func() {
 				cmd = Cf("create-org", org).Wait(operationTimeout)
 				Expect(cmd).To(Exit(0))
 
@@ -362,7 +362,7 @@ var _ = Describe("Plugin API", func() {
 			space := generator.RandomName()
 			user := generator.RandomName()
 
-			AsUser(context.AdminUserContext(), func() {
+			AsUser(context.AdminUserContext(), 150*time.Second, func() {
 				cmd = Cf("create-org", org).Wait(operationTimeout)
 				Expect(cmd).To(Exit(0))
 
@@ -407,7 +407,7 @@ var _ = Describe("Plugin API", func() {
 			org := generator.RandomName()
 			space := generator.RandomName()
 
-			AsUser(context.AdminUserContext(), func() {
+			AsUser(context.AdminUserContext(), 120*time.Second, func() {
 				cmd = Cf("create-org", org).Wait(operationTimeout)
 				Expect(cmd).To(Exit(0))
 
@@ -438,7 +438,7 @@ var _ = Describe("Plugin API", func() {
 			org := generator.RandomName()
 			space := generator.RandomName()
 
-			AsUser(context.AdminUserContext(), func() {
+			AsUser(context.AdminUserContext(), 120*time.Second, func() {
 				cmd = Cf("create-org", org).Wait(operationTimeout)
 				Expect(cmd).To(Exit(0))
 

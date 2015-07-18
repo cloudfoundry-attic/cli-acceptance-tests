@@ -2,9 +2,11 @@ package service_access_test
 
 import (
 	"fmt"
+	"time"
+
 	. "github.com/cloudfoundry-incubator/cf-test-helpers/cf"
 	"github.com/cloudfoundry-incubator/cf-test-helpers/generator"
-	CATS_helper "github.com/cloudfoundry/cf-acceptance-tests/helpers"
+	CATS_helper "github.com/cloudfoundry-incubator/cf-test-helpers/helpers"
 	broker_helper "github.com/cloudfoundry/cf-acceptance-tests/services/helpers"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -36,7 +38,7 @@ var _ = Describe("CF service access commands", func() {
 	})
 
 	It("provides a reasonable workflow for seeing visibilities", func() {
-		AsUser(context.AdminUserContext(), func() {
+		AsUser(context.AdminUserContext(), 100*time.Second, func() {
 			access := Cf("service-access").Wait(assertionTimeout)
 			Expect(access).To(Exit(0))
 			output := access.Out.Contents()

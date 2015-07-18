@@ -1,7 +1,9 @@
 package environment_variable_groups_test
 
 import (
-	CATS_helper "github.com/cloudfoundry/cf-acceptance-tests/helpers"
+	"time"
+
+	CATS_helper "github.com/cloudfoundry-incubator/cf-test-helpers/helpers"
 
 	. "github.com/cloudfoundry-incubator/cf-test-helpers/cf"
 	. "github.com/onsi/ginkgo"
@@ -27,7 +29,7 @@ var _ = Describe("CF environment variable group commands", func() {
 
 		env.Setup()
 
-		AsUser(context.AdminUserContext(), func() {
+		AsUser(context.AdminUserContext(), 30*time.Second, func() {
 			envVarGroups := Cf("ssevg", `{}`).Wait(assertionTimeout)
 			Expect(envVarGroups).To(Exit(0))
 			output := envVarGroups.Out.Contents()
@@ -43,7 +45,7 @@ var _ = Describe("CF environment variable group commands", func() {
 	})
 
 	AfterEach(func() {
-		AsUser(context.AdminUserContext(), func() {
+		AsUser(context.AdminUserContext(), 30*time.Second, func() {
 			envVarGroups := Cf("ssevg", `{}`).Wait(assertionTimeout)
 			Expect(envVarGroups).To(Exit(0))
 			output := envVarGroups.Out.Contents()
@@ -61,7 +63,7 @@ var _ = Describe("CF environment variable group commands", func() {
 
 	Describe("environment variable groups", func() {
 		It("can list and set both running and staging environment variable groups", func() {
-			AsUser(context.AdminUserContext(), func() {
+			AsUser(context.AdminUserContext(), 50*time.Second, func() {
 				envVarGroups := Cf("ssevg", `{"foo":"bar"}`).Wait(assertionTimeout)
 				Expect(envVarGroups).To(Exit(0))
 				output := envVarGroups.Out.Contents()

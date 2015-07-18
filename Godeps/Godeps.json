@@ -1,29 +1,25 @@
 {
 	"ImportPath": "github.com/pivotal-cf-experimental/GATS",
-	"GoVersion": "go1.2.2",
+	"GoVersion": "go1.4.2",
 	"Packages": [
 		"./..."
 	],
 	"Deps": [
 		{
-			"ImportPath": "github.com/XenoPhex/jibber_jabber",
-			"Rev": "4f063ae5c2cae7f3444c8b16af0f9f5e4323b31b"
-		},
-		{
 			"ImportPath": "github.com/cloudfoundry-incubator/cf-test-helpers/cf",
-			"Rev": "866a2a0085b0a91579a455ec0e142dcf53187f45"
+			"Rev": "b05e7028ae395fedb07ace068eb934a9b7ba07ed"
 		},
 		{
 			"ImportPath": "github.com/cloudfoundry-incubator/cf-test-helpers/generator",
-			"Rev": "866a2a0085b0a91579a455ec0e142dcf53187f45"
+			"Rev": "b05e7028ae395fedb07ace068eb934a9b7ba07ed"
 		},
 		{
 			"ImportPath": "github.com/cloudfoundry-incubator/cf-test-helpers/helpers",
-			"Rev": "866a2a0085b0a91579a455ec0e142dcf53187f45"
+			"Rev": "b05e7028ae395fedb07ace068eb934a9b7ba07ed"
 		},
 		{
 			"ImportPath": "github.com/cloudfoundry-incubator/cf-test-helpers/runner",
-			"Rev": "866a2a0085b0a91579a455ec0e142dcf53187f45"
+			"Rev": "b05e7028ae395fedb07ace068eb934a9b7ba07ed"
 		},
 		{
 			"ImportPath": "github.com/cloudfoundry/cf-acceptance-tests/helpers",
@@ -32,6 +28,15 @@
 		{
 			"ImportPath": "github.com/cloudfoundry/cf-acceptance-tests/services/helpers",
 			"Rev": "74f7537ce7e67c9eee8014c73ac2ea9e83e8d70b"
+		},
+		{
+			"ImportPath": "github.com/cloudfoundry/cli/plugin",
+			"Comment": "v6.12.2-13-g30ea30b",
+			"Rev": "30ea30b8e8a16b7cc0534ad0765a1a565c69d267"
+		},
+		{
+			"ImportPath": "github.com/cloudfoundry/jibber_jabber",
+			"Rev": "5181a0a92a50f392c5638170d6cfad5397df5895"
 		},
 		{
 			"ImportPath": "github.com/nu7hatch/gouuid",

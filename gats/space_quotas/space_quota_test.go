@@ -2,8 +2,9 @@ package space_quotas_test
 
 import (
 	"fmt"
+	"time"
 
-	CATS_helper "github.com/cloudfoundry/cf-acceptance-tests/helpers"
+	CATS_helper "github.com/cloudfoundry-incubator/cf-test-helpers/helpers"
 
 	. "github.com/cloudfoundry-incubator/cf-test-helpers/cf"
 	. "github.com/onsi/ginkgo"
@@ -38,7 +39,7 @@ var _ = Describe("CF space quota commands", func() {
 
 	Describe("space quotas", func() {
 		It("can create, read, update, assign to a space, remove a space and delete a space quota", func() {
-			AsUser(context.AdminUserContext(), func() {
+			AsUser(context.AdminUserContext(), 120*time.Second, func() {
 				target := Cf("target", "-o", orgName).Wait(assertionTimeout)
 				Expect(target).To(Exit(0))
 
