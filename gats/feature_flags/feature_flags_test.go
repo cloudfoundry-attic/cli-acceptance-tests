@@ -1,6 +1,8 @@
 package feature_flags_test
 
 import (
+	"time"
+
 	CATS_helper "github.com/cloudfoundry-incubator/cf-test-helpers/helpers"
 
 	. "github.com/cloudfoundry-incubator/cf-test-helpers/cf"
@@ -33,7 +35,7 @@ var _ = Describe("CF feature flag commands", func() {
 	AfterEach(func() {
 		features := []string{"user_org_creation", "app_scaling", "private_domain_creation", "app_bits_upload", "route_creation"}
 
-		AsUser(context.AdminUserContext(), func() {
+		AsUser(context.AdminUserContext(), 20*time.Second, func() {
 			for _, feature := range features {
 				featureFlags := Cf("enable-feature-flag", feature).Wait(assertionTimeout)
 				Expect(featureFlags).To(Exit(0))
@@ -45,7 +47,7 @@ var _ = Describe("CF feature flag commands", func() {
 
 	Describe("feature flags", func() {
 		It("can list feature flags and toggle them on and off", func() {
-			AsUser(context.AdminUserContext(), func() {
+			AsUser(context.AdminUserContext(), 20*time.Second, func() {
 				featureFlags := Cf("feature-flags").Wait(assertionTimeout)
 				Expect(featureFlags).To(Exit(0))
 				output := featureFlags.Out.Contents()

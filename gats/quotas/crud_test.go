@@ -1,6 +1,8 @@
 package quotas_test
 
 import (
+	"time"
+
 	"github.com/nu7hatch/gouuid"
 
 	. "github.com/cloudfoundry-incubator/cf-test-helpers/cf"
@@ -13,7 +15,7 @@ var assertionTimeout = 10.0
 
 var _ = Describe("CF Quota commands", func() {
 	It("can Create, Read, Update, and Delete quotas", func() {
-		AsUser(context.AdminUserContext(), func() {
+		AsUser(context.AdminUserContext(), 100*time.Second, func() {
 			quotaBytes, err := uuid.NewV4()
 			Expect(err).ToNot(HaveOccurred())
 			quotaName := quotaBytes.String()
