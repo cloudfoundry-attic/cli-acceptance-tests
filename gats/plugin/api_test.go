@@ -64,9 +64,9 @@ var _ = AfterSuite(func() {
 
 var _ = Describe("Plugin API", func() {
 	const (
-		apiTimeout       = 10 * time.Second
+		apiTimeout       = 20 * time.Second
 		appTimeout       = 1 * time.Minute
-		assertionTimeout = 10 * time.Second
+		assertionTimeout = 20 * time.Second
 		operationTimeout = 20 * time.Second
 	)
 
