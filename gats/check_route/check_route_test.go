@@ -2,6 +2,7 @@ package check_route_test
 
 import (
 	"fmt"
+	"time"
 
 	. "github.com/cloudfoundry-incubator/cf-test-helpers/cf"
 	"github.com/cloudfoundry-incubator/cf-test-helpers/generator"
@@ -41,7 +42,7 @@ var _ = Describe("CheckRoute", func() {
 	})
 
 	It("can check if a route exists", func() {
-		AsUser(context.AdminUserContext(), func() {
+		AsUser(context.AdminUserContext(), 60*time.Second, func() {
 			space := context.RegularUserContext().Space
 
 			target := Cf("target", "-o", context.RegularUserContext().Org, "-s", space).Wait(assertionTimeout)

@@ -1,6 +1,8 @@
 package security_groups_test
 
 import (
+	"time"
+
 	"github.com/nu7hatch/gouuid"
 	"github.com/pivotal-cf-experimental/GATS/helpers"
 
@@ -17,7 +19,7 @@ var _ = Describe("CF security group commands", func() {
 	var securityGroupName, orgName, spaceName string
 
 	BeforeEach(func() {
-		AsUser(context.AdminUserContext(), func() {
+		AsUser(context.AdminUserContext(), 60*time.Second, func() {
 			bytes, err := uuid.NewV4()
 			Expect(err).ToNot(HaveOccurred())
 
@@ -33,7 +35,7 @@ var _ = Describe("CF security group commands", func() {
 	})
 
 	AfterEach(func() {
-		AsUser(context.AdminUserContext(), func() {
+		AsUser(context.AdminUserContext(), 80*time.Second, func() {
 			// Must target org in order to delete security-group.
 			Eventually(Cf("target", "-o", orgName, "-s", spaceName), assertionTimeout).ShouldNot(Say("FAILED"))
 
@@ -45,7 +47,7 @@ var _ = Describe("CF security group commands", func() {
 	})
 
 	It("has a workflow for CRUD", func() {
-		AsUser(context.AdminUserContext(), func() {
+		AsUser(context.AdminUserContext(), 60*time.Second, func() {
 			Eventually(Cf("security-group", securityGroupName), assertionTimeout).Should(Say("Rules"))
 
 			Eventually(Cf(
@@ -60,7 +62,7 @@ var _ = Describe("CF security group commands", func() {
 	})
 
 	It("has a workflow for default staging security groups", func() {
-		AsUser(context.AdminUserContext(), func() {
+		AsUser(context.AdminUserContext(), 120*time.Second, func() {
 			Eventually(Cf("staging-security-groups"), assertionTimeout).ShouldNot(Say(securityGroupName))
 
 			Eventually(Cf("bind-staging-security-group", securityGroupName), assertionTimeout).Should(Say("OK"))
@@ -72,7 +74,7 @@ var _ = Describe("CF security group commands", func() {
 	})
 
 	It("has a workflow for default running security groups", func() {
-		AsUser(context.AdminUserContext(), func() {
+		AsUser(context.AdminUserContext(), 90*time.Second, func() {
 			Eventually(Cf("running-security-groups"), assertionTimeout).ShouldNot(Say(securityGroupName))
 
 			Eventually(Cf("bind-running-security-group", securityGroupName), assertionTimeout).Should(Say("OK"))
@@ -84,7 +86,7 @@ var _ = Describe("CF security group commands", func() {
 	})
 
 	It("has a workflow for binding and unbinding security groups", func() {
-		AsUser(context.AdminUserContext(), func() {
+		AsUser(context.AdminUserContext(), 90*time.Second, func() {
 			Eventually(Cf("bind-security-group", securityGroupName, orgName, spaceName), assertionTimeout).Should(Say("OK"))
 			Eventually(Cf("security-group", securityGroupName), assertionTimeout).Should(Say(spaceName))
 
