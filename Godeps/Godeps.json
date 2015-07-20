@@ -22,12 +22,12 @@
 			"Rev": "b05e7028ae395fedb07ace068eb934a9b7ba07ed"
 		},
 		{
-			"ImportPath": "github.com/cloudfoundry/cf-acceptance-tests/helpers",
-			"Rev": "74f7537ce7e67c9eee8014c73ac2ea9e83e8d70b"
+			"ImportPath": "github.com/cloudfoundry/cf-acceptance-tests/helpers/assets",
+			"Rev": "0f4c39dca345dad530e5a273fb407191fa4619c6"
 		},
 		{
-			"ImportPath": "github.com/cloudfoundry/cf-acceptance-tests/services/helpers",
-			"Rev": "74f7537ce7e67c9eee8014c73ac2ea9e83e8d70b"
+			"ImportPath": "github.com/cloudfoundry/cf-acceptance-tests/helpers/services",
+			"Rev": "0f4c39dca345dad530e5a273fb407191fa4619c6"
 		},
 		{
 			"ImportPath": "github.com/cloudfoundry/cli/plugin",
@@ -44,13 +44,13 @@
 		},
 		{
 			"ImportPath": "github.com/onsi/ginkgo",
-			"Comment": "v1.1.0-12-g90d6a47",
-			"Rev": "90d6a472e25d8096739d5405286ec051c87fade7"
+			"Comment": "v1.1.0-29-g18c73cf",
+			"Rev": "18c73cfeca1095f984c036a04c42ac0b08048685"
 		},
 		{
 			"ImportPath": "github.com/onsi/gomega",
-			"Comment": "v1.0-12-g3ca2515",
-			"Rev": "3ca2515afb00bc39bc77d27cdbce85a7caaf103e"
+			"Comment": "v1.0-50-gd6c945f",
+			"Rev": "d6c945f9fdbf6cad99e85b0feff591caa268e0db"
 		}
 	]
 }

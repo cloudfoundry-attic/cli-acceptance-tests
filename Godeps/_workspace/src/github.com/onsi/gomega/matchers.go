@@ -49,6 +49,21 @@ func HaveOccurred() types.GomegaMatcher {
 	return &matchers.HaveOccurredMatcher{}
 }
 
+//Succeed passes if actual is a nil error
+//Succeed is intended to be used with functions that return a single error value. Instead of
+//    err := SomethingThatMightFail()
+//    Ω(err).ShouldNot(HaveOccurred())
+//
+//You can write:
+//    Ω(SomethingThatMightFail()).Should(Succeed())
+//
+//It is a mistake to use Succeed with a function that has multiple return values.  Gomega's Ω and Expect
+//functions automatically trigger failure if any return values after the first return value are non-zero/non-nil.
+//This means that Ω(MultiReturnFunc()).ShouldNot(Succeed()) can never pass.
+func Succeed() types.GomegaMatcher {
+	return &matchers.SucceedMatcher{}
+}
+
 //MatchError succeeds if actual is a non-nil error that matches the passed in string/error.
 //
 //These are valid use-cases:
@@ -235,7 +250,6 @@ func ContainElement(element interface{}) types.GomegaMatcher {
 //    Ω([]string{"Foo", "FooBar"}).Should(ConsistOf([]string{"FooBar", "Foo"}))
 //
 //Note that Go's type system does not allow you to write this as ConsistOf([]string{"FooBar", "Foo"}...) as []string and []interface{} are different types - hence the need for this special rule.
-
 func ConsistOf(elements ...interface{}) types.GomegaMatcher {
 	return &matchers.ConsistOfMatcher{
 		Elements: elements,
@@ -310,4 +324,22 @@ func BeAssignableToTypeOf(expected interface{}) types.GomegaMatcher {
 //Actual must be a function that takes no arguments and returns no results.
 func Panic() types.GomegaMatcher {
 	return &matchers.PanicMatcher{}
+}
+
+//BeAnExistingFile succeeds if a file exists.
+//Actual must be a string representing the abs path to the file being checked.
+func BeAnExistingFile() types.GomegaMatcher {
+	return &matchers.BeAnExistingFileMatcher{}
+}
+
+//BeARegularFile succeeds iff a file exists and is a regular file.
+//Actual must be a string representing the abs path to the file being checked.
+func BeARegularFile() types.GomegaMatcher {
+	return &matchers.BeARegularFileMatcher{}
+}
+
+//BeADirectory succeeds iff a file exists and is a directory.
+//Actual must be a string representing the abs path to the file being checked.
+func BeADirectory() types.GomegaMatcher {
+	return &matchers.BeADirectoryMatcher{}
 }
