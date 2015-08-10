@@ -1,15 +1,16 @@
-GATS
+CLI Acceptance Tests
 ====
 
-We got some CATS strapped with GATS.
-![cache-cats](http://41.media.tumblr.com/8b3d8038a788d661b59ed7b35a7f73a2/tumblr_njuqwy3abv1r9khx4o4_1280.jpg)
+Formerly known as GATS.
 
-What???
-=======
+These are the [Cloud Foundry CLI](https://github.com/cloudfoundry/cli) acceptance tests. 
 
-GATS (a.k.a. the Go-CLI Acceptance Test Suite) are a collection of integration tests for the Go-CLI. In general, these should all be passed on recent CF Releases, but not on the stable version of the CLI. We may be using these at any given time to test new features that haven't been released yet.
+They are run to evaluate the readiness of the next CLI release. 
 
-Where is this going?
---------------------
+They run seperately to the rest of the CLI test because they require a full CF stack
+to test against. 
 
-Our goal is to delete these tests overtime as we push these tests upstream into [CATS](https://github.com/cloudfoundry/cf-acceptance-tests). All of the tests in this repo should be written in the same style, with the same testhelpers.
+We may be using these at any given time to test new features that haven't been released yet.
+
+Some tests can be pushed upstream into [cf-acceptance-tests](https://github.com/cloudfoundry/cf-acceptance-tests). 
+All of the tests in this repo should be written in the same style as cf-acceptance-tests, with the same `testhelpers`.
