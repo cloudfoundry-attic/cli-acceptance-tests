@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.com/pivotal-cf-experimental/GATS",
+	"ImportPath": "github.com/cloudfoundry/GATS",
 	"GoVersion": "go1.4.2",
 	"Packages": [
 		"./..."
@@ -36,7 +36,7 @@
 		},
 		{
 			"ImportPath": "github.com/cloudfoundry/jibber_jabber",
-			"Rev": "5181a0a92a50f392c5638170d6cfad5397df5895"
+			"Rev": "3ebdd29971178ede5714008229e68fec7645d695"
 		},
 		{
 			"ImportPath": "github.com/nu7hatch/gouuid",

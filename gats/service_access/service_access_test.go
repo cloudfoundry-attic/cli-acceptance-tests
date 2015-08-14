@@ -11,7 +11,7 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	. "github.com/onsi/gomega/gexec"
-	"github.com/pivotal-cf-experimental/GATS/helpers"
+	"github.com/cloudfoundry/GATS/helpers"
 )
 
 var assertionTimeout = 10.0
