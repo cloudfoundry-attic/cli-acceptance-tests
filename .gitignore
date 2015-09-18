@@ -1,4 +1,5 @@
-gcf
+bin/cf
+tmp
 .idea
 integration_config.json
 config.json
