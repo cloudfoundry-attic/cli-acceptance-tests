@@ -7,7 +7,7 @@ import (
 	. "github.com/cloudfoundry-incubator/cf-test-helpers/cf"
 
 	acceptanceTestHelpers "github.com/cloudfoundry-incubator/cf-test-helpers/helpers"
-	gatsHelpers "github.com/cloudfoundry/GATS/helpers"
+	gatsHelpers "github.com/cloudfoundry/cli-acceptance-tests/helpers"
 
 	"github.com/cloudfoundry-incubator/cf-test-helpers/generator"
 	. "github.com/onsi/ginkgo"
@@ -29,7 +29,7 @@ var _ = BeforeSuite(func() {
 
 	env.Setup()
 
-	Expect(runtime.GOARCH).To(Equal("amd64"), "Plugin suite only runs under 64bit OS, please skip the plugin suite in 32bit OS (use flag -skipPackage='gats/plugin')")
+	Expect(runtime.GOARCH).To(Equal("amd64"), "Plugin suite only runs under 64bit OS, please skip the plugin suite in 32bit OS (use flag -skipPackage='cli_acceptance_tests/plugin')")
 
 	var install *Session
 	switch runtime.GOOS {

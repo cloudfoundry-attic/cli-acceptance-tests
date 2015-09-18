@@ -5,6 +5,8 @@ import (
 	"os"
 	"path/filepath"
 	"time"
+
+	"github.com/cloudfoundry-incubator/cf-test-helpers/runner"
 )
 
 type Config struct {
@@ -12,6 +14,7 @@ type Config struct {
 	SystemDomain string `json:"system_domain"`
 	ClientSecret string `json:"client_secret"`
 	AppsDomain   string `json:"apps_domain"`
+	UseHttp      bool   `json:"use_http"`
 
 	AdminUser     string `json:"admin_user"`
 	AdminPassword string `json:"admin_password"`
@@ -20,6 +23,8 @@ type Config struct {
 	ShouldKeepUser       bool   `json:"keep_user_at_suite_end"`
 	ExistingUser         string `json:"existing_user"`
 	ExistingUserPassword string `json:"existing_user_password"`
+
+	ConfigurableTestPassword string `json:"test_password"`
 
 	PersistentAppHost      string `json:"persistent_app_host"`
 	PersistentAppSpace     string `json:"persistent_app_space"`
@@ -79,7 +84,17 @@ func LoadConfig() Config {
 		loadedConfig.TimeoutScale = 1.0
 	}
 
+	runner.SkipSSLValidation = loadedConfig.SkipSSLValidation
+
 	return *loadedConfig
+}
+
+func (c Config) Protocol() string {
+	if c.UseHttp {
+		return "http://"
+	} else {
+		return "https://"
+	}
 }
 
 func loadConfigJsonFromPath() *Config {
