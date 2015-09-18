@@ -12,8 +12,10 @@ const CURL_TIMEOUT = 30 * time.Second
 
 // Gets an app's endpoint with the specified path
 func AppUri(appName, path string) string {
-	appsDomain := LoadConfig().AppsDomain
-	return "http://" + appName + "." + appsDomain + path
+	config := LoadConfig()
+	appsDomain := config.AppsDomain
+
+	return config.Protocol() + appName + "." + appsDomain + path
 }
 
 // Gets an app's root endpoint
@@ -25,6 +27,7 @@ func AppRootUri(appName string) string {
 func CurlAppWithTimeout(appName, path string, timeout time.Duration) string {
 	uri := AppUri(appName, path)
 	curlCmd := runner.Curl(uri)
+
 	runner.NewCmdRunner(curlCmd, timeout).Run()
 	Expect(string(curlCmd.Err.Contents())).To(HaveLen(0))
 	return string(curlCmd.Out.Contents())

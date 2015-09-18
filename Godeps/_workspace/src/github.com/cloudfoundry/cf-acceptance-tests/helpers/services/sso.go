@@ -4,13 +4,16 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/url"
+	"os"
 	"regexp"
 	"strings"
 
 	. "github.com/onsi/gomega"
 	. "github.com/onsi/gomega/gexec"
 
+	"github.com/cloudfoundry-incubator/cf-test-helpers/generator"
 	"github.com/cloudfoundry-incubator/cf-test-helpers/helpers"
 	"github.com/cloudfoundry-incubator/cf-test-helpers/runner"
 )
@@ -49,14 +52,30 @@ func SetOauthEndpoints(apiEndpoint string, config *OAuthConfig) {
 }
 
 func AuthenticateUser(authorizationEndpoint string, username string, password string) (cookie string) {
+	loginCsrfUri := fmt.Sprintf("%v/login", authorizationEndpoint)
+
+	cookieFile, err := ioutil.TempFile("", "cats-csrf-cookie"+generator.RandomName())
+	Expect(err).ToNot(HaveOccurred())
+	cookiePath := cookieFile.Name()
+	defer func() {
+		cookieFile.Close()
+		os.Remove(cookiePath)
+	}()
+
+	curl := runner.Curl(loginCsrfUri, `--insecure`, `-i`, `-v`, `-c`, cookiePath).Wait(DEFAULT_TIMEOUT)
+	apiResponse := string(curl.Out.Contents())
+	csrfRegEx, _ := regexp.Compile(`name="X-Uaa-Csrf" value="(.*)"`)
+	csrfToken := csrfRegEx.FindStringSubmatch(apiResponse)[1]
+
 	loginUri := fmt.Sprintf("%v/login.do", authorizationEndpoint)
 	usernameEncoded := url.QueryEscape(username)
 	passwordEncoded := url.QueryEscape(password)
-	loginCredentials := fmt.Sprintf("username=%v&password=%v", usernameEncoded, passwordEncoded)
+	csrfTokenEncoded := url.QueryEscape(csrfToken)
+	loginCredentials := fmt.Sprintf("username=%v&password=%v&X-Uaa-Csrf=%v", usernameEncoded, passwordEncoded, csrfTokenEncoded)
 
-	curl := runner.Curl(loginUri, `--data`, loginCredentials, `--insecure`, `-i`, `-v`).Wait(DEFAULT_TIMEOUT)
+	curl = runner.Curl(loginUri, `--data`, loginCredentials, `--insecure`, `-i`, `-v`, `-b`, cookiePath).Wait(DEFAULT_TIMEOUT)
 	Expect(curl).To(Exit(0))
-	apiResponse := string(curl.Out.Contents())
+	apiResponse = string(curl.Out.Contents())
 
 	jsessionRegEx, _ := regexp.Compile(`JSESSIONID([^;]*)`)
 	vcapidRegEx, _ := regexp.Compile(`__VCAP_ID__([^;]*)`)
@@ -69,7 +88,7 @@ func AuthenticateUser(authorizationEndpoint string, username string, password st
 func RequestScopes(cookie string, config OAuthConfig) (authCode string, httpCode string) {
 	authCode = `initialized`
 
-	requestScopesUri := fmt.Sprintf("%v/oauth/authorize?client_id=%v&response_type=code+id_token&redirect_uri=%v&scope=%v",
+	requestScopesUri := fmt.Sprintf("%v/oauth/authorize?client_id=%v&response_type=code&redirect_uri=%v&scope=%v",
 		config.AuthorizationEndpoint,
 		url.QueryEscape(config.ClientId),
 		config.RedirectUri,
