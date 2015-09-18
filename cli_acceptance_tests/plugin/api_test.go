@@ -29,7 +29,7 @@ var _ = BeforeSuite(func() {
 
 	env.Setup()
 
-	Expect(runtime.GOARCH).To(Equal("amd64"), "Plugin suite only runs under 64bit OS, please skip the plugin suite in 32bit OS (use flag -skipPackage='gats/plugin')")
+	Expect(runtime.GOARCH).To(Equal("amd64"), "Plugin suite only runs under 64bit OS, please skip the plugin suite in 32bit OS (use flag -skipPackage='cli_acceptance_tests/plugin')")
 
 	var install *Session
 	switch runtime.GOOS {

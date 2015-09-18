@@ -42,5 +42,5 @@ echo $PATH
 echo `which cf`
 echo `which godep`
 
-GOPATH=$ROOT_DIR/Godeps/_workspace:$CLI_ACCEPTANCE_GOPATH:$GOPATH ginkgo -r -slowSpecThreshold=120 ./gats
+GOPATH=$ROOT_DIR/Godeps/_workspace:$CLI_ACCEPTANCE_GOPATH:$GOPATH ginkgo -r -slowSpecThreshold=120 ./cli_acceptance_tests
 rm -rf $CLI_ACCEPTANCE_GOPATH

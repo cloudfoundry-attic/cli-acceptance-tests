@@ -33,5 +33,5 @@ else
 fi
 
 export local_bin=$(cd $(dirname $0) && pwd)
-PATH=$PATH:$local_bin GOPATH=$(godep path):$CLI_ACCEPTANCE_GOPATH:$GOPATH ginkgo -r -slowSpecThreshold=120 ./gats
+PATH=$PATH:$local_bin GOPATH=$(godep path):$CLI_ACCEPTANCE_GOPATH:$GOPATH ginkgo -r -slowSpecThreshold=120 ./cli_acceptance_tests
 rm -rf $CLI_ACCEPTANCE_GOPATH

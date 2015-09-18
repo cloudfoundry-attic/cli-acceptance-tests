@@ -12,4 +12,4 @@ SET GOPATH=%LOCAL_GOPATH%;%GOPATH%
 SET PATH=%LOCAL_GOPATH%\bin;%PATH%
 
 go install -v github.com/onsi/ginkgo/ginkgo
-ginkgo.exe -r -slowSpecThreshold=120 ./gats
+ginkgo.exe -r -slowSpecThreshold=120 ./cli_acceptance_tests
