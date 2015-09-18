@@ -13,9 +13,9 @@ trap printStatus EXIT
 
 . $(dirname $0)/goenv
 ROOT_DIR=$(cd $(dirname $(dirname $0)) && pwd)
-CLI_ACCEPTANCE_GOPATH=$ROOT_DIR/tmp/gats_gopath
+CLI_ACCEPTANCE_GOPATH=$ROOT_DIR/tmp/cli_acceptance_gopath
 mkdir -p $CLI_ACCEPTANCE_GOPATH/src/github.com/cloudfoundry
-ln -s $ROOT_DIR $CLI_ACCEPTANCE_GOPATH/src/github.com/cloudfoundry/GATS
+ln -s $ROOT_DIR $CLI_ACCEPTANCE_GOPATH/src/github.com/cloudfoundry/cli-acceptance-tests
 
 go install -v github.com/onsi/ginkgo/ginkgo
 

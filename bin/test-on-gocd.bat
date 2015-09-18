@@ -1,12 +1,12 @@
-DEL c:\Users\Administrator\go\src\github.com\cloudfoundry\GATS\gcf.exe
-bitsadmin.exe /transfer "DownloadStableCLI" https://s3.amazonaws.com/go-cli/builds/cf-windows-amd64.exe c:\Users\Administrator\go\src\github.com\cloudfoundry\GATS\cf.exe
+DEL c:\Users\Administrator\go\src\github.com\cloudfoundry\cli-acceptance-tests\gcf.exe
+bitsadmin.exe /transfer "DownloadStableCLI" https://s3.amazonaws.com/go-cli/builds/cf-windows-amd64.exe c:\Users\Administrator\go\src\github.com\cloudfoundry\cli-acceptance-tests\cf.exe
 
-go get -u github.com/cloudfoundry/GATS/...
+go get -u github.com/cloudfoundry/cli-acceptance-tests/...
 
-SET GATSPATH=%GOPATH%\src\github.com\cloudfoundry\GATS
-SET PATH=%PATH%;%GATSPATH%;C:\Program Files\cURL\bin
+SET CLIACCEPTANCEPATH=%GOPATH%\src\github.com\cloudfoundry\cli-acceptance-tests
+SET PATH=%PATH%;%CLIACCEPTANCEPATH%;C:\Program Files\cURL\bin
 SET CONFIG=%CD%\config.json
-SET LOCAL_GOPATH=%GATSPATH%\Godeps\_workspace
+SET LOCAL_GOPATH=%CLIACCEPTANCEPATH%\Godeps\_workspace
 MKDIR %LOCAL_GOPATH%\bin
 SET GOPATH=%LOCAL_GOPATH%;%GOPATH%
 SET PATH=%LOCAL_GOPATH%\bin;%PATH%
