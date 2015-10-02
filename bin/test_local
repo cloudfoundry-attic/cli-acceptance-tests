@@ -3,11 +3,11 @@
 set -e -x
 
 function printStatus {
-    if [ $? -eq 0 ]; then
-        echo -e "\nPOP POP POP POP POP POP POP"
-    else
-        echo -e "\nMAN DOWN"
-    fi
+  if [ $? -eq 0 ]; then
+    echo -e "\nPOP POP POP POP POP POP POP"
+  else
+    echo -e "\nMAN DOWN"
+  fi
 }
 
 trap printStatus EXIT
@@ -17,4 +17,5 @@ trap printStatus EXIT
 go install -v github.com/onsi/ginkgo/ginkgo
 
 export local_bin=$(cd $(dirname $0) && pwd)
-PATH=$PATH:$local_bin GOPATH=$(godep path):$GOPATH ginkgo -r -slowSpecThreshold=120 ./gats
+testPath=${1:-./gats}
+PATH=$PATH:$local_bin GOPATH=$(godep path):$GOPATH ginkgo -r -slowSpecThreshold=120 $testPath
