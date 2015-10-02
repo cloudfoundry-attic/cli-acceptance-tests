@@ -11,7 +11,7 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	. "github.com/onsi/gomega/gexec"
-	"github.com/cloudfoundry/GATS/helpers"
+	"github.com/cloudfoundry/cli-acceptance-tests/helpers"
 )
 
 var assertionTimeout = 10.0
