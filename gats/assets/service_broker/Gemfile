@@ -1,0 +1,12 @@
+source 'http://rubygems.org'
+
+ruby '2.1.6'
+
+gem 'sinatra'
+gem 'json'
+gem 'colorize'
+
+group :test, :development do
+  gem 'rspec'
+  gem 'rack-test'
+end

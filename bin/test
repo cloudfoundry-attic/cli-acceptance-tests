@@ -13,9 +13,9 @@ trap printStatus EXIT
 
 . $(dirname $0)/goenv
 ROOT_DIR=$(cd $(dirname $(dirname $0)) && pwd)
-TESTS_GOPATH=$ROOT_DIR/tmp/tests_gopath
-mkdir -p $TESTS_GOPATH/src/github.com/cloudfoundry
-ln -s $ROOT_DIR $TESTS_GOPATH/src/github.com/cloudfoundry/cli-acceptance-tests
+GATS_GOPATH=$ROOT_DIR/tmp/gats_gopath
+mkdir -p $GATS_GOPATH/src/github.com/cloudfoundry
+ln -s $ROOT_DIR $GATS_GOPATH/src/github.com/cloudfoundry/GATS
 
 go install -v github.com/onsi/ginkgo/ginkgo
 
@@ -33,5 +33,5 @@ else
 fi
 
 export local_bin=$(cd $(dirname $0) && pwd)
-PATH=$PATH:$local_bin GOPATH=$(godep path):$TESTS_GOPATH:$GOPATH ginkgo -r -slowSpecThreshold=120 ./cli_tests
-rm -rf $TESTS_GOPATH
+PATH=$PATH:$local_bin GOPATH=$(godep path):$GATS_GOPATH:$GOPATH ginkgo -r -slowSpecThreshold=120 ./gats
+rm -rf $GATS_GOPATH

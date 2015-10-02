@@ -17,5 +17,5 @@ trap printStatus EXIT
 go install -v github.com/onsi/ginkgo/ginkgo
 
 export local_bin=$(cd $(dirname $0) && pwd)
-testPath=${1:-./cli_tests}
+testPath=${1:-./gats}
 PATH=$PATH:$local_bin GOPATH=$(godep path):$GOPATH ginkgo -r -slowSpecThreshold=120 $testPath
