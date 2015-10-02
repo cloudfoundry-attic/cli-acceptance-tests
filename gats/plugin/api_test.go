@@ -35,21 +35,21 @@ var _ = BeforeSuite(func() {
 	switch runtime.GOOS {
 	case "windows":
 		if runtime.GOARCH == "amd64" {
-			install = Cf("install-plugin", "fixtures/plugin_windows_amd64.exe").Wait(5 * time.Second)
+			install = Cf("install-plugin", "-f","fixtures/plugin_windows_amd64.exe").Wait(5 * time.Second)
 		} else {
-			install = Cf("install-plugin", "fixtures/plugin_windows_386.exe").Wait(5 * time.Second)
+			install = Cf("install-plugin", "-f","fixtures/plugin_windows_386.exe").Wait(5 * time.Second)
 		}
 	case "linux":
 		if runtime.GOARCH == "amd64" {
-			install = Cf("install-plugin", "fixtures/plugin_linux_amd64").Wait(5 * time.Second)
+			install = Cf("install-plugin", "-f", "fixtures/plugin_linux_amd64").Wait(5 * time.Second)
 		} else {
-			install = Cf("install-plugin", "fixtures/plugin_linux_386").Wait(5 * time.Second)
+			install = Cf("install-plugin", "-f", "fixtures/plugin_linux_386").Wait(5 * time.Second)
 		}
 	case "darwin":
 		if runtime.GOARCH == "amd64" {
-			install = Cf("install-plugin", "fixtures/plugin_darwin_amd64").Wait(5 * time.Second)
+			install = Cf("install-plugin", "-f", "fixtures/plugin_darwin_amd64").Wait(5 * time.Second)
 		} else {
-			install = Cf("install-plugin", "fixtures/plugin_darwin_386").Wait(5 * time.Second)
+			install = Cf("install-plugin", "-f", "fixtures/plugin_darwin_386").Wait(5 * time.Second)
 		}
 	}
 	Expect(install).To(Exit(0))
