@@ -15,7 +15,7 @@ trap printStatus EXIT
 ROOT_DIR=$(cd $(dirname $(dirname $0)) && pwd)
 GATS_GOPATH=$ROOT_DIR/tmp/gats_gopath
 mkdir -p $GATS_GOPATH/src/github.com/cloudfoundry
-ln -s $ROOT_DIR $GATS_GOPATH/src/github.com/cloudfoundry/GATS
+ln -s $ROOT_DIR $GATS_GOPATH/src/github.com/cloudfoundry/cli-acceptance-tests
 
 go install -v github.com/onsi/ginkgo/ginkgo
 
