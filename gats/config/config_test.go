@@ -100,64 +100,156 @@ var _ = Describe("Config", func() {
 		})
 	})
 
-	Context("when LANG is set", func() {
-		var origLANG string
-
-		BeforeEach(func() {
-			origLANG = os.Getenv("LANG")
-			os.Setenv("LANG", "fr_FR")
-		})
-
-		AfterEach(func() {
-			os.Setenv("LANG", origLANG)
-		})
-
-		It("uses LANG to load the translations", func() {
-			cf.AsUser(context.AdminUserContext(), setupTimeout, func() {
-				session := cf.Cf("help").Wait(commandTimeout)
-				Expect(session).To(gexec.Exit(0))
-				Expect(session).To(gbytes.Say("UTILISATION"))
-			})
-		})
-
-		It("uses the locale to load the translations when a locale is set", func() {
-			cf.AsUser(context.AdminUserContext(), setupTimeout, func() {
-				session := cf.Cf("config", "-locale", "es_ES").Wait(commandTimeout)
-				Expect(session).To(gexec.Exit(0))
-				session = cf.Cf("help").Wait(commandTimeout)
-				Expect(session).To(gexec.Exit(0))
-				Expect(session).To(gbytes.Say("USO"))
-			})
-		})
-	})
-
-	Context("when LC_ALL is set", func() {
+	Context("when LC_ALL is not set", func() {
 		var origLCALL string
 
 		BeforeEach(func() {
 			origLCALL = os.Getenv("LC_ALL")
-			os.Setenv("LC_ALL", "fr_FR")
+			os.Setenv("LC_ALL", "")
 		})
 
 		AfterEach(func() {
 			os.Setenv("LC_ALL", origLCALL)
 		})
 
-		It("uses LC_ALL to load the translations", func() {
+		Context("when LANG is set to a value we have translations for", func() {
+			var origLANG string
+
+			BeforeEach(func() {
+				origLANG = os.Getenv("LANG")
+				os.Setenv("LANG", "fr_FR")
+			})
+
+			AfterEach(func() {
+				os.Setenv("LANG", origLANG)
+			})
+
+			It("uses LANG to load the translations", func() {
+				cf.AsUser(context.AdminUserContext(), setupTimeout, func() {
+					session := cf.Cf("help").Wait(commandTimeout)
+					Expect(session).To(gexec.Exit(0))
+					Expect(session).To(gbytes.Say("UTILISATION"))
+				})
+			})
+
+			It("uses the locale to load the translations when a locale is set", func() {
+				cf.AsUser(context.AdminUserContext(), setupTimeout, func() {
+					session := cf.Cf("config", "-locale", "es_ES").Wait(commandTimeout)
+					Expect(session).To(gexec.Exit(0))
+					session = cf.Cf("help").Wait(commandTimeout)
+					Expect(session).To(gexec.Exit(0))
+					Expect(session).To(gbytes.Say("USO"))
+				})
+			})
+		})
+
+		Context("when LANG is set to a value we do not have translations for", func() {
+			var origLANG string
+
+			BeforeEach(func() {
+				origLANG = os.Getenv("LANG")
+				os.Setenv("LANG", "zz_ZZ")
+			})
+
+			AfterEach(func() {
+				os.Setenv("LANG", origLANG)
+			})
+
+			It("defaults to en_US", func() {
+				cf.AsUser(context.AdminUserContext(), setupTimeout, func() {
+					session := cf.Cf("help").Wait(commandTimeout)
+					Expect(session).To(gexec.Exit(0))
+					Expect(session).To(gbytes.Say("USAGE"))
+				})
+			})
+		})
+	})
+
+	Context("when LANG is not set", func() {
+		var origLANG string
+
+		BeforeEach(func() {
+			origLANG = os.Getenv("LANG")
+			os.Setenv("LANG", "")
+		})
+
+		AfterEach(func() {
+			os.Setenv("LANG", origLANG)
+		})
+
+		Context("when LC_ALL is set to a value we have translations for", func() {
+			var origLCALL string
+
+			BeforeEach(func() {
+				origLCALL = os.Getenv("LC_ALL")
+				os.Setenv("LC_ALL", "fr_FR")
+			})
+
+			AfterEach(func() {
+				os.Setenv("LC_ALL", origLCALL)
+			})
+
+			It("uses LC_ALL to load the translations", func() {
+				cf.AsUser(context.AdminUserContext(), setupTimeout, func() {
+					session := cf.Cf("help").Wait(commandTimeout)
+					Expect(session).To(gexec.Exit(0))
+					Expect(session).To(gbytes.Say("UTILISATION"))
+				})
+			})
+
+			It("uses the locale to load the translations when a locale is set", func() {
+				cf.AsUser(context.AdminUserContext(), setupTimeout, func() {
+					session := cf.Cf("config", "-locale", "es_ES").Wait(commandTimeout)
+					Expect(session).To(gexec.Exit(0))
+					session = cf.Cf("help").Wait(commandTimeout)
+					Expect(session).To(gexec.Exit(0))
+					Expect(session).To(gbytes.Say("USO"))
+				})
+			})
+		})
+
+		Context("when LC_ALL is set to a value we do not have translations for", func() {
+			var origLCALL string
+
+			BeforeEach(func() {
+				origLCALL = os.Getenv("LC_ALL")
+				os.Setenv("LC_ALL", "zz_ZZ")
+			})
+
+			AfterEach(func() {
+				os.Setenv("LC_ALL", origLCALL)
+			})
+
+			It("defaults to en_US", func() {
+				cf.AsUser(context.AdminUserContext(), setupTimeout, func() {
+					session := cf.Cf("help").Wait(commandTimeout)
+					Expect(session).To(gexec.Exit(0))
+					Expect(session).To(gbytes.Say("USAGE"))
+				})
+			})
+		})
+	})
+
+	Context("when LANG and LC_ALL are set to values we have translations for", func() {
+		var origLCALL, origLANG string
+
+		BeforeEach(func() {
+			origLCALL = os.Getenv("LC_ALL")
+			os.Setenv("LC_ALL", "fr_FR")
+			origLANG = os.Getenv("LANG")
+			os.Setenv("LANG", "en_US")
+		})
+
+		AfterEach(func() {
+			os.Setenv("LC_ALL", origLCALL)
+			os.Setenv("LANG", origLANG)
+		})
+
+		It("uses LC_ALL", func() {
 			cf.AsUser(context.AdminUserContext(), setupTimeout, func() {
 				session := cf.Cf("help").Wait(commandTimeout)
 				Expect(session).To(gexec.Exit(0))
 				Expect(session).To(gbytes.Say("UTILISATION"))
-			})
-		})
-
-		It("uses the locale to load the translations when a locale is set", func() {
-			cf.AsUser(context.AdminUserContext(), setupTimeout, func() {
-				session := cf.Cf("config", "-locale", "es_ES").Wait(commandTimeout)
-				Expect(session).To(gexec.Exit(0))
-				session = cf.Cf("help").Wait(commandTimeout)
-				Expect(session).To(gexec.Exit(0))
-				Expect(session).To(gbytes.Say("USO"))
 			})
 		})
 	})
