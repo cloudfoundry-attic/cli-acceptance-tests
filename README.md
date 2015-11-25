@@ -1,16 +1,44 @@
 CLI Acceptance Tests
 ====
+These are high-level tests for the [Cloud Foundry
+CLI](https://github.com/cloudfoundry/cli) that make assertions about the
+behavior of the `cf` binary.
 
-Formerly known as GATS.
+These tests require that a `cf` binary built from the latest source is
+available in your `PATH`.
 
-These are the [Cloud Foundry CLI](https://github.com/cloudfoundry/cli) acceptance tests. 
+### Installing from source
 
-They are run to evaluate the readiness of the next CLI release. 
+1. Install [Go](https://golang.org/dl)
+1. Ensure your `$GOPATH` [is set correctly](http://golang.org/cmd/go/#hdr-GOPATH_environment_variable)
+1. Install [godep](go get github.com/tools/godep)
+1. Get the cli source code: `go get -u github.com/cloudfoundry/cli` (ignore the "no buildable Go source files" warning)
+1. Run `godep restore` in `$GOPATH/src/github.com/cloudfoundry/cli` (note: this will modify the dependencies in your `GOPATH`)
+1. Run `go get -u github.com/jteeuwen/go-bindata/...`
+1. Run `bin/build` in `$GOPATH/src/cloudfoundry/cli`
+1. Copy `$GOPATH/src/cloudfoundry/cli/out/cf` to a location in your `PATH`
 
-They run seperately to the rest of the CLI test because they require a full CF stack
-to test against. 
+### Running the suite
 
-We may be using these at any given time to test new features that haven't been released yet.
+These tests are similar to the [CF Acceptance
+Tests](https://github.com/cloudfoundry/cf-acceptance-tests), and use the same
+configuration and test helpers.
 
-Some tests can be pushed upstream into [cf-acceptance-tests](https://github.com/cloudfoundry/cf-acceptance-tests). 
-All of the tests in this repo should be written in the same style as cf-acceptance-tests, with the same `testhelpers`.
+To run the tests (example given is for [bosh-lite](https://github.com/cloudfoundry/bosh-lite)):
+
+```
+cat > gats_config.json <<EOF
+{
+  "api": "api.bosh-lite.com",
+  "apps_domain": "bosh-lite.com",
+  "skip_ssl_validation": true,
+  "use_http": true,
+  "admin_password": "admin",
+  "admin_user": "admin",
+  "existing_user": "admin",
+  "existing_user_password": "admin"
+}
+EOF
+export CONFIG=$PWD/gats_config.json
+ginkgo -r
+```
