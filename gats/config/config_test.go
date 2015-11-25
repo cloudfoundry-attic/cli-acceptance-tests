@@ -163,6 +163,20 @@ var _ = Describe("Config", func() {
 	})
 
 	Context("when LANG, LC_ALL, and locale are not set", func() {
+		var origLCALL, origLANG string
+
+		BeforeEach(func() {
+			origLCALL = os.Getenv("LC_ALL")
+			os.Setenv("LC_ALL", "")
+			origLANG = os.Getenv("LANG")
+			os.Setenv("LANG", "")
+		})
+
+		AfterEach(func() {
+			os.Setenv("LC_ALL", origLCALL)
+			os.Setenv("LANG", origLANG)
+		})
+
 		It("defaults to en_US", func() {
 			cf.AsUser(context.AdminUserContext(), setupTimeout, func() {
 				session := cf.Cf("help").Wait(commandTimeout)
