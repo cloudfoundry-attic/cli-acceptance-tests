@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 
@@ -51,11 +52,22 @@ var _ = Describe("Push", func() {
 		)
 
 		BeforeEach(func() {
-			longDirName := strings.Repeat("i", 248)
+			cwd, err := os.Getwd()
+			Expect(err).NotTo(HaveOccurred())
+
+			longDirName := strings.Repeat("i", 247)
 			longPath = filepath.Join(assets.ServiceBroker, longDirName)
 
-			err := os.MkdirAll(longPath, os.ModeDir|os.ModePerm)
-			Expect(err).NotTo(HaveOccurred())
+			if runtime.GOOS == "windows" {
+				// `\\?\` is used to skip Windows' file name processor, which imposes
+				// length limits. Search MSDN for 'Maximum Path Length Limitation' for
+				// more.
+				err := os.MkdirAll(`\\?\`+filepath.Join(cwd, longPath), os.ModeDir|os.ModePerm)
+				Expect(err).NotTo(HaveOccurred())
+			} else {
+				err := os.MkdirAll(longPath, os.ModeDir|os.ModePerm)
+				Expect(err).NotTo(HaveOccurred())
+			}
 
 			cfIgnorePath = filepath.Join(assets.ServiceBroker, ".cfignore")
 			cfIgnoreContents := []byte(longDirName + "\n")
