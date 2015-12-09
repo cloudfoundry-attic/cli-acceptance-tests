@@ -52,13 +52,13 @@ var _ = Describe("Push", func() {
 		)
 
 		BeforeEach(func() {
-			cwd, err := os.Getwd()
-			Expect(err).NotTo(HaveOccurred())
-
 			longDirName := strings.Repeat("i", 247)
 			longPath = filepath.Join(assets.ServiceBroker, longDirName)
 
 			if runtime.GOOS == "windows" {
+				cwd, err := os.Getwd()
+				Expect(err).NotTo(HaveOccurred())
+
 				// `\\?\` is used to skip Windows' file name processor, which imposes
 				// length limits. Search MSDN for 'Maximum Path Length Limitation' for
 				// more.
