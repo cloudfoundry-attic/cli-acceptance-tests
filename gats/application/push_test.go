@@ -78,8 +78,16 @@ var _ = Describe("Push", func() {
 		AfterEach(func() {
 			err := os.RemoveAll(cfIgnorePath)
 			Expect(err).NotTo(HaveOccurred())
-			err = os.RemoveAll(longPath)
-			Expect(err).NotTo(HaveOccurred())
+			if runtime.GOOS == "windows" {
+				// `\\?\` is used to skip Windows' file name processor, which imposes
+				// length limits. Search MSDN for 'Maximum Path Length Limitation' for
+				// more.
+				err = os.RemoveAll(`\\?\` + filepath.Join(cwd, longPath))
+				Expect(err).NotTo(HaveOccurred())
+			} else {
+				err = os.RemoveAll(longPath)
+				Expect(err).NotTo(HaveOccurred())
+			}
 		})
 
 		It("is successful", func() {
