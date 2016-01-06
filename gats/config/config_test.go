@@ -128,7 +128,7 @@ var _ = Describe("Config", func() {
 				cf.AsUser(context.AdminUserContext(), setupTimeout, func() {
 					session := cf.Cf("help").Wait(commandTimeout)
 					Expect(session).To(gexec.Exit(0))
-					Expect(session).To(gbytes.Say("UTILISATION"))
+					Expect(session).To(gbytes.Say("SYNTAXE"))
 				})
 			})
 
@@ -193,7 +193,7 @@ var _ = Describe("Config", func() {
 				cf.AsUser(context.AdminUserContext(), setupTimeout, func() {
 					session := cf.Cf("help").Wait(commandTimeout)
 					Expect(session).To(gexec.Exit(0))
-					Expect(session).To(gbytes.Say("UTILISATION"))
+					Expect(session).To(gbytes.Say("SYNTAXE"))
 				})
 			})
 
