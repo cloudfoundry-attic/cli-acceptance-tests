@@ -65,9 +65,9 @@ var _ = Describe("Config", func() {
 		})
 	})
 
-	It("allows setting locale to ja_JA", func() {
+	It("allows setting locale to ja_JP", func() {
 		cf.AsUser(context.AdminUserContext(), setupTimeout, func() {
-			session := cf.Cf("config", "-locale", "ja_JA").Wait(commandTimeout)
+			session := cf.Cf("config", "-locale", "ja_JP").Wait(commandTimeout)
 			Expect(session).To(gexec.Exit(0))
 		})
 	})
