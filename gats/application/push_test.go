@@ -4,7 +4,6 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
-	"strings"
 	"time"
 
 	"github.com/cloudfoundry-incubator/cf-test-helpers/cf"
@@ -44,15 +43,21 @@ var _ = Describe("Push", func() {
 		env.Teardown()
 	})
 
-	Context("when pushing an app with >248 character paths", func() {
+	Context("when pushing an app with >260 character paths", func() {
 		var (
-			longPath string
+			fullPath string
 			cwd      string
 		)
 
 		BeforeEach(func() {
-			longDirName := strings.Repeat("i", 247)
-			longPath = filepath.Join(assets.ServiceBroker, longDirName)
+			dirName := "dir_name"
+			dirNames := []string{}
+			for i := 0; i < 32; i++ { // minimum 300 chars, including separators
+				dirNames = append(dirNames, dirName)
+			}
+
+			longPath := filepath.Join(dirNames...)
+			fullPath = filepath.Join(assets.ServiceBroker, longPath)
 
 			if runtime.GOOS == "windows" {
 				var err error
@@ -62,10 +67,10 @@ var _ = Describe("Push", func() {
 				// `\\?\` is used to skip Windows' file name processor, which imposes
 				// length limits. Search MSDN for 'Maximum Path Length Limitation' for
 				// more.
-				err = os.MkdirAll(`\\?\`+filepath.Join(cwd, longPath), os.ModeDir|os.ModePerm)
+				err = os.MkdirAll(`\\?\`+filepath.Join(cwd, fullPath), os.ModeDir|os.ModePerm)
 				Expect(err).NotTo(HaveOccurred())
 			} else {
-				err := os.MkdirAll(longPath, os.ModeDir|os.ModePerm)
+				err := os.MkdirAll(fullPath, os.ModeDir|os.ModePerm)
 				Expect(err).NotTo(HaveOccurred())
 			}
 		})
@@ -75,10 +80,10 @@ var _ = Describe("Push", func() {
 				// `\\?\` is used to skip Windows' file name processor, which imposes
 				// length limits. Search MSDN for 'Maximum Path Length Limitation' for
 				// more.
-				err := os.RemoveAll(`\\?\` + filepath.Join(cwd, longPath))
+				err := os.RemoveAll(`\\?\` + filepath.Join(cwd, fullPath))
 				Expect(err).NotTo(HaveOccurred())
 			} else {
-				err := os.RemoveAll(longPath)
+				err := os.RemoveAll(fullPath)
 				Expect(err).NotTo(HaveOccurred())
 			}
 		})
