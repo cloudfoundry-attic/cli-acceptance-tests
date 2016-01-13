@@ -1,7 +1,6 @@
 package application_test
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -45,11 +44,10 @@ var _ = Describe("Push", func() {
 		env.Teardown()
 	})
 
-	Context("when pushing an app with >248 character paths, which are .cfignored", func() {
+	Context("when pushing an app with >248 character paths", func() {
 		var (
-			longPath     string
-			cfIgnorePath string
-			cwd          string
+			longPath string
+			cwd      string
 		)
 
 		BeforeEach(func() {
@@ -70,16 +68,9 @@ var _ = Describe("Push", func() {
 				err := os.MkdirAll(longPath, os.ModeDir|os.ModePerm)
 				Expect(err).NotTo(HaveOccurred())
 			}
-
-			cfIgnorePath = filepath.Join(assets.ServiceBroker, ".cfignore")
-			cfIgnoreContents := []byte(longDirName + "\n")
-			err := ioutil.WriteFile(cfIgnorePath, cfIgnoreContents, 0644)
-			Expect(err).NotTo(HaveOccurred())
 		})
 
 		AfterEach(func() {
-			err := os.RemoveAll(cfIgnorePath)
-			Expect(err).NotTo(HaveOccurred())
 			if runtime.GOOS == "windows" {
 				// `\\?\` is used to skip Windows' file name processor, which imposes
 				// length limits. Search MSDN for 'Maximum Path Length Limitation' for
@@ -87,7 +78,7 @@ var _ = Describe("Push", func() {
 				err := os.RemoveAll(`\\?\` + filepath.Join(cwd, longPath))
 				Expect(err).NotTo(HaveOccurred())
 			} else {
-				err = os.RemoveAll(longPath)
+				err := os.RemoveAll(longPath)
 				Expect(err).NotTo(HaveOccurred())
 			}
 		})
