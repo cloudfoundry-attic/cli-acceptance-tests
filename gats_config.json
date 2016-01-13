@@ -1,0 +1,10 @@
+{
+  "api": "api.bosh-lite.com",
+  "apps_domain": "bosh-lite.com",
+  "skip_ssl_validation": true,
+  "use_http": true,
+  "admin_password": "admin",
+  "admin_user": "admin",
+  "existing_user": "admin",
+  "existing_user_password": "admin"
+}
