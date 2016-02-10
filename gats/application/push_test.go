@@ -30,7 +30,7 @@ var _ = Describe("Push", func() {
 		assets = helpers.NewAssets()
 		setupTimeout = 20 * time.Second
 		targetTimeout = 10 * time.Second
-		pushTimeout = 1 * time.Minute
+		pushTimeout = 2 * time.Minute
 
 		config := catshelpers.LoadConfig()
 		context = catshelpers.NewContext(config)
