@@ -8,13 +8,16 @@ import (
 	"github.com/cloudfoundry-incubator/cf-test-helpers/generator"
 	CATS_helper "github.com/cloudfoundry-incubator/cf-test-helpers/helpers"
 	broker_helper "github.com/cloudfoundry/cf-acceptance-tests/helpers/services"
+	"github.com/cloudfoundry/cli-acceptance-tests/helpers"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	. "github.com/onsi/gomega/gexec"
-	"github.com/cloudfoundry/cli-acceptance-tests/helpers"
 )
 
-var assertionTimeout = 10.0
+var (
+	assertionTimeout         = 10.0
+	extendedAssertionTimeout = 20.0
+)
 
 var _ = Describe("CF service access commands", func() {
 	// Create service broker, service, service plans, and service plan visibilities.
@@ -51,7 +54,7 @@ var _ = Describe("CF service access commands", func() {
 			Expect(output).To(ContainSubstring(broker.SyncPlans[0].Name))
 			Expect(output).To(ContainSubstring("none"))
 
-			access = Cf("enable-service-access", broker.Service.Name, "-p", broker.SyncPlans[0].Name, "-o", orgName).Wait(assertionTimeout)
+			access = Cf("enable-service-access", broker.Service.Name, "-p", broker.SyncPlans[0].Name, "-o", orgName).Wait(extendedAssertionTimeout)
 			Expect(access).To(Exit(0))
 			Expect(access.Out.Contents()).To(ContainSubstring("OK"))
 
@@ -64,7 +67,7 @@ var _ = Describe("CF service access commands", func() {
 			Expect(output).To(ContainSubstring("limited"))
 			Expect(output).To(ContainSubstring(orgName))
 
-			access = Cf("enable-service-access", broker.Service.Name).Wait(assertionTimeout)
+			access = Cf("enable-service-access", broker.Service.Name).Wait(extendedAssertionTimeout)
 			Expect(access).To(Exit(0))
 			Expect(access.Out.Contents()).To(ContainSubstring("OK"))
 
@@ -76,7 +79,7 @@ var _ = Describe("CF service access commands", func() {
 			Expect(output).To(ContainSubstring(broker.SyncPlans[0].Name))
 			Expect(output).To(ContainSubstring("all"))
 
-			access = Cf("disable-service-access", broker.Service.Name, "-p", broker.SyncPlans[0].Name).Wait(assertionTimeout)
+			access = Cf("disable-service-access", broker.Service.Name, "-p", broker.SyncPlans[0].Name).Wait(extendedAssertionTimeout)
 			Expect(access).To(Exit(0))
 			Expect(access.Out.Contents()).To(ContainSubstring("OK"))
 
