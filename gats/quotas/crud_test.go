@@ -11,7 +11,10 @@ import (
 	. "github.com/onsi/gomega/gbytes"
 )
 
-var assertionTimeout = 10.0
+var (
+	assertionTimeout      = 10.0
+	asyncAssertionTimeout = 15.0
+)
 
 var _ = Describe("CF Quota commands", func() {
 	It("can Create, Read, Update, and Delete quotas", func() {
@@ -38,10 +41,10 @@ var _ = Describe("CF Quota commands", func() {
 
 			Eventually(Cf("quotas"), assertionTimeout).Should(Say("513M"))
 
-			Eventually(Cf("delete-quota",
-				quotaName,
-				"-f",
-			), assertionTimeout).Should(Say("OK"))
+			Eventually(
+				Cf("delete-quota", quotaName, "-f"),
+				asyncAssertionTimeout,
+			).Should(Say("OK"))
 
 			Eventually(Cf("quotas"), assertionTimeout).ShouldNot(Say(quotaName))
 		})
