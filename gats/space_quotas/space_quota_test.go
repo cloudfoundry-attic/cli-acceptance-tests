@@ -14,7 +14,8 @@ import (
 
 var _ = Describe("CF space quota commands", func() {
 	const (
-		assertionTimeout = 10.0
+		assertionTimeout         = 10.0
+		extendedAssertionTimeout = 15.0
 	)
 
 	var (
@@ -81,7 +82,7 @@ var _ = Describe("CF space quota commands", func() {
 				output = spaceQuota.Out.Contents()
 				Expect(output).To(ContainSubstring(fmt.Sprintf("Unassigning space quota foo from space %s", spaceName)))
 
-				spaceQuota = Cf("delete-space-quota", "foo", "-f").Wait(assertionTimeout)
+				spaceQuota = Cf("delete-space-quota", "foo", "-f").Wait(extendedAssertionTimeout)
 				Expect(spaceQuota).To(Exit(0))
 				output = spaceQuota.Out.Contents()
 				Expect(output).To(ContainSubstring("Deleting space quota foo"))
