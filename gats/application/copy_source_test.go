@@ -16,8 +16,8 @@ import (
 var _ = Describe("CopySource", func() {
 	const (
 		assertionTimeout = 10 * time.Second
-		appTimeout       = 1 * time.Minute
-		copyAppTimeout   = appTimeout * 3
+		appTimeout       = 2 * time.Minute
+		copyAppTimeout   = 3 * time.Minute
 	)
 
 	var (
