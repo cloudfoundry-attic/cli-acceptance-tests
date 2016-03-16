@@ -1,10 +1,8 @@
 source 'http://rubygems.org'
 
-ruby '2.0.0'
-
 gem 'sinatra'
 gem 'json'
-gem 'colorize'
+gem 'rainbow'
 
 group :test, :development do
   gem 'rspec'
