@@ -15,8 +15,8 @@ import (
 )
 
 var (
-	assertionTimeout         = 10.0
-	extendedAssertionTimeout = 20.0
+	assertionTimeout         = 1 * time.Minute
+	extendedAssertionTimeout = 2 * time.Minute
 )
 
 var _ = Describe("CF service access commands", func() {
