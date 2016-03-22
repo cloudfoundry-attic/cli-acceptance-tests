@@ -14,7 +14,7 @@ import (
 
 var _ = Describe("CheckRoute", func() {
 	const (
-		assertionTimeout = 10.0
+		assertionTimeout = 30.0
 	)
 
 	var (
@@ -54,7 +54,7 @@ var _ = Describe("CheckRoute", func() {
 			checkRoute := Cf("check-route", hostName, config.AppsDomain).Wait(assertionTimeout)
 			Expect(checkRoute.Out.Contents()).To(ContainSubstring(fmt.Sprintf("Route %s.%s does exist", hostName, config.AppsDomain)))
 
-			deleteRoute := Cf("delete-route", config.AppsDomain, "-n", hostName, "-f").Wait(assertionTimeout + 30)
+			deleteRoute := Cf("delete-route", config.AppsDomain, "-n", hostName, "-f").Wait(assertionTimeout)
 			Expect(deleteRoute.ExitCode()).To(Equal(0))
 
 			checkRoute = Cf("check-route", hostName, config.AppsDomain).Wait(assertionTimeout)
