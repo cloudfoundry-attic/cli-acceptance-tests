@@ -20,7 +20,7 @@ import (
 var _ = Describe("CreateAppManifest", func() {
 	const (
 		assertionTimeout         = 10 * time.Second
-		appTimeout               = 1 * time.Minute
+		appTimeout               = 5 * time.Minute
 		createAppManifestTimeout = 20 * time.Second
 		manifestFileName         = "create-app-manifest-test-manifest.yml"
 	)
