@@ -35,9 +35,9 @@ var _ = BeforeSuite(func() {
 	switch runtime.GOOS {
 	case "windows":
 		if runtime.GOARCH == "amd64" {
-			install = Cf("install-plugin", "-f","fixtures/plugin_windows_amd64.exe").Wait(5 * time.Second)
+			install = Cf("install-plugin", "-f", "fixtures/plugin_windows_amd64.exe").Wait(5 * time.Second)
 		} else {
-			install = Cf("install-plugin", "-f","fixtures/plugin_windows_386.exe").Wait(5 * time.Second)
+			install = Cf("install-plugin", "-f", "fixtures/plugin_windows_386.exe").Wait(5 * time.Second)
 		}
 	case "linux":
 		if runtime.GOARCH == "amd64" {
@@ -65,7 +65,7 @@ var _ = AfterSuite(func() {
 var _ = Describe("Plugin API", func() {
 	const (
 		apiTimeout       = 20 * time.Second
-		appTimeout       = 1 * time.Minute
+		appTimeout       = 5 * time.Minute
 		assertionTimeout = 20 * time.Second
 		operationTimeout = 20 * time.Second
 	)
