@@ -17,6 +17,7 @@ var _ = Describe("i18n support and language detection", func() {
 	})
 
 	It("returns the french translation for cf quota", func() {
+		Skip("Until language setting works in parallel")
 		Eventually(Cf("help", "quota")).Should(Say("Afficher les informations de quota"))
 	})
 })
