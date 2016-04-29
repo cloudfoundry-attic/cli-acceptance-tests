@@ -1,0 +1,100 @@
+{
+	"version": 0,
+	"dependencies": [
+		{
+			"importpath": "github.com/cloudfoundry-incubator/cf-test-helpers/cf",
+			"repository": "https://github.com/cloudfoundry-incubator/cf-test-helpers",
+			"vcs": "git",
+			"revision": "b05e7028ae395fedb07ace068eb934a9b7ba07ed",
+			"branch": "HEAD",
+			"path": "/cf",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/cloudfoundry-incubator/cf-test-helpers/generator",
+			"repository": "https://github.com/cloudfoundry-incubator/cf-test-helpers",
+			"vcs": "git",
+			"revision": "b05e7028ae395fedb07ace068eb934a9b7ba07ed",
+			"branch": "HEAD",
+			"path": "/generator",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/cloudfoundry-incubator/cf-test-helpers/helpers",
+			"repository": "https://github.com/cloudfoundry-incubator/cf-test-helpers",
+			"vcs": "git",
+			"revision": "b05e7028ae395fedb07ace068eb934a9b7ba07ed",
+			"branch": "HEAD",
+			"path": "/helpers",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/cloudfoundry-incubator/cf-test-helpers/runner",
+			"repository": "https://github.com/cloudfoundry-incubator/cf-test-helpers",
+			"vcs": "git",
+			"revision": "b05e7028ae395fedb07ace068eb934a9b7ba07ed",
+			"branch": "HEAD",
+			"path": "/runner",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/cloudfoundry/cf-acceptance-tests/helpers/assets",
+			"repository": "https://github.com/cloudfoundry/cf-acceptance-tests",
+			"vcs": "git",
+			"revision": "0f4c39dca345dad530e5a273fb407191fa4619c6",
+			"branch": "HEAD",
+			"path": "/helpers/assets",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/cloudfoundry/cf-acceptance-tests/helpers/services",
+			"repository": "https://github.com/cloudfoundry/cf-acceptance-tests",
+			"vcs": "git",
+			"revision": "0f4c39dca345dad530e5a273fb407191fa4619c6",
+			"branch": "HEAD",
+			"path": "/helpers/services",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/cloudfoundry/cli/plugin",
+			"repository": "https://github.com/cloudfoundry/cli",
+			"vcs": "git",
+			"revision": "30ea30b8e8a16b7cc0534ad0765a1a565c69d267",
+			"branch": "HEAD",
+			"path": "/plugin",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/cloudfoundry/jibber_jabber",
+			"repository": "https://github.com/cloudfoundry/jibber_jabber",
+			"vcs": "git",
+			"revision": "3ebdd29971178ede5714008229e68fec7645d695",
+			"branch": "HEAD",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/nu7hatch/gouuid",
+			"repository": "https://github.com/nu7hatch/gouuid",
+			"vcs": "git",
+			"revision": "179d4d0c4d8d407a32af483c2354df1d2c91e6c3",
+			"branch": "HEAD",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/onsi/ginkgo",
+			"repository": "https://github.com/onsi/ginkgo",
+			"vcs": "git",
+			"revision": "18c73cfeca1095f984c036a04c42ac0b08048685",
+			"branch": "HEAD",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/onsi/gomega",
+			"repository": "https://github.com/onsi/gomega",
+			"vcs": "git",
+			"revision": "d6c945f9fdbf6cad99e85b0feff591caa268e0db",
+			"branch": "HEAD",
+			"notests": true
+		}
+	]
+}
