@@ -96,38 +96,38 @@ var _ = Describe("Plugin API", func() {
 		})
 	})
 
-	// Describe("GetCurrentSpace()", func() {
-	// 	It("gets the current targeted space", func() {
-	// 		AsUser(context.AdminUserContext(), 150*time.Second, func() {
-	// 			var cmd *Session
+	Describe("GetCurrentSpace()", func() {
+		It("gets the current targeted space", func() {
+			AsUser(context.AdminUserContext(), 150*time.Second, func() {
+				var cmd *Session
 
-	// 			org := generator.RandomName()
-	// 			space := generator.RandomName()
+				org := generator.RandomName()
+				space := generator.RandomName()
 
-	// 			cmd = Cf("create-org", org).Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+				cmd = Cf("create-org", org).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			cmd = Cf("target", "-o", org).Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+				cmd = Cf("target", "-o", org).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			cmd = Cf("create-space", space).Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+				cmd = Cf("create-space", space).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			cmd = Cf("target", "-s", space).Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+				cmd = Cf("target", "-s", space).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			apiResult := Cf("GetCurrentSpace").Wait(apiTimeout)
-	// 			Expect(apiResult).To(Exit(0))
-	// 			Expect(apiResult.Out.Contents()).To(ContainSubstring(space))
+				apiResult := Cf("GetCurrentSpace").Wait(apiTimeout)
+				Expect(apiResult).To(Exit(0))
+				Expect(apiResult.Out.Contents()).To(ContainSubstring(space))
 
-	// 			cmd = Cf("delete-space", space, "-f").Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+				cmd = Cf("delete-space", space, "-f").Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			cmd = Cf("delete-org", org, "-f").Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
-	// 		})
-	// 	})
-	// })
+				cmd = Cf("delete-org", org, "-f").Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+			})
+		})
+	})
 
 	Describe("Username()", func() {
 		It("gets the current Username", func() {
@@ -268,23 +268,23 @@ var _ = Describe("Plugin API", func() {
 		})
 	})
 
-	// Describe("GetOrg()", func() {
-	// 	It("gets the detail of a org", func() {
-	// 		org := generator.RandomName()
+	Describe("GetOrg()", func() {
+		It("gets the detail of a org", func() {
+			org := generator.RandomName()
 
-	// 		AsUser(context.AdminUserContext(), 50*time.Second, func() {
-	// 			co := Cf("create-org", org).Wait(operationTimeout)
-	// 			Expect(co).To(Exit(0))
+			AsUser(context.AdminUserContext(), 50*time.Second, func() {
+				co := Cf("create-org", org).Wait(operationTimeout)
+				Expect(co).To(Exit(0))
 
-	// 			apiResult := Cf("GetOrg", org).Wait(apiTimeout)
-	// 			Expect(apiResult).To(Exit(0))
-	// 			Expect(apiResult.Out.Contents()).To(ContainSubstring(org))
+				apiResult := Cf("GetOrg", org).Wait(apiTimeout)
+				Expect(apiResult).To(Exit(0))
+				Expect(apiResult.Out.Contents()).To(ContainSubstring(org))
 
-	// 			do := Cf("delete-org", org, "-f").Wait(operationTimeout)
-	// 			Expect(do).To(Exit(0))
-	// 		})
-	// 	})
-	// })
+				do := Cf("delete-org", org, "-f").Wait(operationTimeout)
+				Expect(do).To(Exit(0))
+			})
+		})
+	})
 
 	Describe("GetOrgs()", func() {
 		It("gets a list of orgs", func() {
@@ -294,102 +294,102 @@ var _ = Describe("Plugin API", func() {
 		})
 	})
 
-	// Describe("GetSpace()", func() {
-	// 	It("gets the detail of a space", func() {
-	// 		var cmd *Session
+	Describe("GetSpace()", func() {
+		It("gets the detail of a space", func() {
+			var cmd *Session
 
-	// 		org := generator.RandomName()
-	// 		space := generator.RandomName()
+			org := generator.RandomName()
+			space := generator.RandomName()
 
-	// 		AsUser(context.AdminUserContext(), 120*time.Second, func() {
-	// 			cmd = Cf("create-org", org).Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+			AsUser(context.AdminUserContext(), 120*time.Second, func() {
+				cmd = Cf("create-org", org).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			cmd = Cf("target", "-o", org).Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+				cmd = Cf("target", "-o", org).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			cmd = Cf("create-space", space).Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+				cmd = Cf("create-space", space).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			apiResult := Cf("GetSpace", space).Wait(apiTimeout)
-	// 			Expect(apiResult).To(Exit(0))
-	// 			Expect(apiResult.Out.Contents()).To(ContainSubstring(space))
+				apiResult := Cf("GetSpace", space).Wait(apiTimeout)
+				Expect(apiResult).To(Exit(0))
+				Expect(apiResult.Out.Contents()).To(ContainSubstring(space))
 
-	// 			cmd = Cf("delete-space", space, "-f").Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+				cmd = Cf("delete-space", space, "-f").Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			cmd = Cf("delete-org", org, "-f").Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
-	// 		})
-	// 	})
-	// })
+				cmd = Cf("delete-org", org, "-f").Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+			})
+		})
+	})
 
-	// Describe("GetOrgUsers()", func() {
-	// 	It("gets a list of users in the org", func() {
-	// 		var cmd *Session
+	Describe("GetOrgUsers()", func() {
+		It("gets a list of users in the org", func() {
+			var cmd *Session
 
-	// 		org := generator.RandomName()
-	// 		user := generator.RandomName()
+			org := generator.RandomName()
+			user := generator.RandomName()
 
-	// 		AsUser(context.AdminUserContext(), 120*time.Second, func() {
-	// 			cmd = Cf("create-org", org).Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+			AsUser(context.AdminUserContext(), 120*time.Second, func() {
+				cmd = Cf("create-org", org).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			cmd = Cf("target", "-o", org).Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+				cmd = Cf("target", "-o", org).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			cmd = Cf("create-user", user, "password").Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+				cmd = Cf("create-user", user, "password").Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			cmd = Cf("set-org-role", user, org, "OrgManager").Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+				cmd = Cf("set-org-role", user, org, "OrgManager").Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			apiResult := Cf("GetOrgUsers", org, "-a").Wait(apiTimeout)
-	// 			Expect(apiResult).To(Exit(0))
-	// 			Expect(apiResult.Out.Contents()).To(ContainSubstring(user))
+				apiResult := Cf("GetOrgUsers", org, "-a").Wait(apiTimeout)
+				Expect(apiResult).To(Exit(0))
+				Expect(apiResult.Out.Contents()).To(ContainSubstring(user))
 
-	// 			cmd = Cf("delete-org", org, "-f").Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
-	// 		})
-	// 	})
-	// })
+				cmd = Cf("delete-org", org, "-f").Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+			})
+		})
+	})
 
-	// Describe("GetSpaceUsers()", func() {
-	// 	It("gets a list of users in the space", func() {
-	// 		var cmd *Session
+	Describe("GetSpaceUsers()", func() {
+		It("gets a list of users in the space", func() {
+			var cmd *Session
 
-	// 		org := generator.RandomName()
-	// 		space := generator.RandomName()
-	// 		user := generator.RandomName()
+			org := generator.RandomName()
+			space := generator.RandomName()
+			user := generator.RandomName()
 
-	// 		AsUser(context.AdminUserContext(), 150*time.Second, func() {
-	// 			cmd = Cf("create-org", org).Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+			AsUser(context.AdminUserContext(), 150*time.Second, func() {
+				cmd = Cf("create-org", org).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			cmd = Cf("create-space", space, "-o", org).Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+				cmd = Cf("create-space", space, "-o", org).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			cmd = Cf("target", "-o", org, "-s", space).Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+				cmd = Cf("target", "-o", org, "-s", space).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			cmd = Cf("create-user", user, "password").Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+				cmd = Cf("create-user", user, "password").Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			cmd = Cf("set-org-role", user, org, "OrgManager").Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+				cmd = Cf("set-org-role", user, org, "OrgManager").Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			cmd = Cf("set-space-role", user, org, space, "SpaceManager").Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+				cmd = Cf("set-space-role", user, org, space, "SpaceManager").Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			apiResult := Cf("GetSpaceUsers", org, space).Wait(apiTimeout)
-	// 			Expect(apiResult).To(Exit(0))
-	// 			Expect(apiResult.Out.Contents()).To(ContainSubstring(user))
+				apiResult := Cf("GetSpaceUsers", org, space).Wait(apiTimeout)
+				Expect(apiResult).To(Exit(0))
+				Expect(apiResult.Out.Contents()).To(ContainSubstring(user))
 
-	// 			cmd = Cf("delete-org", org, "-f").Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
-	// 		})
-	// 	})
-	// })
+				cmd = Cf("delete-org", org, "-f").Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
+			})
+		})
+	})
 
 	Describe("GetSpaces()", func() {
 		It("gets a list of spaces", func() {
@@ -399,66 +399,66 @@ var _ = Describe("Plugin API", func() {
 		})
 	})
 
-	// Describe("GetServices()", func() {
-	// 	It("gets a list of available services", func() {
-	// 		var cmd *Session
+	Describe("GetServices()", func() {
+		It("gets a list of available services", func() {
+			var cmd *Session
 
-	// 		service := generator.RandomName()
-	// 		org := generator.RandomName()
-	// 		space := generator.RandomName()
+			service := generator.RandomName()
+			org := generator.RandomName()
+			space := generator.RandomName()
 
-	// 		AsUser(context.AdminUserContext(), 120*time.Second, func() {
-	// 			cmd = Cf("create-org", org).Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+			AsUser(context.AdminUserContext(), 120*time.Second, func() {
+				cmd = Cf("create-org", org).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			cmd = Cf("create-space", space, "-o", org).Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+				cmd = Cf("create-space", space, "-o", org).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			cmd = Cf("target", "-o", org, "-s", space).Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+				cmd = Cf("target", "-o", org, "-s", space).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			cmd = Cf("cups", service).Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+				cmd = Cf("cups", service).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			apiResult := Cf("GetServices").Wait(apiTimeout)
-	// 			Expect(apiResult).To(Exit(0))
-	// 			Expect(apiResult.Out.Contents()).To(ContainSubstring(service))
+				apiResult := Cf("GetServices").Wait(apiTimeout)
+				Expect(apiResult).To(Exit(0))
+				Expect(apiResult.Out.Contents()).To(ContainSubstring(service))
 
-	// 			do := Cf("delete-service", service, "-f").Wait(operationTimeout)
-	// 			Expect(do).To(Exit(0))
-	// 		})
-	// 	})
-	// })
+				do := Cf("delete-service", service, "-f").Wait(operationTimeout)
+				Expect(do).To(Exit(0))
+			})
+		})
+	})
 
-	// Describe("GetService()", func() {
-	// 	It("gets the details of a service", func() {
-	// 		var cmd *Session
+	Describe("GetService()", func() {
+		It("gets the details of a service", func() {
+			var cmd *Session
 
-	// 		service := generator.RandomName()
-	// 		org := generator.RandomName()
-	// 		space := generator.RandomName()
+			service := generator.RandomName()
+			org := generator.RandomName()
+			space := generator.RandomName()
 
-	// 		AsUser(context.AdminUserContext(), 120*time.Second, func() {
-	// 			cmd = Cf("create-org", org).Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+			AsUser(context.AdminUserContext(), 120*time.Second, func() {
+				cmd = Cf("create-org", org).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			cmd = Cf("create-space", space, "-o", org).Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+				cmd = Cf("create-space", space, "-o", org).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			cmd = Cf("target", "-o", org, "-s", space).Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+				cmd = Cf("target", "-o", org, "-s", space).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			cmd = Cf("cups", service).Wait(operationTimeout)
-	// 			Expect(cmd).To(Exit(0))
+				cmd = Cf("cups", service).Wait(operationTimeout)
+				Expect(cmd).To(Exit(0))
 
-	// 			apiResult := Cf("GetService", service).Wait(apiTimeout)
-	// 			Expect(apiResult).To(Exit(0))
-	// 			Expect(apiResult.Out.Contents()).To(ContainSubstring(service))
+				apiResult := Cf("GetService", service).Wait(apiTimeout)
+				Expect(apiResult).To(Exit(0))
+				Expect(apiResult.Out.Contents()).To(ContainSubstring(service))
 
-	// 			do := Cf("delete-service", service, "-f").Wait(operationTimeout)
-	// 			Expect(do).To(Exit(0))
-	// 		})
-	// 	})
-	// })
+				do := Cf("delete-service", service, "-f").Wait(operationTimeout)
+				Expect(do).To(Exit(0))
+			})
+		})
+	})
 
 })
