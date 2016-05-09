@@ -9,6 +9,8 @@ import (
 	acceptanceTestHelpers "github.com/cloudfoundry-incubator/cf-test-helpers/helpers"
 	gatsHelpers "github.com/cloudfoundry/cli-acceptance-tests/helpers"
 
+	"os"
+
 	"github.com/cloudfoundry-incubator/cf-test-helpers/generator"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -16,53 +18,53 @@ import (
 	. "github.com/onsi/gomega/gexec"
 )
 
-var (
-	context *acceptanceTestHelpers.ConfiguredContext
-	env     *acceptanceTestHelpers.Environment
-	config  acceptanceTestHelpers.Config
-)
-
-var _ = BeforeSuite(func() {
-	config = acceptanceTestHelpers.LoadConfig()
-	context = acceptanceTestHelpers.NewContext(config)
-	env = acceptanceTestHelpers.NewEnvironment(context)
-
-	env.Setup()
-
-	Expect(runtime.GOARCH).To(Equal("amd64"), "Plugin suite only runs under 64bit OS, please skip the plugin suite in 32bit OS (use flag -skipPackage='gats/plugin')")
-
-	var install *Session
-	switch runtime.GOOS {
-	case "windows":
-		if runtime.GOARCH == "amd64" {
-			install = Cf("install-plugin", "-f", "fixtures/plugin_windows_amd64.exe").Wait(5 * time.Second)
-		} else {
-			install = Cf("install-plugin", "-f", "fixtures/plugin_windows_386.exe").Wait(5 * time.Second)
-		}
-	case "linux":
-		if runtime.GOARCH == "amd64" {
-			install = Cf("install-plugin", "-f", "fixtures/plugin_linux_amd64").Wait(5 * time.Second)
-		} else {
-			install = Cf("install-plugin", "-f", "fixtures/plugin_linux_386").Wait(5 * time.Second)
-		}
-	case "darwin":
-		if runtime.GOARCH == "amd64" {
-			install = Cf("install-plugin", "-f", "fixtures/plugin_darwin_amd64").Wait(5 * time.Second)
-		} else {
-			install = Cf("install-plugin", "-f", "fixtures/plugin_darwin_386").Wait(5 * time.Second)
-		}
-	}
-	Expect(install).To(Exit(0))
-})
-
-var _ = AfterSuite(func() {
-	env.Teardown()
-
-	uninstall := Cf("uninstall-plugin", "GatsPlugin").Wait(5 * time.Second)
-	Expect(uninstall).To(Exit(0))
-})
-
 var _ = Describe("Plugin API", func() {
+
+	var (
+		config  acceptanceTestHelpers.Config
+		context *acceptanceTestHelpers.ConfiguredContext
+		env     *acceptanceTestHelpers.Environment
+	)
+
+	BeforeEach(func() {
+		config = acceptanceTestHelpers.LoadConfig()
+		context = acceptanceTestHelpers.NewContext(config)
+		env = acceptanceTestHelpers.NewEnvironment(context)
+
+		env.Setup()
+
+		Expect(runtime.GOARCH).To(Equal("amd64"), "Plugin suite only runs under 64bit OS, please skip the plugin suite in 32bit OS (use flag -skipPackage='gats/plugin')")
+		os.Setenv("CF_PLUGIN_HOME", os.Getenv("CF_HOME")+"/.cf/plugins")
+
+		var install *Session
+		switch runtime.GOOS {
+		case "windows":
+			if runtime.GOARCH == "amd64" {
+				install = Cf("install-plugin", "-f", "fixtures/plugin_windows_amd64.exe").Wait(5 * time.Second)
+			} else {
+				install = Cf("install-plugin", "-f", "fixtures/plugin_windows_386.exe").Wait(5 * time.Second)
+			}
+		case "linux":
+			if runtime.GOARCH == "amd64" {
+				install = Cf("install-plugin", "-f", "fixtures/plugin_linux_amd64").Wait(5 * time.Second)
+			} else {
+				install = Cf("install-plugin", "-f", "fixtures/plugin_linux_386").Wait(5 * time.Second)
+			}
+		case "darwin":
+			if runtime.GOARCH == "amd64" {
+				install = Cf("install-plugin", "-f", "fixtures/plugin_darwin_amd64").Wait(5 * time.Second)
+			} else {
+				install = Cf("install-plugin", "-f", "fixtures/plugin_darwin_386").Wait(5 * time.Second)
+			}
+		}
+		Expect(install).To(Exit(0))
+	})
+
+	AfterEach(func() {
+		Expect(Cf("uninstall-plugin", "GatsPlugin")).To(Exit(0))
+		env.Teardown()
+	})
+
 	const (
 		apiTimeout       = 20 * time.Second
 		appTimeout       = 5 * time.Minute
