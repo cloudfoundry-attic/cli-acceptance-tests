@@ -1,23 +1,17 @@
 package translations_test
 
 import (
-	"github.com/cloudfoundry/jibber_jabber"
-
 	. "github.com/cloudfoundry-incubator/cf-test-helpers/cf"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	. "github.com/onsi/gomega/gbytes"
+	"github.com/onsi/gomega/gexec"
 )
 
-var _ = Describe("i18n support and language detection", func() {
-	BeforeEach(func() {
-		userLocale, err := jibber_jabber.DetectIETF()
-		Expect(err).NotTo(HaveOccurred())
-		Expect(userLocale).To(Equal("fr-FR"), "This test can only be run when the system's language is set to french")
-	})
-
+var _ = Describe("i18n support", func() {
 	It("returns the french translation for cf quota", func() {
-		Skip("Until language setting works in parallel")
+		session := Cf("config", "--locale", "fr-FR")
+		Eventually(session).Should(gexec.Exit(0))
 		Eventually(Cf("help", "quota")).Should(Say("Afficher les informations de quota"))
 	})
 })
