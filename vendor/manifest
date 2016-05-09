@@ -2,6 +2,14 @@
 	"version": 0,
 	"dependencies": [
 		{
+			"importpath": "github.com/blang/semver",
+			"repository": "https://github.com/blang/semver",
+			"vcs": "git",
+			"revision": "aea32c919a18e5ef4537bbd283ff29594b1b0165",
+			"branch": "master",
+			"notests": true
+		},
+		{
 			"importpath": "github.com/cloudfoundry-incubator/cf-test-helpers/cf",
 			"repository": "https://github.com/cloudfoundry-incubator/cf-test-helpers",
 			"vcs": "git",
@@ -56,11 +64,20 @@
 			"notests": true
 		},
 		{
+			"importpath": "github.com/cloudfoundry/cli/cf",
+			"repository": "https://github.com/cloudfoundry/cli",
+			"vcs": "git",
+			"revision": "b8094c98cbe55ca54e14ecbfa68601e5736103d8",
+			"branch": "master",
+			"path": "/cf",
+			"notests": true
+		},
+		{
 			"importpath": "github.com/cloudfoundry/cli/plugin",
 			"repository": "https://github.com/cloudfoundry/cli",
 			"vcs": "git",
-			"revision": "30ea30b8e8a16b7cc0534ad0765a1a565c69d267",
-			"branch": "HEAD",
+			"revision": "b8094c98cbe55ca54e14ecbfa68601e5736103d8",
+			"branch": "master",
 			"path": "/plugin",
 			"notests": true
 		},

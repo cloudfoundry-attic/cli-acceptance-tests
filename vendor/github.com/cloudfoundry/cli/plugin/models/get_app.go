@@ -20,6 +20,7 @@ type GetAppModel struct {
 	PackageUpdatedAt     *time.Time
 	PackageState         string
 	StagingFailedReason  string
+	AppPorts             []int
 	Stack                *GetApp_Stack
 	Instances            []GetApp_AppInstanceFields
 	Routes               []GetApp_RouteSummary
@@ -50,10 +51,8 @@ type GetApp_RouteSummary struct {
 }
 
 type GetApp_DomainFields struct {
-	Guid                   string
-	Name                   string
-	OwningOrganizationGuid string
-	Shared                 bool
+	Guid string
+	Name string
 }
 
 type GetApp_ServiceSummary struct {
