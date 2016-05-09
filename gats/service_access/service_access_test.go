@@ -30,7 +30,6 @@ var _ = Describe("CF service access commands", func() {
 	BeforeEach(func() {
 		env.Setup()
 		broker = broker_helper.NewServiceBroker(generator.RandomName(), helpers.NewAssets().ServiceBroker, context, false)
-		// broker = broker_helper.NewServiceBroker(generator.RandomName(), assets.NewAssets().ServiceBroker, context, false)
 		broker.Push()
 		broker.Configure()
 
