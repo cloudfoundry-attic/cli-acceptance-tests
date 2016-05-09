@@ -93,7 +93,7 @@
 			"importpath": "github.com/onsi/ginkgo",
 			"repository": "https://github.com/onsi/ginkgo",
 			"vcs": "git",
-			"revision": "2c2e9bb47b4e44067024f29339588cac8b34dd12",
+			"revision": "5437a97bf824dec14e58d68c56ee36e772670c2e",
 			"branch": "master",
 			"notests": true
 		},
