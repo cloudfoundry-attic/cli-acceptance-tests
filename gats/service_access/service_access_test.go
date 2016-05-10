@@ -6,9 +6,8 @@ import (
 
 	. "github.com/cloudfoundry-incubator/cf-test-helpers/cf"
 	"github.com/cloudfoundry-incubator/cf-test-helpers/generator"
-	CATS_helper "github.com/cloudfoundry-incubator/cf-test-helpers/helpers"
-	broker_helper "github.com/cloudfoundry/cf-acceptance-tests/helpers/services"
-	"github.com/cloudfoundry/cli-acceptance-tests/helpers"
+	"github.com/cloudfoundry-incubator/cf-test-helpers/helpers"
+	"github.com/cloudfoundry/cli-acceptance-tests/gats/service_access/servicebroker"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	. "github.com/onsi/gomega/gexec"
@@ -22,14 +21,14 @@ var (
 var _ = Describe("CF service access commands", func() {
 	// Create service broker, service, service plans, and service plan visibilities.
 
-	var broker broker_helper.ServiceBroker
-	config := CATS_helper.LoadConfig()
-	context := CATS_helper.NewContext(config)
-	env := CATS_helper.NewEnvironment(context)
+	var broker servicebroker.ServiceBroker
+	config := helpers.LoadConfig()
+	context := helpers.NewContext(config)
+	env := helpers.NewEnvironment(context)
 	orgName := context.RegularUserContext().Org
 	BeforeEach(func() {
 		env.Setup()
-		broker = broker_helper.NewServiceBroker(generator.RandomName(), helpers.NewAssets().ServiceBroker, context, false)
+		broker = servicebroker.NewServiceBroker(generator.RandomName(), servicebroker.NewAssets().ServiceBroker, context)
 		broker.Push()
 		broker.Configure()
 
