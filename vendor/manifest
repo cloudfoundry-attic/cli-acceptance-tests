@@ -67,7 +67,7 @@
 			"importpath": "github.com/cloudfoundry/cli/cf",
 			"repository": "https://github.com/cloudfoundry/cli",
 			"vcs": "git",
-			"revision": "b8094c98cbe55ca54e14ecbfa68601e5736103d8",
+			"revision": "b1900ee15d9b617af15235f794fe6f6a71a63628",
 			"branch": "master",
 			"path": "/cf",
 			"notests": true
