@@ -7,9 +7,9 @@ import (
 	ginkgoconfig "github.com/onsi/ginkgo/config"
 	. "github.com/onsi/gomega"
 	. "github.com/onsi/gomega/gbytes"
+	. "github.com/onsi/gomega/gexec"
 
 	"github.com/cloudfoundry-incubator/cf-test-helpers/cf"
-	"github.com/cloudfoundry-incubator/cf-test-helpers/runner"
 )
 
 const RUNAWAY_QUOTA_MEM_LIMIT = "99999G"
@@ -51,6 +51,9 @@ func NewContext(config Config) *ConfiguredContext {
 	if config.UseExistingUser {
 		regUser = config.ExistingUser
 		regUserPass = config.ExistingUserPassword
+	}
+	if config.ConfigurableTestPassword != "" {
+		regUserPass = config.ConfigurableTestPassword
 	}
 
 	return &ConfiguredContext{
@@ -113,24 +116,24 @@ func (context *ConfiguredContext) Setup() {
 			args = append(args, "--allow-paid-service-plans")
 		}
 
-		runner.NewCmdRunner(cf.Cf(args...), context.shortTimeout).Run()
+		Eventually(cf.Cf(args...), context.shortTimeout).Should(Exit(0))
 
 		if !context.config.UseExistingUser {
 			createUserCmd := cf.Cf("create-user", context.regularUserUsername, context.regularUserPassword)
-			runner.NewCmdRunner(createUserCmd, context.shortTimeout).Run()
+			Eventually(createUserCmd, context.shortTimeout).Should(Exit())
 			if createUserCmd.ExitCode() != 0 {
 				Expect(createUserCmd.Out).To(Say("scim_resource_already_exists"))
 			}
 		}
 
-		runner.NewCmdRunner(cf.Cf("create-org", context.organizationName), context.shortTimeout).Run()
-		runner.NewCmdRunner(cf.Cf("set-quota", context.organizationName, definition.Name), context.shortTimeout).Run()
+		Eventually(cf.Cf("create-org", context.organizationName), context.shortTimeout).Should(Exit(0))
+		Eventually(cf.Cf("set-quota", context.organizationName, definition.Name), context.shortTimeout).Should(Exit(0))
 	})
 }
 
 func (context *ConfiguredContext) SetRunawayQuota() {
 	cf.AsUser(context.AdminUserContext(), context.shortTimeout, func() {
-		runner.NewCmdRunner(cf.Cf("update-quota", context.quotaDefinitionName, "-m", RUNAWAY_QUOTA_MEM_LIMIT, "-i=-1"), context.shortTimeout).Run()
+		Eventually(cf.Cf("update-quota", context.quotaDefinitionName, "-m", RUNAWAY_QUOTA_MEM_LIMIT, "-i=-1"), context.shortTimeout).Should(Exit(0))
 	})
 }
 
@@ -138,12 +141,12 @@ func (context *ConfiguredContext) Teardown() {
 	cf.AsUser(context.AdminUserContext(), context.shortTimeout, func() {
 
 		if !context.config.ShouldKeepUser {
-			runner.NewCmdRunner(cf.Cf("delete-user", "-f", context.regularUserUsername), context.shortTimeout).Run()
+			Eventually(cf.Cf("delete-user", "-f", context.regularUserUsername), context.shortTimeout).Should(Exit(0))
 		}
 
 		if !context.isPersistent {
-			runner.NewCmdRunner(cf.Cf("delete-org", "-f", context.organizationName), context.shortTimeout).Run()
-			runner.NewCmdRunner(cf.Cf("delete-quota", "-f", context.quotaDefinitionName), context.shortTimeout).Run()
+			Eventually(cf.Cf("delete-org", "-f", context.organizationName), context.shortTimeout).Should(Exit(0))
+			Eventually(cf.Cf("delete-quota", "-f", context.quotaDefinitionName), context.shortTimeout).Should(Exit(0))
 		}
 	})
 }

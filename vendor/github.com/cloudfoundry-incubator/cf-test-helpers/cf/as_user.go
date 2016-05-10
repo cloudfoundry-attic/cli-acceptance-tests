@@ -7,8 +7,8 @@ import (
 	"time"
 
 	ginkgoconfig "github.com/onsi/ginkgo/config"
-
-	"github.com/cloudfoundry-incubator/cf-test-helpers/runner"
+	. "github.com/onsi/gomega"
+	. "github.com/onsi/gomega/gexec"
 )
 
 var AsUser = func(userContext UserContext, timeout time.Duration, actions func()) {
@@ -37,9 +37,8 @@ func InitiateUserContext(userContext UserContext, timeout time.Duration) (origin
 		cfSetApiArgs = append(cfSetApiArgs, "--skip-ssl-validation")
 	}
 
-	runner.NewCmdRunner(Cf(cfSetApiArgs...), timeout).Run()
-
-	runner.NewCmdRunner(Cf("auth", userContext.Username, userContext.Password), timeout).Run()
+	Cf(cfSetApiArgs...).Wait(timeout)
+	CfAuth(userContext.Username, userContext.Password).Wait(timeout)
 
 	return
 }
@@ -47,15 +46,15 @@ func InitiateUserContext(userContext UserContext, timeout time.Duration) (origin
 func TargetSpace(userContext UserContext, timeout time.Duration) {
 	if userContext.Org != "" {
 		if userContext.Space != "" {
-			runner.NewCmdRunner(Cf("target", "-o", userContext.Org, "-s", userContext.Space), timeout).Run()
+			Eventually(Cf("target", "-o", userContext.Org, "-s", userContext.Space), timeout).Should(Exit(0))
 		} else {
-			runner.NewCmdRunner(Cf("target", "-o", userContext.Org), timeout).Run()
+			Eventually(Cf("target", "-o", userContext.Org), timeout).Should(Exit(0))
 		}
 	}
 }
 
 func RestoreUserContext(_ UserContext, timeout time.Duration, originalCfHomeDir, currentCfHomeDir string) {
-	runner.NewCmdRunner(Cf("logout"), timeout).Run()
+	Eventually(Cf("logout"), timeout).Should(Exit(0))
 	os.Setenv("CF_HOME", originalCfHomeDir)
 	os.RemoveAll(currentCfHomeDir)
 }

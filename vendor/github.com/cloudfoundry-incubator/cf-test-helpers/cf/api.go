@@ -6,8 +6,7 @@ import (
 	"time"
 
 	. "github.com/onsi/gomega"
-
-	"github.com/cloudfoundry-incubator/cf-test-helpers/runner"
+	. "github.com/onsi/gomega/gexec"
 )
 
 //var CfApiTimeout = 30 * time.Second
@@ -23,14 +22,19 @@ type QueryResponse struct {
 }
 
 var ApiRequest = func(method, endpoint string, response interface{}, timeout time.Duration, data ...string) {
-	request := Cf(
+	args := []string{
 		"curl",
 		endpoint,
 		"-X", method,
-		"-d", strings.Join(data, ""),
-	)
+	}
 
-	runner.NewCmdRunner(request, timeout).Run()
+	dataArg := strings.Join(data, "")
+	if len(dataArg) > 0 {
+		args = append(args, "-d", dataArg)
+	}
+
+	request := Cf(args...).Wait(timeout)
+	Expect(request).To(Exit(0))
 
 	if response != nil {
 		err := json.Unmarshal(request.Out.Contents(), response)
