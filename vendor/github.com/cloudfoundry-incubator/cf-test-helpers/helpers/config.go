@@ -2,19 +2,16 @@ package helpers
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"path/filepath"
-	"reflect"
 	"time"
-
-	"github.com/cloudfoundry-incubator/cf-test-helpers/runner"
 )
 
 type Config struct {
-	ApiEndpoint string `json:"api"`
-	AppsDomain  string `json:"apps_domain"`
-	UseHttp     bool   `json:"use_http"`
+	ApiEndpoint  string `json:"api"`
+	SystemDomain string `json:"system_domain"`
+	ClientSecret string `json:"client_secret"`
+	AppsDomain   string `json:"apps_domain"`
 
 	AdminUser     string `json:"admin_user"`
 	AdminPassword string `json:"admin_password"`
@@ -24,22 +21,17 @@ type Config struct {
 	ExistingUser         string `json:"existing_user"`
 	ExistingUserPassword string `json:"existing_user_password"`
 
-	ConfigurableTestPassword string `json:"test_password"`
-
 	PersistentAppHost      string `json:"persistent_app_host"`
 	PersistentAppSpace     string `json:"persistent_app_space"`
 	PersistentAppOrg       string `json:"persistent_app_org"`
 	PersistentAppQuotaName string `json:"persistent_app_quota_name"`
 
-	SkipSSLValidation  bool   `json:"skip_ssl_validation"`
-	Backend            string `json:"backend"`
-	IncludeDiegoDocker bool   `json:"include_diego_docker"`
-	IncludeTasks       bool   `json:"include_tasks"`
+	SkipSSLValidation bool `json:"skip_ssl_validation"`
+	UseDiego          bool `json:"use_diego"`
 
 	ArtifactsDirectory string `json:"artifacts_directory"`
 
 	DefaultTimeout     time.Duration `json:"default_timeout"`
-	DetectTimeout      time.Duration `json:"detect_timeout"`
 	CfPushTimeout      time.Duration `json:"cf_push_timeout"`
 	LongCurlTimeout    time.Duration `json:"long_curl_timeout"`
 	BrokerStartTimeout time.Duration `json:"broker_start_timeout"`
@@ -58,33 +50,6 @@ type Config struct {
 	DockerUser            string   `json:"docker_user"`
 	DockerPassword        string   `json:"docker_password"`
 	DockerEmail           string   `json:"docker_email"`
-
-	StaticFileBuildpackName string `json:"staticfile_buildpack_name"`
-	JavaBuildpackName       string `json:"java_buildpack_name"`
-	RubyBuildpackName       string `json:"ruby_buildpack_name"`
-	NodejsBuildpackName     string `json:"nodejs_buildpack_name"`
-	GoBuildpackName         string `json:"go_buildpack_name"`
-	PythonBuildpackName     string `json:"python_buildpack_name"`
-	PhpBuildpackName        string `json:"php_buildpack_name"`
-	BinaryBuildpackName     string `json:"binary_buildpack_name"`
-}
-
-var defaults = Config{
-	PersistentAppHost:      "CATS-persistent-app",
-	PersistentAppSpace:     "CATS-persistent-space",
-	PersistentAppOrg:       "CATS-persistent-org",
-	PersistentAppQuotaName: "CATS-persistent-quota",
-
-	StaticFileBuildpackName: "staticfile_buildpack",
-	JavaBuildpackName:       "java_buildpack",
-	RubyBuildpackName:       "ruby_buildpack",
-	NodejsBuildpackName:     "nodejs_buildpack",
-	GoBuildpackName:         "go_buildpack",
-	PythonBuildpackName:     "python_buildpack",
-	PhpBuildpackName:        "php_buildpack",
-	BinaryBuildpackName:     "binary_buildpack",
-
-	ArtifactsDirectory: filepath.Join("..", "results"),
 }
 
 func (c Config) ScaledTimeout(timeout time.Duration) time.Duration {
@@ -93,75 +58,57 @@ func (c Config) ScaledTimeout(timeout time.Duration) time.Duration {
 
 var loadedConfig *Config
 
-func Load(path string, config interface{}) error {
-	c, ok := config.(*Config)
-	if !ok {
-		val := reflect.ValueOf(config).Elem().FieldByName("Config").Addr()
-		c = val.Interface().(*Config)
+func LoadConfig() Config {
+	if loadedConfig == nil {
+		loadedConfig = loadConfigJsonFromPath()
 	}
 
-	*c = defaults
-	err := loadConfigFromPath(path, config)
-	if err != nil {
-		return err
+	if loadedConfig.ApiEndpoint == "" {
+		panic("missing configuration 'api'")
 	}
 
-	if c.ApiEndpoint == "" {
-		return fmt.Errorf("missing configuration 'api'")
+	if loadedConfig.AdminUser == "" {
+		panic("missing configuration 'admin_user'")
 	}
 
-	if c.AdminUser == "" {
-		return fmt.Errorf("missing configuration 'admin_user'")
+	if loadedConfig.ApiEndpoint == "" {
+		panic("missing configuration 'admin_password'")
 	}
 
-	if c.AdminPassword == "" {
-		return fmt.Errorf("missing configuration 'admin_password'")
+	if loadedConfig.TimeoutScale <= 0 {
+		loadedConfig.TimeoutScale = 1.0
 	}
 
-	if c.TimeoutScale <= 0 {
-		c.TimeoutScale = 1.0
-	}
-
-	runner.SkipSSLValidation = c.SkipSSLValidation
-	return nil
+	return *loadedConfig
 }
 
-func LoadConfig() Config {
-	if loadedConfig != nil {
-		return *loadedConfig
+func loadConfigJsonFromPath() *Config {
+	var config *Config = &Config{
+		PersistentAppHost:      "CATS-persistent-app",
+		PersistentAppSpace:     "CATS-persistent-space",
+		PersistentAppOrg:       "CATS-persistent-org",
+		PersistentAppQuotaName: "CATS-persistent-quota",
+
+		ArtifactsDirectory: filepath.Join("..", "results"),
 	}
 
-	var config Config
+	path := configPath()
 
-	err := Load(ConfigPath(), &config)
+	configFile, err := os.Open(path)
 	if err != nil {
 		panic(err)
 	}
 
-	loadedConfig = &config
+	decoder := json.NewDecoder(configFile)
+	err = decoder.Decode(config)
+	if err != nil {
+		panic(err)
+	}
+
 	return config
 }
 
-func (c Config) Protocol() string {
-	if c.UseHttp {
-		return "http://"
-	} else {
-		return "https://"
-	}
-}
-
-func loadConfigFromPath(path string, config interface{}) error {
-	configFile, err := os.Open(path)
-	if err != nil {
-		return err
-	}
-	defer configFile.Close()
-
-	decoder := json.NewDecoder(configFile)
-	return decoder.Decode(config)
-}
-
-func ConfigPath() string {
+func configPath() string {
 	path := os.Getenv("CONFIG")
 	if path == "" {
 		panic("Must set $CONFIG to point to an integration config .json file.")

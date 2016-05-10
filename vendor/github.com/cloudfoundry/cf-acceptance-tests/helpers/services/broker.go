@@ -6,24 +6,30 @@ import (
 	"io/ioutil"
 	"strings"
 
-	. "github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace/src/github.com/onsi/gomega"
-	. "github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace/src/github.com/onsi/gomega/gbytes"
-	. "github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace/src/github.com/onsi/gomega/gexec"
+	. "github.com/onsi/gomega"
+	. "github.com/onsi/gomega/gbytes"
+	. "github.com/onsi/gomega/gexec"
 
-	"github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace/src/github.com/cloudfoundry-incubator/cf-test-helpers/cf"
-	"github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace/src/github.com/cloudfoundry-incubator/cf-test-helpers/generator"
-	"github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace/src/github.com/cloudfoundry-incubator/cf-test-helpers/helpers"
-	"github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace/src/github.com/cloudfoundry-incubator/cf-test-helpers/runner"
+	"github.com/cloudfoundry-incubator/cf-test-helpers/cf"
+	"github.com/cloudfoundry-incubator/cf-test-helpers/generator"
+	"github.com/cloudfoundry-incubator/cf-test-helpers/helpers"
+	"github.com/cloudfoundry-incubator/cf-test-helpers/runner"
 
-	"github.com/cloudfoundry/cf-acceptance-tests/helpers/app_helpers"
 	"github.com/cloudfoundry/cf-acceptance-tests/helpers/assets"
 )
 
 type Plan struct {
-	Name string `json:"name"`
-	ID   string `json:"id"`
+	Name            string `json:"name"`
+	ID              string `json:"id"`
+	DashboardClient DashboardClient
 }
 
+type DashboardClient struct {
+	Key         string `json:"key"`
+	ID          string `json:"id"`
+	Secret      string `json:"secret"`
+	RedirectUri string `json:"redirect_uri"`
+}
 type ServiceBroker struct {
 	Name    string
 	Path    string
@@ -31,14 +37,11 @@ type ServiceBroker struct {
 	Service struct {
 		Name            string `json:"name"`
 		ID              string `json:"id"`
-		DashboardClient struct {
-			ID          string `json:"id"`
-			Secret      string `json:"secret"`
-			RedirectUri string `json:"redirect_uri"`
-		}
+		DashboardClient DashboardClient
 	}
 	SyncPlans  []Plan
 	AsyncPlans []Plan
+	SsoPlans   []Plan
 }
 
 type ServicesResponse struct {
@@ -81,7 +84,7 @@ type SpaceJson struct {
 	}
 }
 
-func NewServiceBroker(name string, path string, context helpers.SuiteContext) ServiceBroker {
+func NewServiceBroker(name string, path string, context helpers.SuiteContext, includeSSOClient bool) ServiceBroker {
 	b := ServiceBroker{}
 	b.Path = path
 	b.Name = name
@@ -95,6 +98,20 @@ func NewServiceBroker(name string, path string, context helpers.SuiteContext) Se
 		{Name: generator.RandomName(), ID: generator.RandomName()},
 		{Name: generator.RandomName(), ID: generator.RandomName()},
 	}
+	b.SsoPlans = []Plan{
+		{
+			Name: generator.RandomName(), ID: generator.RandomName(), DashboardClient: DashboardClient{
+				ID:     generator.RandomName(),
+				Secret: generator.RandomName(),
+			},
+		},
+	}
+	if includeSSOClient {
+		b.Service.DashboardClient.Key = "dashboard_client"
+	} else {
+		b.Service.DashboardClient.Key = "dashboard_client-deactivated"
+	}
+
 	b.Service.DashboardClient.ID = generator.RandomName()
 	b.Service.DashboardClient.Secret = generator.RandomName()
 	b.Service.DashboardClient.RedirectUri = generator.RandomName()
@@ -103,16 +120,15 @@ func NewServiceBroker(name string, path string, context helpers.SuiteContext) Se
 }
 
 func (b ServiceBroker) Push() {
-	config := helpers.LoadConfig()
-	Expect(cf.Cf(
-		"push", b.Name,
-		"--no-start",
-		"-b", config.RubyBuildpackName,
-		"-m", DEFAULT_MEMORY_LIMIT,
-		"-p", b.Path,
-		"-d", config.AppsDomain,
-	).Wait(BROKER_START_TIMEOUT)).To(Exit(0))
-	app_helpers.SetBackend(b.Name)
+	Expect(cf.Cf("push", b.Name, "-p", b.Path, "--no-start").Wait(BROKER_START_TIMEOUT)).To(Exit(0))
+	if helpers.LoadConfig().UseDiego {
+		appGuid := strings.TrimSpace(string(cf.Cf("app", b.Name, "--guid").Wait(DEFAULT_TIMEOUT).Out.Contents()))
+		cf.Cf("curl",
+			fmt.Sprintf("/v2/apps/%s", appGuid),
+			"-X", "PUT",
+			"-d", "{\"diego\": true}",
+		).Wait(DEFAULT_TIMEOUT)
+	}
 	Expect(cf.Cf("start", b.Name).Wait(BROKER_START_TIMEOUT)).To(Exit(0))
 }
 
@@ -127,13 +143,6 @@ func (b ServiceBroker) Restart() {
 func (b ServiceBroker) Create() {
 	cf.AsUser(b.context.AdminUserContext(), DEFAULT_TIMEOUT, func() {
 		Expect(cf.Cf("create-service-broker", b.Name, "username", "password", helpers.AppUri(b.Name, "")).Wait(DEFAULT_TIMEOUT)).To(Exit(0))
-		Expect(cf.Cf("service-brokers").Wait(DEFAULT_TIMEOUT)).To(Say(b.Name))
-	})
-}
-
-func (b ServiceBroker) CreateSpaceScoped() {
-	cf.AsUser(b.context.RegularUserContext(), DEFAULT_TIMEOUT, func() {
-		Expect(cf.Cf("create-service-broker", b.Name, "username", "password", helpers.AppUri(b.Name, ""), "--space-scoped").Wait(DEFAULT_TIMEOUT)).To(Exit(0))
 		Expect(cf.Cf("service-brokers").Wait(DEFAULT_TIMEOUT)).To(Say(b.Name))
 	})
 }
@@ -159,7 +168,7 @@ func (b ServiceBroker) Destroy() {
 		Expect(cf.Cf("purge-service-offering", b.Service.Name, "-f").Wait(DEFAULT_TIMEOUT)).To(Exit(0))
 	})
 	b.Delete()
-	Expect(cf.Cf("delete", b.Name, "-f", "-r").Wait(DEFAULT_TIMEOUT)).To(Exit(0))
+	Expect(cf.Cf("delete", b.Name, "-f").Wait(DEFAULT_TIMEOUT)).To(Exit(0))
 }
 
 func (b ServiceBroker) ToJSON() string {
@@ -169,6 +178,7 @@ func (b ServiceBroker) ToJSON() string {
 	replacer := strings.NewReplacer(
 		"<fake-service>", b.Service.Name,
 		"<fake-service-guid>", b.Service.ID,
+		"<dashboard-client-key>", b.Service.DashboardClient.Key,
 		"<sso-test>", b.Service.DashboardClient.ID,
 		"<sso-secret>", b.Service.DashboardClient.Secret,
 		"<sso-redirect-uri>", b.Service.DashboardClient.RedirectUri,
@@ -180,6 +190,10 @@ func (b ServiceBroker) ToJSON() string {
 		"<fake-async-plan-guid>", b.AsyncPlans[0].ID,
 		"<fake-async-plan-2>", b.AsyncPlans[1].Name,
 		"<fake-async-plan-2-guid>", b.AsyncPlans[1].ID,
+		"<fake-sso-plan>", b.SsoPlans[0].Name,
+		"<fake-sso-plan-guid>", b.SsoPlans[0].ID,
+		"<sso-plan-client-id>", b.SsoPlans[0].DashboardClient.ID,
+		"<sso-plan-secret>", b.SsoPlans[0].DashboardClient.Secret,
 	)
 
 	return replacer.Replace(string(bytes))
@@ -204,6 +218,13 @@ func (b ServiceBroker) PublicizePlans() {
 			}
 		}
 	}
+}
+
+func (b ServiceBroker) EnableServiceAccess() {
+	cf.AsUser(b.context.AdminUserContext(), b.context.ShortTimeout(), func() {
+		session := cf.Cf("enable-service-access", b.Service.Name).Wait(DEFAULT_TIMEOUT)
+		Expect(session).To(Exit(0))
+	})
 }
 
 func (b ServiceBroker) HasPlan(planName string) bool {

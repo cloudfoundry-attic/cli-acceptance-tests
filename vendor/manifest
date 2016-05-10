@@ -10,100 +10,57 @@
 			"notests": true
 		},
 		{
-			"importpath": "github.com/cloudfoundry-incubator/cf-test-helpers",
+			"importpath": "github.com/cloudfoundry-incubator/cf-test-helpers/cf",
 			"repository": "https://github.com/cloudfoundry-incubator/cf-test-helpers",
 			"vcs": "git",
-			"revision": "41e1e261d084de8b61dd52482fce9ea1049fe82b",
-			"branch": "master",
+			"revision": "b05e7028ae395fedb07ace068eb934a9b7ba07ed",
+			"branch": "HEAD",
+			"path": "/cf",
 			"notests": true
 		},
 		{
-			"importpath": "github.com/cloudfoundry/cf-acceptance-tests",
-			"repository": "https://github.com/cloudfoundry/cf-acceptance-tests",
+			"importpath": "github.com/cloudfoundry-incubator/cf-test-helpers/generator",
+			"repository": "https://github.com/cloudfoundry-incubator/cf-test-helpers",
 			"vcs": "git",
-			"revision": "7cf960cf30ea772f2545f75346646c44cac1940e",
-			"branch": "master",
+			"revision": "b05e7028ae395fedb07ace068eb934a9b7ba07ed",
+			"branch": "HEAD",
+			"path": "/generator",
 			"notests": true
 		},
 		{
-			"importpath": "github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace/src/github.com/cloudfoundry-incubator/cf-test-helpers/cf",
-			"repository": "https://github.com/cloudfoundry/cf-acceptance-tests",
+			"importpath": "github.com/cloudfoundry-incubator/cf-test-helpers/helpers",
+			"repository": "https://github.com/cloudfoundry-incubator/cf-test-helpers",
 			"vcs": "git",
-			"revision": "7cf960cf30ea772f2545f75346646c44cac1940e",
-			"branch": "master",
-			"path": "/Godeps/_workspace/src/github.com/cloudfoundry-incubator/cf-test-helpers/cf",
+			"revision": "b05e7028ae395fedb07ace068eb934a9b7ba07ed",
+			"branch": "HEAD",
+			"path": "/helpers",
 			"notests": true
 		},
 		{
-			"importpath": "github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace/src/github.com/cloudfoundry-incubator/cf-test-helpers/generator",
-			"repository": "https://github.com/cloudfoundry/cf-acceptance-tests",
+			"importpath": "github.com/cloudfoundry-incubator/cf-test-helpers/runner",
+			"repository": "https://github.com/cloudfoundry-incubator/cf-test-helpers",
 			"vcs": "git",
-			"revision": "7cf960cf30ea772f2545f75346646c44cac1940e",
-			"branch": "master",
-			"path": "/Godeps/_workspace/src/github.com/cloudfoundry-incubator/cf-test-helpers/generator",
+			"revision": "b05e7028ae395fedb07ace068eb934a9b7ba07ed",
+			"branch": "HEAD",
+			"path": "/runner",
 			"notests": true
 		},
 		{
-			"importpath": "github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace/src/github.com/cloudfoundry-incubator/cf-test-helpers/helpers",
+			"importpath": "github.com/cloudfoundry/cf-acceptance-tests/helpers/assets",
 			"repository": "https://github.com/cloudfoundry/cf-acceptance-tests",
 			"vcs": "git",
-			"revision": "7cf960cf30ea772f2545f75346646c44cac1940e",
-			"branch": "master",
-			"path": "/Godeps/_workspace/src/github.com/cloudfoundry-incubator/cf-test-helpers/helpers",
+			"revision": "0f4c39dca345dad530e5a273fb407191fa4619c6",
+			"branch": "HEAD",
+			"path": "/helpers/assets",
 			"notests": true
 		},
 		{
-			"importpath": "github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace/src/github.com/cloudfoundry-incubator/cf-test-helpers/runner",
+			"importpath": "github.com/cloudfoundry/cf-acceptance-tests/helpers/services",
 			"repository": "https://github.com/cloudfoundry/cf-acceptance-tests",
 			"vcs": "git",
-			"revision": "7cf960cf30ea772f2545f75346646c44cac1940e",
-			"branch": "master",
-			"path": "/Godeps/_workspace/src/github.com/cloudfoundry-incubator/cf-test-helpers/runner",
-			"notests": true
-		},
-		{
-			"importpath": "github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace/src/github.com/cloudfoundry/noaa/events",
-			"repository": "https://github.com/cloudfoundry/cf-acceptance-tests",
-			"vcs": "git",
-			"revision": "7cf960cf30ea772f2545f75346646c44cac1940e",
-			"branch": "master",
-			"path": "/Godeps/_workspace/src/github.com/cloudfoundry/noaa/events",
-			"notests": true
-		},
-		{
-			"importpath": "github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace/src/github.com/gogo/protobuf/proto",
-			"repository": "https://github.com/cloudfoundry/cf-acceptance-tests",
-			"vcs": "git",
-			"revision": "7cf960cf30ea772f2545f75346646c44cac1940e",
-			"branch": "master",
-			"path": "/Godeps/_workspace/src/github.com/gogo/protobuf/proto",
-			"notests": true
-		},
-		{
-			"importpath": "github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace/src/github.com/nu7hatch/gouuid",
-			"repository": "https://github.com/cloudfoundry/cf-acceptance-tests",
-			"vcs": "git",
-			"revision": "7cf960cf30ea772f2545f75346646c44cac1940e",
-			"branch": "master",
-			"path": "/Godeps/_workspace/src/github.com/nu7hatch/gouuid",
-			"notests": true
-		},
-		{
-			"importpath": "github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace/src/github.com/onsi/ginkgo",
-			"repository": "https://github.com/cloudfoundry/cf-acceptance-tests",
-			"vcs": "git",
-			"revision": "7cf960cf30ea772f2545f75346646c44cac1940e",
-			"branch": "master",
-			"path": "/Godeps/_workspace/src/github.com/onsi/ginkgo",
-			"notests": true
-		},
-		{
-			"importpath": "github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace/src/github.com/onsi/gomega",
-			"repository": "https://github.com/cloudfoundry/cf-acceptance-tests",
-			"vcs": "git",
-			"revision": "7cf960cf30ea772f2545f75346646c44cac1940e",
-			"branch": "master",
-			"path": "/Godeps/_workspace/src/github.com/onsi/gomega",
+			"revision": "0f4c39dca345dad530e5a273fb407191fa4619c6",
+			"branch": "HEAD",
+			"path": "/helpers/services",
 			"notests": true
 		},
 		{

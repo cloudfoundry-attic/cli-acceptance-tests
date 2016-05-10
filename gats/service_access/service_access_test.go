@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"time"
 
-	. "github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace/src/github.com/cloudfoundry-incubator/cf-test-helpers/cf"
-	"github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace/src/github.com/cloudfoundry-incubator/cf-test-helpers/generator"
-	CATS_helper "github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace/src/github.com/cloudfoundry-incubator/cf-test-helpers/helpers"
-	. "github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace/src/github.com/onsi/ginkgo"
-	. "github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace/src/github.com/onsi/gomega"
-	. "github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace/src/github.com/onsi/gomega/gexec"
+	. "github.com/cloudfoundry-incubator/cf-test-helpers/cf"
+	"github.com/cloudfoundry-incubator/cf-test-helpers/generator"
+	CATS_helper "github.com/cloudfoundry-incubator/cf-test-helpers/helpers"
 	broker_helper "github.com/cloudfoundry/cf-acceptance-tests/helpers/services"
 	"github.com/cloudfoundry/cli-acceptance-tests/helpers"
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
+	. "github.com/onsi/gomega/gexec"
 )
 
 var (
@@ -29,7 +29,7 @@ var _ = Describe("CF service access commands", func() {
 	orgName := context.RegularUserContext().Org
 	BeforeEach(func() {
 		env.Setup()
-		broker = broker_helper.NewServiceBroker(generator.RandomName(), helpers.NewAssets().ServiceBroker, context)
+		broker = broker_helper.NewServiceBroker(generator.RandomName(), helpers.NewAssets().ServiceBroker, context, false)
 		broker.Push()
 		broker.Configure()
 
