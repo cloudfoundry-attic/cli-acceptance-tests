@@ -1,6 +1,7 @@
 package application_test
 
 import (
+	"fmt"
 	"time"
 
 	. "github.com/cloudfoundry-incubator/cf-test-helpers/cf"
@@ -33,20 +34,20 @@ var _ = Describe("Env", func() {
 
 		env.Setup()
 		AsUser(context.AdminUserContext(), 30*time.Second, func() {
-			envVarGroups := Cf("ssevg", `{}`).Wait(assertionTimeout)
+			envVarGroups := Cf("set-staging-environment-variable-group", `{}`).Wait(assertionTimeout)
 			Expect(envVarGroups).To(Exit(0))
 
-			envVarGroups = Cf("srevg", `{}`).Wait(assertionTimeout)
+			envVarGroups = Cf("set-running-environment-variable-group", `{}`).Wait(assertionTimeout)
 			Expect(envVarGroups).To(Exit(0))
 		})
 	})
 
 	AfterEach(func() {
 		AsUser(context.AdminUserContext(), 30*time.Second, func() {
-			envVarGroups := Cf("ssevg", `{}`).Wait(assertionTimeout)
+			envVarGroups := Cf("set-staging-environment-variable-group", `{}`).Wait(assertionTimeout)
 			Expect(envVarGroups).To(Exit(0))
 
-			envVarGroups = Cf("srevg", `{}`).Wait(assertionTimeout)
+			envVarGroups = Cf("set-running-environment-variable-group", `{}`).Wait(assertionTimeout)
 			Expect(envVarGroups).To(Exit(0))
 			env.Teardown()
 		})
@@ -54,9 +55,13 @@ var _ = Describe("Env", func() {
 
 	It("returns ann applications running, staging, system provided and user defined environment variables", func() {
 		AsUser(context.AdminUserContext(), 60*time.Second, func() {
-			ssevgResult := Cf("ssevg", `{"name":"staging-val"}`).Wait(assertionTimeout)
+			stagingVal := fmt.Sprintf("staging-val-%d", time.Now().Nanosecond())
+			runningVal := fmt.Sprintf("running-val-%d", time.Now().Nanosecond())
+			setEnvVal := fmt.Sprintf("set-env-val-%d", time.Now().Nanosecond())
+
+			ssevgResult := Cf("set-staging-environment-variable-group", fmt.Sprintf(`{"name":"%s"}`, stagingVal)).Wait(assertionTimeout)
 			Expect(ssevgResult).To(Exit(0))
-			srevgResult := Cf("srevg", `{"name":"running-val"}`).Wait(assertionTimeout)
+			srevgResult := Cf("set-running-environment-variable-group", fmt.Sprintf(`{"name":"%s"}`, runningVal)).Wait(assertionTimeout)
 			Expect(srevgResult).To(Exit(0))
 
 			space := context.RegularUserContext().Space
@@ -69,7 +74,7 @@ var _ = Describe("Env", func() {
 			app := Cf("push", appName, "-p", gatsHelpers.NewAssets().ServiceBroker).Wait(appTimeout)
 			Expect(app).To(Exit(0))
 
-			setEnvResult := Cf("set-env", appName, "set-env-key", "set-env-val").Wait(assertionTimeout)
+			setEnvResult := Cf("set-env", appName, "set-env-key", setEnvVal).Wait(assertionTimeout)
 			Expect(setEnvResult).To(Exit(0))
 
 			envResult := Cf("env", appName).Wait(assertionTimeout)
