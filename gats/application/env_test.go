@@ -82,9 +82,9 @@ var _ = Describe("Env", func() {
 
 			output := envResult.Out.Contents()
 			Expect(output).To(ContainSubstring("\"VCAP_APPLICATION\": {"))
-			Expect(output).To(ContainSubstring("User-Provided:\nset-env-key: set-env-val"))
-			Expect(output).To(ContainSubstring("Running Environment Variable Groups:\nname: running-val"))
-			Expect(output).To(ContainSubstring("Staging Environment Variable Groups:\nname: staging-val"))
+			Expect(output).To(ContainSubstring("User-Provided:\nset-env-key: %s", setEnvVal))
+			Expect(output).To(ContainSubstring("Running Environment Variable Groups:\nname: %s", runningVal))
+			Expect(output).To(ContainSubstring("Staging Environment Variable Groups:\nname: %s", stagingVal))
 		})
 	})
 })
