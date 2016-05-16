@@ -33,20 +33,20 @@ var _ = Describe("Env", func() {
 
 		env.Setup()
 		AsUser(context.AdminUserContext(), 30*time.Second, func() {
-			envVarGroups := Cf("ssevg", `{}`).Wait(assertionTimeout)
+			envVarGroups := Cf("set-staging-environment-variable-group", `{}`).Wait(assertionTimeout)
 			Expect(envVarGroups).To(Exit(0))
 
-			envVarGroups = Cf("srevg", `{}`).Wait(assertionTimeout)
+			envVarGroups = Cf("set-running-environment-variable-group", `{}`).Wait(assertionTimeout)
 			Expect(envVarGroups).To(Exit(0))
 		})
 	})
 
 	AfterEach(func() {
 		AsUser(context.AdminUserContext(), 30*time.Second, func() {
-			envVarGroups := Cf("ssevg", `{}`).Wait(assertionTimeout)
+			envVarGroups := Cf("set-staging-environment-variable-group", `{}`).Wait(assertionTimeout)
 			Expect(envVarGroups).To(Exit(0))
 
-			envVarGroups = Cf("srevg", `{}`).Wait(assertionTimeout)
+			envVarGroups = Cf("set-running-environment-variable-group", `{}`).Wait(assertionTimeout)
 			Expect(envVarGroups).To(Exit(0))
 			env.Teardown()
 		})
@@ -54,9 +54,9 @@ var _ = Describe("Env", func() {
 
 	It("returns ann applications running, staging, system provided and user defined environment variables", func() {
 		AsUser(context.AdminUserContext(), 60*time.Second, func() {
-			ssevgResult := Cf("ssevg", `{"name":"staging-val"}`).Wait(assertionTimeout)
+			ssevgResult := Cf("set-staging-environment-variable-group", `{"name":"staging-val"}`).Wait(assertionTimeout)
 			Expect(ssevgResult).To(Exit(0))
-			srevgResult := Cf("srevg", `{"name":"running-val"}`).Wait(assertionTimeout)
+			srevgResult := Cf("set-running-environment-variable-group", `{"name":"running-val"}`).Wait(assertionTimeout)
 			Expect(srevgResult).To(Exit(0))
 
 			space := context.RegularUserContext().Space
