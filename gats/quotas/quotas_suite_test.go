@@ -11,6 +11,11 @@ import (
 
 var context helpers.SuiteContext
 
+var (
+	assertionTimeout      = 10.0
+	asyncAssertionTimeout = 15.0
+)
+
 func TestQuotas(t *testing.T) {
 	RegisterFailHandler(Fail)
 

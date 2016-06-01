@@ -3,17 +3,11 @@ package quotas_test
 import (
 	"time"
 
-	"github.com/nu7hatch/gouuid"
-
 	. "github.com/cloudfoundry-incubator/cf-test-helpers/cf"
+	"github.com/nu7hatch/gouuid"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	. "github.com/onsi/gomega/gbytes"
-)
-
-var (
-	assertionTimeout      = 10.0
-	asyncAssertionTimeout = 15.0
 )
 
 var _ = Describe("CF Quota commands", func() {
