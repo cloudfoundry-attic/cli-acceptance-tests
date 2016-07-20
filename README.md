@@ -11,9 +11,7 @@ available in your `PATH`.
 
 1. Install [Go](https://golang.org/dl)
 1. Ensure your `$GOPATH` [is set correctly](http://golang.org/cmd/go/#hdr-GOPATH_environment_variable)
-1. Install [godep](go get github.com/tools/godep)
 1. Get the cli source code: `go get -u github.com/cloudfoundry/cli` (ignore the "no buildable Go source files" warning)
-1. Run `godep restore` in `$GOPATH/src/github.com/cloudfoundry/cli` (note: this will modify the dependencies in your `GOPATH`)
 1. Run `go get -u github.com/jteeuwen/go-bindata/...`
 1. Run `bin/build` in `$GOPATH/src/cloudfoundry/cli`
 1. Copy `$GOPATH/src/cloudfoundry/cli/out/cf` to a location in your `PATH`
