@@ -1,0 +1,11 @@
+---
+applications:
+- name: app-with-routes
+  memory: 256M
+  instances: 1
+  path: .
+  routes:
+  - route: private-domain.com
+  - route: domain.com
+  - route: manifest-host.domain.com/path
+  - route: tcp-domain.com:3333
