@@ -10,8 +10,8 @@ type Assets struct {
 func NewAssets() Assets {
 	return Assets{
 		ServiceBroker:      "../assets/service_broker",
-		SecurityRules:      "../../assets/security_groups/security-rules.json",
-		EmptySecurityRules: "../../assets/security_groups/empty-security-rules.json",
+		SecurityRules:      "../assets/security_groups/security-rules.json",
+		EmptySecurityRules: "../assets/security_groups/empty-security-rules.json",
 		DoraApp:            "../assets/dora",
 	}
 }

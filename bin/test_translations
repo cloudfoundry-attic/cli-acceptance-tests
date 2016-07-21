@@ -12,8 +12,6 @@ function printStatus {
 
 trap printStatus EXIT
 
-. $(dirname $0)/goenv
-
 go install -v github.com/onsi/ginkgo/ginkgo
 
 rm -f bin/gcf

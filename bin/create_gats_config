@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cat<<EOF > config.json
+cat<<EOF > gats_config.json
 {
   "api": "$API_ENDPOINT",
   "apps_domain": "$APPS_DOMAIN",

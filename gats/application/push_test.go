@@ -9,7 +9,7 @@ import (
 	"github.com/cloudfoundry-incubator/cf-test-helpers/cf"
 	"github.com/cloudfoundry-incubator/cf-test-helpers/generator"
 	catshelpers "github.com/cloudfoundry-incubator/cf-test-helpers/helpers"
-	"github.com/cloudfoundry/cli-acceptance-tests/helpers"
+	"github.com/cloudfoundry/cli-acceptance-tests/gats/helpers"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

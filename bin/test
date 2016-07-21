@@ -11,7 +11,6 @@ function printStatus {
 
 trap printStatus EXIT
 
-. $(dirname $0)/goenv
 ROOT_DIR=$(cd $(dirname $(dirname $0)) && pwd)
 GATS_GOPATH=$ROOT_DIR/tmp/gats_gopath
 mkdir -p $GATS_GOPATH/src/github.com/cloudfoundry
