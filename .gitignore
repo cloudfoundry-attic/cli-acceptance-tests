@@ -2,5 +2,4 @@ gcf
 .idea
 integration_config.json
 config.json
-GoDeps/_workspace/pkg
 bin/cf

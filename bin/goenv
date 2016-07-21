@@ -7,11 +7,4 @@ if ! which go 2>/dev/null; then
   exit 1
 fi
 
-parent_dir=$(cd $(dirname $0)/.. && pwd)
-local_gopath=$parent_dir/Godeps/_workspace
-
-mkdir -p $local_gopath/bin
-
-export GOPATH=$local_gopath:$GOPATH
-export PATH=$local_gopath/bin:$PATH:$HOME/go/bin
 export CONFIG=$(pwd)/$(dirname $0)/../config.json

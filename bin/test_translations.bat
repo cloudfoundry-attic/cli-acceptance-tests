@@ -6,10 +6,6 @@ go get -u github.com/cloudfoundry/cli-acceptance-tests/...
 SET GATSPATH=%GOPATH%\src\github.com\cloudfoundry\cli-acceptance-tests
 SET PATH=%GATSPATH%;C:\Program Files\cURL\bin;%PATH%
 SET CONFIG=%CD%\config.json
-SET LOCAL_GOPATH=%GATSPATH%\Godeps\_workspace
-MKDIR %LOCAL_GOPATH%\bin
-SET GOPATH=%LOCAL_GOPATH%;%GOPATH%
-SET PATH=%LOCAL_GOPATH%\bin;%PATH%
 
 go install -v github.com/onsi/ginkgo/ginkgo
 ginkgo.exe -r -slowSpecThreshold=120 ./translations
