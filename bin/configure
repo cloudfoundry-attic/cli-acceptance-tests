@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-echo "{\"api\": \"$API\", \"admin_user\": \"$ADMIN_USER\", \"admin_password\": \"$ADMIN_PASSWORD\", \"apps_domain\": \"$APPS_DOMAIN\", \"skip_ssl_validation\": true, \"cf_user\": \"$CF_USER\", \"cf_user_password\": \"$CF_USER_PASSWORD\", \"cf_org\": \"$ORG\", \"cf_space\": \"$SPACE\", \"persistent_app_host\": \"$APP_HOST\"}" > $(dirname $0)/../config.json

@@ -18,4 +18,4 @@ go install -v github.com/onsi/ginkgo/ginkgo
 
 export local_bin=$(cd $(dirname $0) && pwd)
 testPath=${1:-./gats}
-PATH=$PATH:$local_bin GOPATH=$GOPATH ginkgo -r -slowSpecThreshold=120 $testPath
+PATH=$PATH:$local_bin ginkgo -r -slowSpecThreshold=120 $testPath
