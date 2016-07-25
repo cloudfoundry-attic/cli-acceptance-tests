@@ -70,9 +70,8 @@ var _ = Describe("CreateAppManifest", func() {
 
 			manifest := string(manifestContents)
 
-			Expect(manifest).NotTo(ContainSubstring("host:"))
-			Expect(manifest).NotTo(ContainSubstring("hosts:"))
-			Expect(manifest).To(ContainSubstring("no-hostname: true"))
+			Expect(manifest).To(ContainSubstring("routes"))
+			Expect(manifest).To(ContainSubstring(domainName))
 		})
 	})
 })
