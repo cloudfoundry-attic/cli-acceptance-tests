@@ -7,6 +7,25 @@ behavior of the `cf` binary.
 These tests require that a `cf` binary built from the latest source is
 available in your `PATH`.
 
+# New Suite:
+These are the notes for the `integration` suite tests.
+
+# How to run:
+Running is simple:
+
+```
+ginkgo -p -r -randomizeAllSpecs -slowSpecThreshold=120 ./integration
+```
+
+Customizations (based on environment variables):
+
+- `CF_API` - Sets the CF API URL these tests will be using. Will `--skip-ssl-validation` by default. Should default to `api.bosh-lite.com` if not set.
+
+
+
+# Old Suite:
+These are the notes for the `gats` directory tests.
+
 ### Installing from source
 
 1. Install [Go](https://golang.org/dl)
