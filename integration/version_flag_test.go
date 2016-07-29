@@ -11,20 +11,13 @@ import (
 
 var _ = Describe("Version", func() {
 	Context("when the -v option is provided without additional fields", func() {
-		var (
-			commandErr error
-			session    *Session
-		)
-
-		BeforeEach(func() {
-			command := exec.Command("cf", "-v")
-			session, commandErr = Start(command, GinkgoWriter, GinkgoWriter)
-		})
-
 		It("displays the version", func() {
-			Expect(commandErr).NotTo(HaveOccurred())
-			Eventually(session).Should(Exit(0))
+			command := exec.Command("cf", "-v")
+			session, err := Start(command, GinkgoWriter, GinkgoWriter)
+
+			Expect(err).NotTo(HaveOccurred())
 			Eventually(session).Should(Say("cf version"))
+			Eventually(session).Should(Exit(0))
 		})
 	})
 })
