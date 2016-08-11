@@ -138,7 +138,7 @@ var _ = Describe("Push", func() {
 				Expect(target.ExitCode()).To(Equal(0))
 
 				_ = cf.Cf("set-quota", org, "default").Wait(domainTimeout)
-				_ = cf.Cf("delete-domain", org, "private-domain.com", "-f").Wait(domainTimeout)
+				_ = cf.Cf("delete-domain", "private-domain.com", "-f").Wait(domainTimeout)
 				_ = cf.Cf("delete-shared-domain", "domain.com", "-f").Wait(domainTimeout)
 				_ = cf.Cf("delete-shared-domain", "tcp-domain.com", "-f").Wait(domainTimeout)
 				_ = cf.Cf("delete-quota", "gats-quota", "-f").Wait(domainTimeout)
