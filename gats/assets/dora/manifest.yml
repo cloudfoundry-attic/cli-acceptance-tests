@@ -8,4 +8,4 @@ applications:
   - route: private-domain.com
   - route: domain.com
   - route: manifest-host.domain.com/path
-  - route: tcp-domain.com:3333
+  - route: tcp-domain.com:1100

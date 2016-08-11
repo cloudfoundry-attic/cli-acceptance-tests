@@ -157,7 +157,7 @@ var _ = Describe("Push", func() {
 				Eventually(push.Out).Should(gbytes.Say("Creating route flag-hostname.private-domain.com...\nOK"))
 				Eventually(push.Out).Should(gbytes.Say("Creating route flag-hostname.domain.com...\nOK"))
 				Eventually(push.Out).Should(gbytes.Say("Creating route flag-hostname.domain.com/path...\nOK"))
-				Eventually(push.Out).Should(gbytes.Say("Creating route tcp-domain.com:3333...\nOK"))
+				Eventually(push.Out).Should(gbytes.Say("Creating route tcp-domain.com:1100...\nOK"))
 				Expect(push).To(gexec.Exit(0))
 			})
 		})
