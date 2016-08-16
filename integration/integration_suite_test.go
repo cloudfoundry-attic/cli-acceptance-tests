@@ -30,10 +30,10 @@ var (
 var _ = SynchronizedBeforeSuite(func() []byte {
 	return nil
 }, func(_ []byte) {
-	//Ginkgo Globals
+	// Ginkgo Globals
 	SetDefaultEventuallyTimeout(3 * time.Second)
 
-	//Setup common environment variables
+	// Setup common environment variables
 	apiURL = os.Getenv("CF_API")
 })
 

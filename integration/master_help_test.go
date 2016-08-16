@@ -11,7 +11,7 @@ import (
 )
 
 var _ = Describe("Help Flag", func() {
-	DescribeTable("displays the help text",
+	DescribeTable("displays the master help text",
 		func(setup func() *exec.Cmd) {
 			cmd := setup()
 			session, err := Start(cmd, GinkgoWriter, GinkgoWriter)
@@ -38,18 +38,4 @@ var _ = Describe("Help Flag", func() {
 			return exec.Command("cf", "--help")
 		}),
 	)
-
-	Context("when cf is run with -h flag on a command", func() {
-		It("displays the help text", func() {
-			command := exec.Command("cf", "app", "-h")
-			session, err := Start(command, GinkgoWriter, GinkgoWriter)
-			Expect(err).NotTo(HaveOccurred())
-
-			Eventually(session).Should(Say("NAME:"))
-			Eventually(session).Should(Say("app - Display health and status for ap"))
-			Eventually(session).Should(Say("USAGE:"))
-			Eventually(session).Should(Say("OPTIONS:"))
-			Eventually(session).Should(Exit(0))
-		})
-	})
 })
