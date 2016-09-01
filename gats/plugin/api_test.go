@@ -7,7 +7,7 @@ import (
 	. "github.com/cloudfoundry-incubator/cf-test-helpers/cf"
 
 	acceptanceTestHelpers "github.com/cloudfoundry-incubator/cf-test-helpers/helpers"
-	gatsHelpers "github.com/cloudfoundry/cli-acceptance-tests/gats/helpers"
+	gatsHelpers "code.cloudfoundry.org/cli-acceptance-tests/gats/helpers"
 
 	"github.com/cloudfoundry-incubator/cf-test-helpers/generator"
 	. "github.com/onsi/ginkgo"
