@@ -55,7 +55,7 @@ var _ = Describe("CF space quota commands", func() {
 				Expect(output).To(ContainSubstring("Getting space quotas as"))
 				Expect(output).To(ContainSubstring("foo"))
 
-				spaceQuota = Cf("update-space-quota", "foo", "-i", "-1").Wait(assertionTimeout)
+				spaceQuota = Cf("update-space-quota", "foo", "-i=-1").Wait(assertionTimeout)
 				Expect(spaceQuota).To(Exit(0))
 				output = spaceQuota.Out.Contents()
 				Expect(output).To(ContainSubstring("Updating space quota foo"))
