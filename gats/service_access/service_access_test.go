@@ -7,7 +7,7 @@ import (
 	. "github.com/cloudfoundry-incubator/cf-test-helpers/cf"
 	"github.com/cloudfoundry-incubator/cf-test-helpers/generator"
 	"github.com/cloudfoundry-incubator/cf-test-helpers/helpers"
-	"github.com/cloudfoundry/cli-acceptance-tests/gats/service_access/servicebroker"
+	"code.cloudfoundry.org/cli-acceptance-tests/gats/service_access/servicebroker"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	. "github.com/onsi/gomega/gexec"
