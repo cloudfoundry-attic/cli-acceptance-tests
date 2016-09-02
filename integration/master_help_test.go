@@ -27,15 +27,16 @@ var _ = Describe("Help Flag", func() {
 		},
 
 		Entry("when cf is run without providing a command or a flag", func() *exec.Cmd {
-			return exec.Command("cf")
+			Skip("Ask dies what should happen in this case")
+			return exec.Command("cf", "-a")
 		}),
 
 		Entry("when cf is run with -h flag alone", func() *exec.Cmd {
-			return exec.Command("cf", "-h")
+			return exec.Command("cf", "-h", "-a")
 		}),
 
 		Entry("when cf is run with --help flag alone", func() *exec.Cmd {
-			return exec.Command("cf", "--help")
+			return exec.Command("cf", "--help", "-a")
 		}),
 	)
 })

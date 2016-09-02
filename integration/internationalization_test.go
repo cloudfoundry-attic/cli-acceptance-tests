@@ -13,6 +13,7 @@ import (
 var _ = Describe("internationalization", func() {
 	DescribeTable("outputs help in different languages",
 		func(setup func() *exec.Cmd) {
+			Skip("Pending discussion on internationalization support")
 			cmd := setup()
 			session, err := Start(cmd, GinkgoWriter, GinkgoWriter)
 			Expect(err).NotTo(HaveOccurred())
