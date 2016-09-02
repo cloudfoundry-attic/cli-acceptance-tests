@@ -11,6 +11,71 @@ import (
 )
 
 var _ = Describe("Help Command", func() {
+	DescribeTable("displays help for common commands",
+		func(setup func() *exec.Cmd) {
+			cmd := setup()
+			session, err := Start(cmd, GinkgoWriter, GinkgoWriter)
+			Expect(err).NotTo(HaveOccurred())
+
+			Eventually(session).Should(Say("NAME:"))
+			Eventually(session).Should(Say("USAGE:"))
+			Eventually(session).Should(Say("VERSION:"))
+			Eventually(session).Should(Say("Before getting started:"))
+			Eventually(session).Should(Say("config\\s+login,l\\s+target,t"))
+			Eventually(session).Should(Say("Global options:"))
+			Eventually(session).Should(Exit(0))
+		},
+
+		Entry("when cf is run without providing a command or a flag", func() *exec.Cmd {
+			return exec.Command("cf")
+		}),
+
+		Entry("when cf help is run", func() *exec.Cmd {
+			return exec.Command("cf", "help")
+		}),
+
+		Entry("when cf is run with -h flag alone", func() *exec.Cmd {
+			return exec.Command("cf", "-h")
+		}),
+
+		Entry("when cf is run with --help flag alone", func() *exec.Cmd {
+			return exec.Command("cf", "--help")
+		}),
+	)
+
+	DescribeTable("displays help for all commands",
+		func(setup func() *exec.Cmd) {
+			cmd := setup()
+			session, err := Start(cmd, GinkgoWriter, GinkgoWriter)
+			Expect(err).NotTo(HaveOccurred())
+
+			Eventually(session).Should(Say("NAME:"))
+			Eventually(session).Should(Say("USAGE:"))
+			Eventually(session).Should(Say("VERSION:"))
+			Eventually(session).Should(Say("GETTING STARTED:"))
+			Eventually(session).Should(Say("ENVIRONMENT VARIABLES:"))
+			Eventually(session).Should(Say("GLOBAL OPTIONS:"))
+			Eventually(session).Should(Exit(0))
+		},
+
+		Entry("when cf is run without providing a command or a flag", func() *exec.Cmd {
+			Skip("Ask dies what should happen in this case")
+			return exec.Command("cf", "-a")
+		}),
+
+		Entry("when cf help is run", func() *exec.Cmd {
+			return exec.Command("cf", "help", "-a")
+		}),
+
+		Entry("when cf is run with -h flag alone", func() *exec.Cmd {
+			return exec.Command("cf", "-h", "-a")
+		}),
+
+		Entry("when cf is run with --help flag alone", func() *exec.Cmd {
+			return exec.Command("cf", "--help", "-a")
+		}),
+	)
+
 	DescribeTable("displays the help text for a given command",
 		func(setup func() (*exec.Cmd, int)) {
 			cmd, exitCode := setup()
