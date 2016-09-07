@@ -20,6 +20,7 @@ ginkgo -p -r -randomizeAllSpecs -slowSpecThreshold=120 ./integration
 Customizations (based on environment variables):
 
 - `CF_API` - Sets the CF API URL these tests will be using. Will `--skip-ssl-validation` by default. Should default to `api.bosh-lite.com` if not set.
+- `SKIP_SSL_VALIDATION` - Sets the CF API URL these tests will be using. Will `--skip-ssl-validation` by default. Should default to `api.bosh-lite.com` if not set.
 
 
 

@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"strconv"
 	"time"
 
 	. "github.com/onsi/ginkgo"
@@ -21,7 +22,9 @@ func TestIntegration(t *testing.T) {
 
 var (
 	// Suite Level
-	apiURL string
+	apiURL            string
+	skipSSLValidation string
+	originalColor     string
 
 	// Per Test Level
 	homeDir string
@@ -35,10 +38,17 @@ var _ = SynchronizedBeforeSuite(func() []byte {
 
 	// Setup common environment variables
 	apiURL = os.Getenv("CF_API")
+	turnOffColors()
 })
+
+var _ = SynchronizedAfterSuite(func() {},
+	func() {
+		setColor()
+	})
 
 var _ = BeforeEach(func() {
 	setHomeDir()
+	setSkipSSLValidation()
 	setAPI()
 })
 
@@ -58,18 +68,39 @@ func setHomeDir() {
 	}
 }
 
+func setSkipSSLValidation() {
+	if skip, err := strconv.ParseBool(os.Getenv("SKIP_SSL_VALIDATION")); err == nil && !skip {
+		skipSSLValidation = ""
+		return
+	}
+	skipSSLValidation = "--skip-ssl-validation"
+}
+
+func getAPI() string {
+	if apiURL == "" {
+		apiURL = "api.bosh-lite.com"
+	}
+	return apiURL
+}
+
+func setAPI() {
+	api := exec.Command("cf", "api", getAPI(), skipSSLValidation)
+	apiSession, err := Start(api, GinkgoWriter, GinkgoWriter)
+	Expect(err).NotTo(HaveOccurred())
+	Eventually(apiSession).Should(Exit(0))
+}
+
 func destroyHomeDir() {
 	if homeDir != "" {
 		os.RemoveAll(homeDir)
 	}
 }
 
-func setAPI() {
-	if apiURL == "" {
-		apiURL = "api.bosh-lite.com"
-	}
-	api := exec.Command("cf", "api", apiURL, "--skip-ssl-validation")
-	apiSession, err := Start(api, GinkgoWriter, GinkgoWriter)
-	Expect(err).NotTo(HaveOccurred())
-	Eventually(apiSession).Should(Exit(0))
+func turnOffColors() {
+	originalColor = os.Getenv("CF_COLOR")
+	os.Setenv("CF_COLOR", "false")
+}
+
+func setColor() {
+	os.Setenv("CF_COLOR", originalColor)
 }
