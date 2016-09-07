@@ -17,9 +17,8 @@ var _ = Describe("Help Command", func() {
 			session, err := Start(cmd, GinkgoWriter, GinkgoWriter)
 			Expect(err).NotTo(HaveOccurred())
 
-			Eventually(session).Should(Say("NAME:"))
-			Eventually(session).Should(Say("USAGE:"))
-			Eventually(session).Should(Say("VERSION:"))
+			Eventually(session).Should(Say("Cloud Foundry command line tool"))
+			Eventually(session).Should(Say("\\[global options\\] command \\[arguments...\\] \\[command options\\]"))
 			Eventually(session).Should(Say("Before getting started:"))
 			Eventually(session).Should(Say("config\\s+login,l\\s+target,t"))
 			Eventually(session).Should(Say("Global options:"))

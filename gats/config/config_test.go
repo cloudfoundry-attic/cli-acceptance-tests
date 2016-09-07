@@ -128,7 +128,7 @@ var _ = Describe("Config", func() {
 				cf.AsUser(context.AdminUserContext(), setupTimeout, func() {
 					session := cf.Cf("help").Wait(commandTimeout)
 					Expect(session).To(gexec.Exit(0))
-					Expect(session).To(gbytes.Say("SYNTAXE"))
+					Expect(session).To(gbytes.Say("\\[options globales\\] commande \\[arguments...\\] \\[options de commande\\]"))
 				})
 			})
 
@@ -138,7 +138,7 @@ var _ = Describe("Config", func() {
 					Expect(session).To(gexec.Exit(0))
 					session = cf.Cf("help").Wait(commandTimeout)
 					Expect(session).To(gexec.Exit(0))
-					Expect(session).To(gbytes.Say("USO"))
+					Expect(session).To(gbytes.Say("\\[opciones globales\\] mandato \\[argumentos...\\] \\[opciones de mandato\\]"))
 				})
 			})
 		})
@@ -159,7 +159,7 @@ var _ = Describe("Config", func() {
 				cf.AsUser(context.AdminUserContext(), setupTimeout, func() {
 					session := cf.Cf("help").Wait(commandTimeout)
 					Expect(session).To(gexec.Exit(0))
-					Expect(session).To(gbytes.Say("USAGE"))
+					Expect(session).To(gbytes.Say("\\[global options\\] command \\[arguments...\\] \\[command options\\]"))
 				})
 			})
 		})
@@ -193,7 +193,7 @@ var _ = Describe("Config", func() {
 				cf.AsUser(context.AdminUserContext(), setupTimeout, func() {
 					session := cf.Cf("help").Wait(commandTimeout)
 					Expect(session).To(gexec.Exit(0))
-					Expect(session).To(gbytes.Say("SYNTAXE"))
+					Expect(session).To(gbytes.Say("\\[options globales\\] commande \\[arguments...\\] \\[options de commande\\]"))
 				})
 			})
 
@@ -203,7 +203,7 @@ var _ = Describe("Config", func() {
 					Expect(session).To(gexec.Exit(0))
 					session = cf.Cf("help").Wait(commandTimeout)
 					Expect(session).To(gexec.Exit(0))
-					Expect(session).To(gbytes.Say("USO"))
+					Expect(session).To(gbytes.Say("\\[opciones globales\\] mandato \\[argumentos...\\] \\[opciones de mandato\\]"))
 				})
 			})
 		})
@@ -224,7 +224,7 @@ var _ = Describe("Config", func() {
 				cf.AsUser(context.AdminUserContext(), setupTimeout, func() {
 					session := cf.Cf("help").Wait(commandTimeout)
 					Expect(session).To(gexec.Exit(0))
-					Expect(session).To(gbytes.Say("USAGE"))
+					Expect(session).To(gbytes.Say("\\[global options\\] command \\[arguments...\\] \\[command options\\]"))
 				})
 			})
 		})
@@ -249,7 +249,7 @@ var _ = Describe("Config", func() {
 			cf.AsUser(context.AdminUserContext(), setupTimeout, func() {
 				session := cf.Cf("help").Wait(commandTimeout)
 				Expect(session).To(gexec.Exit(0))
-				Expect(session).To(gbytes.Say("SYNTAXE"))
+				Expect(session).To(gbytes.Say("\\[options globales\\] commande \\[arguments...\\] \\[options de commande\\]"))
 			})
 		})
 	})
@@ -273,7 +273,7 @@ var _ = Describe("Config", func() {
 			cf.AsUser(context.AdminUserContext(), setupTimeout, func() {
 				session := cf.Cf("help").Wait(commandTimeout)
 				Expect(session).To(gexec.Exit(0))
-				Expect(session).To(gbytes.Say("USAGE"))
+				Expect(session).To(gbytes.Say("\\[global options\\] command \\[arguments...\\] \\[command options\\]"))
 			})
 		})
 	})
