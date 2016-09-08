@@ -132,4 +132,25 @@ var _ = Describe("Help Command", func() {
 			return exec.Command("cf", "create-user-provided-service", "foo", "-l"), 1
 		}),
 	)
+
+	Context("when the command does not exist", func() {
+		DescribeTable("help displays an error message",
+			func(command func() *exec.Cmd) {
+				session, err := Start(command(), GinkgoWriter, GinkgoWriter)
+				Expect(err).NotTo(HaveOccurred())
+
+				Eventually(session.Err).Should(Say("'rock' is not a registered command. See 'cf help'"))
+				Eventually(session).Should(Exit(1))
+			},
+
+			Entry("passing the --help flag", func() *exec.Cmd {
+				return exec.Command("cf", "--help", "rock")
+			}),
+
+			Entry("calling the help command directly", func() *exec.Cmd {
+				return exec.Command("cf", "help", "rock")
+			}),
+		)
+
+	})
 })
