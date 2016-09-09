@@ -3,6 +3,7 @@ package integration
 import (
 	"os/exec"
 
+	helpers "code.cloudfoundry.org/cli-acceptance-tests/integration/helpers"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/ginkgo/extensions/table"
 	. "github.com/onsi/gomega"
@@ -34,7 +35,7 @@ var _ = Describe("Verbose", func() {
 
 		Entry("when the CF_TRACE env variable is set", func() *exec.Cmd {
 			cmd := exec.Command("cf", "orgs")
-			cmd.Env = addOrReplaceEnvironment("CF_TRACE", "true")
+			cmd.Env = helpers.AddOrReplaceEnvironment("CF_TRACE", "true")
 			return cmd
 		}),
 	)

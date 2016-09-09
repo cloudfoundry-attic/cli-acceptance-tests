@@ -3,6 +3,7 @@ package integration
 import (
 	"os/exec"
 
+	helpers "code.cloudfoundry.org/cli-acceptance-tests/integration/helpers"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/ginkgo/extensions/table"
 	. "github.com/onsi/gomega"
@@ -36,7 +37,7 @@ var _ = Describe("internationalization", func() {
 
 		Entry("when the the LANG environment variable is set", func() *exec.Cmd {
 			cmd := exec.Command("cf", "push", "--help")
-			cmd.Env = addOrReplaceEnvironment("LANG", "fr-FR")
+			cmd.Env = helpers.AddOrReplaceEnvironment("LANG", "fr-FR")
 			return cmd
 		}),
 	)

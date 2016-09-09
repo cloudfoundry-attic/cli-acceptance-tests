@@ -3,10 +3,11 @@ package integration
 import (
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"runtime"
 	"strconv"
 	"time"
+
+	"code.cloudfoundry.org/cli-acceptance-tests/integration/helpers"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -15,10 +16,9 @@ import (
 	"testing"
 )
 
-func TestIntegration(t *testing.T) {
-	RegisterFailHandler(Fail)
-	RunSpecs(t, "Integration Suite")
-}
+const (
+	CFLongTimeout = 30 * time.Second
+)
 
 var (
 	// Suite Level
@@ -29,6 +29,11 @@ var (
 	// Per Test Level
 	homeDir string
 )
+
+func TestIntegration(t *testing.T) {
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "Integration Suite")
+}
 
 var _ = SynchronizedBeforeSuite(func() []byte {
 	return nil
@@ -84,10 +89,7 @@ func getAPI() string {
 }
 
 func setAPI() {
-	api := exec.Command("cf", "api", getAPI(), skipSSLValidation)
-	apiSession, err := Start(api, GinkgoWriter, GinkgoWriter)
-	Expect(err).NotTo(HaveOccurred())
-	Eventually(apiSession).Should(Exit(0))
+	Eventually(helpers.CF("api", getAPI(), skipSSLValidation)).Should(Exit(0))
 }
 
 func destroyHomeDir() {
@@ -103,4 +105,24 @@ func turnOffColors() {
 
 func setColor() {
 	os.Setenv("CF_COLOR", originalColor)
+}
+
+func getCredentials() (string, string) {
+	username := os.Getenv("CF_USERNAME")
+	if username == "" {
+		username = "admin"
+	}
+	password := os.Getenv("CF_PASSWORD")
+	if password == "" {
+		password = "admin"
+	}
+	return username, password
+}
+
+func setupCF(org string, space string) {
+	username, password := getCredentials()
+	Eventually(helpers.CF("auth", username, password)).Should(Exit(0))
+	Eventually(helpers.CF("create-org", org)).Should(Exit(0))
+	Eventually(helpers.CF("create-space", space, "-o", org)).Should(Exit(0))
+	Eventually(helpers.CF("target", "-o", org, "-s", space)).Should(Exit(0))
 }

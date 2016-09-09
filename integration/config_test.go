@@ -3,6 +3,7 @@ package integration
 import (
 	"os/exec"
 
+	helpers "code.cloudfoundry.org/cli-acceptance-tests/integration/helpers"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	. "github.com/onsi/gomega/gbytes"
@@ -14,7 +15,7 @@ var _ = Describe("Config", func() {
 		Context("when color is enabled", func() {
 			It("prints colors", func() {
 				command := exec.Command("cf", "help")
-				command.Env = addOrReplaceEnvironment("CF_COLOR", "true")
+				command.Env = helpers.AddOrReplaceEnvironment("CF_COLOR", "true")
 				session, err := Start(command, GinkgoWriter, GinkgoWriter)
 				Expect(err).NotTo(HaveOccurred())
 				Eventually(session).Should(Say("\x1b\\[38;1m"))
@@ -24,7 +25,7 @@ var _ = Describe("Config", func() {
 		Context("when color is disabled", func() {
 			It("does not print colors", func() {
 				command := exec.Command("cf", "help")
-				command.Env = addOrReplaceEnvironment("CF_COLOR", "false")
+				command.Env = helpers.AddOrReplaceEnvironment("CF_COLOR", "false")
 				session, err := Start(command, GinkgoWriter, GinkgoWriter)
 				Expect(err).NotTo(HaveOccurred())
 

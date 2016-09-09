@@ -1,4 +1,4 @@
-package integration
+package helpers
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func addOrReplaceEnvironment(newEnvName string, newEnvVal string) []string {
+func AddOrReplaceEnvironment(newEnvName string, newEnvVal string) []string {
 	var found bool
 	env := os.Environ()
 	for i, envPair := range env {
