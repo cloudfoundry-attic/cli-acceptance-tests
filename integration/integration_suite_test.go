@@ -92,6 +92,10 @@ func setAPI() {
 	Eventually(helpers.CF("api", getAPI(), skipSSLValidation)).Should(Exit(0))
 }
 
+func unsetAPI() {
+	Eventually(helpers.CF("api", "--unset")).Should(Exit(0))
+}
+
 func destroyHomeDir() {
 	if homeDir != "" {
 		os.RemoveAll(homeDir)
@@ -119,10 +123,26 @@ func getCredentials() (string, string) {
 	return username, password
 }
 
-func setupCF(org string, space string) {
+func loginCF() {
 	username, password := getCredentials()
 	Eventually(helpers.CF("auth", username, password)).Should(Exit(0))
+}
+
+func logoutCF() {
+	Eventually(helpers.CF("logout")).Should(Exit(0))
+}
+
+func createOrgAndSpace(org string, space string) {
 	Eventually(helpers.CF("create-org", org)).Should(Exit(0))
 	Eventually(helpers.CF("create-space", space, "-o", org)).Should(Exit(0))
+}
+
+func targetOrgAndSpace(org string, space string) {
 	Eventually(helpers.CF("target", "-o", org, "-s", space)).Should(Exit(0))
+}
+
+func setupCF(org string, space string) {
+	loginCF()
+	createOrgAndSpace(org, space)
+	targetOrgAndSpace(org, space)
 }
