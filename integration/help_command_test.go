@@ -2,6 +2,7 @@ package integration
 
 import (
 	"os/exec"
+	"strings"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/ginkgo/extensions/table"
@@ -56,11 +57,6 @@ var _ = Describe("Help Command", func() {
 			Eventually(session).Should(Say("GLOBAL OPTIONS:"))
 			Eventually(session).Should(Exit(0))
 		},
-
-		Entry("when cf is run without providing a command or a flag", func() *exec.Cmd {
-			Skip("Ask dies what should happen in this case")
-			return exec.Command("cf", "-a")
-		}),
 
 		Entry("when cf help is run", func() *exec.Cmd {
 			return exec.Command("cf", "help", "-a")
@@ -191,5 +187,27 @@ ENVIRONMENT:
 			}),
 		)
 
+	})
+
+	Context("when the option does not exist", func() {
+		DescribeTable("help display an error message as well as help for common commands",
+
+			func(command func() *exec.Cmd) {
+				session, err := Start(command(), GinkgoWriter, GinkgoWriter)
+				Expect(err).NotTo(HaveOccurred())
+
+				Eventually(session).Should(Exit(1))
+				Eventually(session).Should(Say("Before getting started:")) // common help
+				Expect(strings.Count(string(session.Err.Contents()), "unknown flag")).To(Equal(1))
+			},
+
+			Entry("passing invalid option", func() *exec.Cmd {
+				return exec.Command("cf", "-c")
+			}),
+
+			Entry("passing -a option", func() *exec.Cmd {
+				return exec.Command("cf", "-a")
+			}),
+		)
 	})
 })
