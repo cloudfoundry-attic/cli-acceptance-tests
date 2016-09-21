@@ -75,63 +75,102 @@ var _ = Describe("Help Command", func() {
 		}),
 	)
 
-	DescribeTable("displays the help text for a given command",
-		func(setup func() (*exec.Cmd, int)) {
-			cmd, exitCode := setup()
-			session, err := Start(cmd, GinkgoWriter, GinkgoWriter)
-			Expect(err).NotTo(HaveOccurred())
+	Context("displays the help text for a given command", func() {
+		DescribeTable("displays the help",
+			func(setup func() (*exec.Cmd, int)) {
+				cmd, exitCode := setup()
+				session, err := Start(cmd, GinkgoWriter, GinkgoWriter)
+				Expect(err).NotTo(HaveOccurred())
 
-			Eventually(session).Should(Say("NAME:"))
-			Eventually(session).Should(Say("create-user-provided-service - Make a user-provided service instance available to CF apps"))
-			Eventually(session).Should(Say("cf create-user-provided-service SERVICE_INSTANCE \\[-p CREDENTIALS\\] \\[-l SYSLOG_DRAIN_URL\\] \\[-r ROUTE_SERVICE_URL\\]"))
-			Eventually(session).Should(Say("-l\\s+URL to which logs for bound applications will be streamed"))
-			Eventually(session).Should(Exit(exitCode))
-		},
+				Eventually(session).Should(Say("NAME:"))
+				Eventually(session).Should(Say("create-user-provided-service - Make a user-provided service instance available to CF apps"))
+				Eventually(session).Should(Say("cf create-user-provided-service SERVICE_INSTANCE \\[-p CREDENTIALS\\] \\[-l SYSLOG_DRAIN_URL\\] \\[-r ROUTE_SERVICE_URL\\]"))
+				Eventually(session).Should(Say("-l\\s+URL to which logs for bound applications will be streamed"))
+				Eventually(session).Should(Exit(exitCode))
+			},
 
-		Entry("when a command is called with the --help flag", func() (*exec.Cmd, int) {
-			return exec.Command("cf", "create-user-provided-service", "--help"), 0
-		}),
+			Entry("when a command is called with the --help flag", func() (*exec.Cmd, int) {
+				return exec.Command("cf", "create-user-provided-service", "--help"), 0
+			}),
 
-		Entry("when a command is called with the --help flag and command arguments", func() (*exec.Cmd, int) {
-			return exec.Command("cf", "create-user-provided-service", "-l", "http://example.com", "--help"), 0
-		}),
+			Entry("when a command is called with the --help flag and command arguments", func() (*exec.Cmd, int) {
+				return exec.Command("cf", "create-user-provided-service", "-l", "http://example.com", "--help"), 0
+			}),
 
-		Entry("when a command is called with the --help flag and command arguments prior to the command", func() (*exec.Cmd, int) {
-			return exec.Command("cf", "-l", "create-user-provided-service", "--help"), 1
-		}),
+			Entry("when a command is called with the --help flag and command arguments prior to the command", func() (*exec.Cmd, int) {
+				return exec.Command("cf", "-l", "create-user-provided-service", "--help"), 1
+			}),
 
-		Entry("when the help command is passed a command name", func() (*exec.Cmd, int) {
-			return exec.Command("cf", "help", "create-user-provided-service"), 0
-		}),
+			Entry("when the help command is passed a command name", func() (*exec.Cmd, int) {
+				return exec.Command("cf", "help", "create-user-provided-service"), 0
+			}),
 
-		Entry("when the --help flag is passed with a command name", func() (*exec.Cmd, int) {
-			return exec.Command("cf", "--help", "create-user-provided-service"), 0
-		}),
+			Entry("when the --help flag is passed with a command name", func() (*exec.Cmd, int) {
+				return exec.Command("cf", "--help", "create-user-provided-service"), 0
+			}),
 
-		Entry("when the help command is passed a command alias", func() (*exec.Cmd, int) {
-			return exec.Command("cf", "help", "cups"), 0
-		}),
+			Entry("when the help command is passed a command alias", func() (*exec.Cmd, int) {
+				return exec.Command("cf", "help", "cups"), 0
+			}),
 
-		Entry("when the --help flag is passed with a command alias", func() (*exec.Cmd, int) {
-			return exec.Command("cf", "--help", "cups"), 0
-		}),
+			Entry("when the --help flag is passed with a command alias", func() (*exec.Cmd, int) {
+				return exec.Command("cf", "--help", "cups"), 0
+			}),
 
-		Entry("when the --help flag is passed after a command alias", func() (*exec.Cmd, int) {
-			return exec.Command("cf", "cups", "--help"), 0
-		}),
+			Entry("when the --help flag is passed after a command alias", func() (*exec.Cmd, int) {
+				return exec.Command("cf", "cups", "--help"), 0
+			}),
 
-		Entry("when an invalid flag is passed", func() (*exec.Cmd, int) {
-			return exec.Command("cf", "create-user-provided-service", "--invalid-flag"), 1
-		}),
+			Entry("when an invalid flag is passed", func() (*exec.Cmd, int) {
+				return exec.Command("cf", "create-user-provided-service", "--invalid-flag"), 1
+			}),
 
-		Entry("when missing required arguments", func() (*exec.Cmd, int) {
-			return exec.Command("cf", "create-user-provided-service"), 1
-		}),
+			Entry("when missing required arguments", func() (*exec.Cmd, int) {
+				return exec.Command("cf", "create-user-provided-service"), 1
+			}),
 
-		Entry("when missing arguments to flags", func() (*exec.Cmd, int) {
-			return exec.Command("cf", "create-user-provided-service", "foo", "-l"), 1
-		}),
-	)
+			Entry("when missing arguments to flags", func() (*exec.Cmd, int) {
+				return exec.Command("cf", "create-user-provided-service", "foo", "-l"), 1
+			}),
+		)
+
+		Context("when the command uses timeout environment variables", func() {
+			DescribeTable("shows the CF_STAGING_TIMEOUT and CF_STARTUP_TIMEOUT environment variables",
+				func(setup func() (*exec.Cmd, int)) {
+					cmd, exitCode := setup()
+					session, err := Start(cmd, GinkgoWriter, GinkgoWriter)
+					Expect(err).NotTo(HaveOccurred())
+
+					Eventually(session).Should(Say(`
+ENVIRONMENT:
+   CF_STAGING_TIMEOUT=15        Max wait time for buildpack staging, in minutes
+   CF_STARTUP_TIMEOUT=5         Max wait time for app instance startup, in minutes
+`))
+					Eventually(session).Should(Exit(exitCode))
+				},
+
+				Entry("cf push", func() (*exec.Cmd, int) {
+					return exec.Command("cf", "h", "push"), 0
+				}),
+
+				Entry("cf start", func() (*exec.Cmd, int) {
+					return exec.Command("cf", "h", "start"), 0
+				}),
+
+				Entry("cf restart", func() (*exec.Cmd, int) {
+					return exec.Command("cf", "h", "restart"), 0
+				}),
+
+				Entry("cf restage", func() (*exec.Cmd, int) {
+					return exec.Command("cf", "h", "restage"), 0
+				}),
+
+				Entry("cf copy-source", func() (*exec.Cmd, int) {
+					return exec.Command("cf", "h", "copy-source"), 0
+				}),
+			)
+		})
+	})
 
 	Context("when the command does not exist", func() {
 		DescribeTable("help displays an error message",
