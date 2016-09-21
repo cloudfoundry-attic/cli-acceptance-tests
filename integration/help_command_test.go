@@ -66,11 +66,11 @@ var _ = Describe("Help Command", func() {
 			return exec.Command("cf", "help", "-a")
 		}),
 
-		Entry("when cf is run with -h flag alone", func() *exec.Cmd {
+		Entry("when cf is run with -h -a flag", func() *exec.Cmd {
 			return exec.Command("cf", "-h", "-a")
 		}),
 
-		Entry("when cf is run with --help flag alone", func() *exec.Cmd {
+		Entry("when cf is run with --help -a flag", func() *exec.Cmd {
 			return exec.Command("cf", "--help", "-a")
 		}),
 	)
