@@ -54,6 +54,7 @@ var _ = Describe("Help Command", func() {
 			Eventually(session).Should(Say("VERSION:"))
 			Eventually(session).Should(Say("GETTING STARTED:"))
 			Eventually(session).Should(Say("ENVIRONMENT VARIABLES:"))
+			Eventually(session).Should(Say("CF_DIAL_TIMEOUT=5\\s+Max wait time to establish a connection, including name resolution, in seconds"))
 			Eventually(session).Should(Say("GLOBAL OPTIONS:"))
 			Eventually(session).Should(Exit(0))
 		},
