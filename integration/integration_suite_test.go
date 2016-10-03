@@ -3,7 +3,6 @@ package integration
 import (
 	"io/ioutil"
 	"os"
-	"runtime"
 	"strconv"
 	"time"
 
@@ -66,11 +65,7 @@ func setHomeDir() {
 	homeDir, err = ioutil.TempDir("", "cli-gats-test")
 	Expect(err).NotTo(HaveOccurred())
 
-	if runtime.GOOS == "windows" {
-		os.Setenv("USERPROFILE", homeDir)
-	} else {
-		os.Setenv("HOME", homeDir)
-	}
+	os.Setenv("CF_HOME", homeDir)
 }
 
 func setSkipSSLValidation() {
