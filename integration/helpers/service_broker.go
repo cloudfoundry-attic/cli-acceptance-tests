@@ -15,6 +15,7 @@ import (
 
 const (
 	DefaultMemoryLimit         = "256M"
+	DefaultDiskLimit           = "1G"
 	CFServiceBrokerLongTimeout = 1 * time.Minute
 )
 
