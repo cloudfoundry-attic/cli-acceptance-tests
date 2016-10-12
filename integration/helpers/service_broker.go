@@ -98,7 +98,6 @@ func (b ServiceBroker) Delete() {
 }
 
 func (b ServiceBroker) Destroy() {
-	fmt.Println(b.Name)
 	Eventually(CF("purge-service-offering", b.Service.Name, "-f"), CFServiceBrokerLongTimeout).Should(Exit(0))
 	b.Delete()
 	Eventually(CF("delete", b.Name, "-f", "-r"), CFServiceBrokerLongTimeout).Should(Exit(0))
