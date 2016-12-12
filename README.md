@@ -1,3 +1,6 @@
+# THIS REPO IS DEFUNCT
+These tests have been merged into the [integration](https://github.com/cloudfoundry/cli/tree/master/integration) of the CF CLI. This repo is left here for historical purposes.
+
 CLI Acceptance Tests
 ====
 These are high-level tests for the [Cloud Foundry
