@@ -18,7 +18,7 @@ ln -s $ROOT_DIR $GATS_GOPATH/src/code.cloudfoundry.org/cli-acceptance-tests
 
 go install -v github.com/onsi/ginkgo/ginkgo
 
-rm -f bin/gcf
+rm -f bin/cf
 
 if [[ $1 == '-s' ]]
 then
